@@ -1,0 +1,21 @@
+prefix: '[FireFighter] '
+messages:
+  invalid_permissions: §4<prefix>Invalid permissions!
+  page_not_found: §4<prefix>Page not found!
+  hold_right_click: Hold Right Click
+  unknown_command: Unknown command. Type "/help" for help.
+  fireset_wand_instructions: '§e<prefix>Left click: select pos #1; Right click: select
+    pos #2'
+  fireset_wand_setted: '§e<prefix>New wand setted!'
+  fireset_first_position_set: '§e<prefix>First position set at <x>, <y>, <z>'
+  fireset_second_position_set: '§e<prefix>Second position set at <x>, <y>, <z>'
+  fireset_mission_not_found: §4<prefix>Mission not found!
+  fireset_delete: '§e<prefix>Mission successfully deleted!'
+  fireset_invalid_selection: §4<prefix>Invalid selection!
+  fireset_added_mission: §e<prefix>Mission successfully added!
+firetool:
+  cooldown: 1800
+fireset:
+  wand:
+missions_interval: 3600
+missions:
