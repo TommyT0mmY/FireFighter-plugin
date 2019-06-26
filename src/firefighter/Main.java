@@ -14,21 +14,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import firefighter.MissionsHandler;
 import firefighter.commands.Fireset;
 import firefighter.commands.Firetool;
 import firefighter.commands.Help;
 import firefighter.events.FireExtinguisherActivation;
 import firefighter.events.FiresetWand;
-import firefighter.tabcompleters.HelpTabCompleter;
 import firefighter.tabcompleters.FiresetTabCompleter;
+import firefighter.tabcompleters.HelpTabCompleter;
 
 public class Main extends JavaPlugin {
 	
 	public File datafolder = getDataFolder();
 	public String prefix = "[" + this.getDescription().getPrefix() + "] ";
 	public final String version = this.getDescription().getVersion();
+	// for the MissionsHandler class //
 	public boolean startedMission = false;
+	//public HashMap<UUID, Integer> PlayerContribution = new HashMap<>(); TODO
+	public String missionName = "";
+	//public List<Location> toExtinguish = new ArrayList<>(); TODO
 	// for the fireset command //
 	public HashMap<String /*player's UUID*/, Location> fireset_first_position = new HashMap<>();
 	public HashMap<String /*player's UUID*/, Location> fireset_second_position = new HashMap<>();
@@ -110,6 +113,7 @@ public class Main extends JavaPlugin {
 			getConfig().set("messages.hold_right_click", messages.get("hold_right_click"));
 			getConfig().set("firetool.cooldown", 1800);
 			getConfig().set("missions_interval", 3600);
+			getConfig().set("fire_lasting_seconds", 300);
 			ItemStack wand = new ItemStack(Material.STICK);
 			ItemMeta wandMeta = wand.getItemMeta();
 			wandMeta.setDisplayName("§eFireset Wand");
@@ -133,6 +137,16 @@ public class Main extends JavaPlugin {
 		readMessage("fireset_mission_not_found");
 		readMessage("fireset_delete");
 		readMessage("fireset_invalid_selection");
+		int fls = Integer.valueOf(getConfig().get("fire_lasting_seconds").toString());
+		int mi = Integer.valueOf(getConfig().get("missions_interval").toString());
+		if (fls >= mi) {
+			console.warning("Loading the file 'config.yml' an error was encountered!");
+			console.warning("The value 'fire_lasting_seconds' cannot be greater than 'missions_interval'");
+			console.warning("Resetting 'missions_interval' and 'fire_lasting_seconds'");
+			getConfig().set("missions_interval", 3600);
+			getConfig().set("fire_lasting_seconds", 300);
+			saveConfig();
+		}
 	}
 	
 	private void readMessage(String name) {

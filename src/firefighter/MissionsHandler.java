@@ -28,7 +28,7 @@ public class MissionsHandler extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		//try { TODO ENABLE THE TRY/CATCH
+		//try {
 			if (firstRun) {
 				firstRun = false;
 				return;
@@ -38,9 +38,10 @@ public class MissionsHandler extends BukkitRunnable {
 				return;
 			}
 			if (mainClass.startedMission) {
-				cancel();
+				return;
 			}
 			
+			int fire_lasting_ticks = Integer.valueOf(mainClass.getConfig().get("fire_lasting_seconds").toString())*20;
 			mainClass.startedMission = true;
 			mainClass.loadConfigs();
 			//selecting random mission
@@ -78,17 +79,59 @@ public class MissionsHandler extends BukkitRunnable {
 					}
 					currLocation.add(0, 1, 0);
 					Block currBlock = currLocation.getBlock();
-					currBlock.setType(Material.FIRE); //TODO CHANGE TO FIRE
+					currBlock.setType(Material.FIRE);
+					setOnFire.add(currBlock);
 				}
 			}
 			
 			//keeping the fire on
-			//TODO
+			new BukkitRunnable() {
+				int timer = 0;
+				public void run() {
+					//mainClass.console.info("FLAG" + timer); debug
+					timer++;
+					if (timer >= fire_lasting_ticks/100) {
+						cancel();
+					}
+					for (int i = 0; i < setOnFire.size(); i++) {
+						Block currBlock = setOnFire.get(i);
+						if (currBlock.getType().equals(Material.FIRE) && !currBlock.getType().equals(Material.AIR)) {
+							continue;
+						}
+						if (random.nextInt(2) == 1) { //randomizing the respawn of the fire
+							setOnFire.remove(i);
+							continue;
+						}
+						/*	TODO
+						for (int j = 0; j < mainClass.toExtinguish.size(); j++) {
+							if (currBlock.getLocation().equals(mainClass.toExtinguish.get(j))) {
+								mainClass.toExtinguish.remove(j);
+								if (random.nextInt(3) == 1) { //randomizing the respawn of the fire
+									setOnFire.remove(i);
+									continue;
+								}
+							}
+						}
+						*/
+						currBlock.setType(Material.FIRE);
+					}
+					//mainClass.toExtinguish.clear();
+				}
+				
+			}.runTaskTimer(mainClass, 0, 100);
 			
-			mainClass.startedMission = false;
-			setOnFire.clear();
-		
+			//TURNING OFF THE MISSION
 			
+			new BukkitRunnable() {
+				public void run() {
+					mainClass.console.info("Mission ended");
+					mainClass.startedMission = false;
+					mainClass.missionName = "";
+					//mainClass.toExtinguish.clear();
+					setOnFire.clear();
+					cancel();
+				}
+			}.runTaskTimer(mainClass, (long) (fire_lasting_ticks*(1.5)), 1);
 			
 		//}catch(Exception e) {}
 	}
@@ -111,9 +154,24 @@ public class MissionsHandler extends BukkitRunnable {
 			}
 			dest.sendTitle(title, subtitle, 10, 100, 20);
 			try {
-				HotbarMessager.sendHotBarMessage(dest, hotbar);
+				new BukkitRunnable() {
+					int timer = 0;
+					public void run() {
+						timer++;
+						HotBarMessage(dest, hotbar);
+						if (timer >= 4) {
+							cancel();
+						}
+					}
+				}.runTaskTimer(mainClass, 0, 50);
 			} catch (Exception e) {}
 		}
+	}
+	
+	private void HotBarMessage(Player p, String message) {
+		try {
+			HotbarMessager.sendHotBarMessage(p, message);
+		} catch (Exception e) {}
 	}
 	
 	private void Broadcast (World w, String message, String permission) {

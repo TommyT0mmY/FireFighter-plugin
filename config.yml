@@ -18,4 +18,5 @@ firetool:
 fireset:
   wand:
 missions_interval: 3600
+fire_lasting_seconds: 300
 missions:

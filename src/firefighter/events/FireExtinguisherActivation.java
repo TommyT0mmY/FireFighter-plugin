@@ -30,20 +30,20 @@ public class FireExtinguisherActivation implements Listener
 		try {
 			Player p = e.getPlayer();
 			Action action = e.getAction();
-			if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) { //only right clicks
+			ItemStack item = e.getItem();
+			if (isFireExtinguisher(item)) {
+				e.setCancelled(true);
+			}else {
 				return;
 			}
-			//checks if the fire extinguisher is being used
-			ItemStack item = e.getItem();
-			if (!isFireExtinguisher(item)) {
+			if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) { //only right clicks
 				return;
-			}else {
-				e.setCancelled(true);
 			}
 			if (!p.hasPermission(mainClass.getPermission("firetool_use"))) {
 				p.sendMessage(mainClass.messages.get("invalid_permissions"));
 				return;
 			}
+			
 			//durability
 			item.setDurability((short) (item.getDurability() + 1));
 			if (item.getDurability() > 249) {

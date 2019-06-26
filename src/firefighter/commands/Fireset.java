@@ -69,7 +69,12 @@ public class Fireset implements CommandExecutor {
 					mainClass.getConfig().set("missions." + newName, mission);
 					mainClass.saveConfig();
 				}else if (args[2].equals("description")) {
-					//TODO
+					String newDescription = args[3];
+					for (int i = 3; i < args.length; i++) {
+						newDescription += args[i] + " ";
+					}
+					mainClass.getConfig().set("missions." + args[1] + ".description", newDescription);
+					mainClass.saveConfig();
 				}else {
 					p.sendMessage(getUsage());
 					break;
