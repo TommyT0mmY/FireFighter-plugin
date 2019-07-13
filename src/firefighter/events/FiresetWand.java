@@ -33,16 +33,16 @@ public class FiresetWand implements Listener {
 			e.setCancelled(true);
 			Location clickedBlock_location = e.getClickedBlock().getLocation();
 			if (action == Action.LEFT_CLICK_BLOCK) { //first position
-				if (mainClass.fireset_first_position.containsKey(p.getUniqueId().toString())) {
-					if (!mainClass.fireset_first_position.get(p.getUniqueId().toString()).equals(clickedBlock_location)) {
+				if (mainClass.fireset_first_position.containsKey(p.getUniqueId())) {
+					if (!mainClass.fireset_first_position.get(p.getUniqueId()).equals(clickedBlock_location)) {
 						setFirstPosition(p, clickedBlock_location);
 					}
 				}else {
 					setFirstPosition(p, clickedBlock_location);
 				}
 			}else { //second position
-				if (mainClass.fireset_second_position.containsKey(p.getUniqueId().toString())) {
-					if (!mainClass.fireset_second_position.get(p.getUniqueId().toString()).equals(clickedBlock_location)) {
+				if (mainClass.fireset_second_position.containsKey(p.getUniqueId())) {
+					if (!mainClass.fireset_second_position.get(p.getUniqueId()).equals(clickedBlock_location)) {
 						setSecondPosition(p, clickedBlock_location);
 					}
 				}else {
@@ -54,7 +54,7 @@ public class FiresetWand implements Listener {
 	}
 	
 	private void setFirstPosition(Player p, Location loc) {
-		mainClass.fireset_first_position.put(p.getUniqueId().toString(), loc);
+		mainClass.fireset_first_position.put(p.getUniqueId(), loc);
 		String msg = mainClass.messages.get("fireset_first_position_set");
 		msg = msg.replace("<x>",loc.getBlockX() + "");
 		msg = msg.replace("<y>",loc.getBlockY() + "");
@@ -63,7 +63,7 @@ public class FiresetWand implements Listener {
 	}
 	
 	private void setSecondPosition(Player p, Location loc) {
-		mainClass.fireset_second_position.put(p.getUniqueId().toString(), loc);
+		mainClass.fireset_second_position.put(p.getUniqueId(), loc);
 		String msg = mainClass.messages.get("fireset_second_position_set");
 		msg = msg.replace("<x>",loc.getBlockX() + "");
 		msg = msg.replace("<y>",loc.getBlockY() + "");

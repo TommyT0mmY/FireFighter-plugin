@@ -3,7 +3,6 @@ package firefighter.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import firefighter.Main;
 import firefighter.utility.HotbarMessager;
+import firefighter.utility.XMaterial;
 
 public class Firetool implements CommandExecutor {
 	private Main mainClass;
@@ -33,7 +33,7 @@ public class Firetool implements CommandExecutor {
 			p.sendMessage(mainClass.messages.get("invalid_permissions"));
 			return true;
 		}
-		ItemStack fire_extinguisher = new ItemStack(Material.IRON_HOE, 1,(short) 0);
+		ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
 		//getting meta
 		ItemMeta meta = fire_extinguisher.getItemMeta();
 		//modifying meta

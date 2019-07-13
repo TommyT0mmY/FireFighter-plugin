@@ -85,13 +85,13 @@ public class Fireset implements CommandExecutor {
 					p.sendMessage(getUsage());
 					break;
 				}
-				if (mainClass.fireset_first_position.containsKey(p.getUniqueId().toString()) && mainClass.fireset_second_position.containsKey(p.getUniqueId().toString())) { //checks if the area is setted
-					mainClass.getConfig().set("missions." + args[1] +  ".first_position.x", mainClass.fireset_first_position.get(p.getUniqueId().toString()).getBlockX());
-					mainClass.getConfig().set("missions." + args[1] +  ".first_position.z", mainClass.fireset_first_position.get(p.getUniqueId().toString()).getBlockZ());
-					mainClass.getConfig().set("missions." + args[1] +  ".second_position.x", mainClass.fireset_second_position.get(p.getUniqueId().toString()).getBlockX());
-					mainClass.getConfig().set("missions." + args[1] +  ".second_position.z", mainClass.fireset_second_position.get(p.getUniqueId().toString()).getBlockZ());
-					mainClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((mainClass.fireset_first_position.get(p.getUniqueId().toString()).getBlockY()), (mainClass.fireset_second_position.get(p.getUniqueId().toString()).getBlockY())));
-					mainClass.getConfig().set("missions." + args[1] + ".world", mainClass.fireset_first_position.get(p.getUniqueId().toString()).getWorld().getName());
+				if (mainClass.fireset_first_position.containsKey(p.getUniqueId()) && mainClass.fireset_second_position.containsKey(p.getUniqueId())) { //checks if the area is setted
+					mainClass.getConfig().set("missions." + args[1] +  ".first_position.x", mainClass.fireset_first_position.get(p.getUniqueId()).getBlockX());
+					mainClass.getConfig().set("missions." + args[1] +  ".first_position.z", mainClass.fireset_first_position.get(p.getUniqueId()).getBlockZ());
+					mainClass.getConfig().set("missions." + args[1] +  ".second_position.x", mainClass.fireset_second_position.get(p.getUniqueId()).getBlockX());
+					mainClass.getConfig().set("missions." + args[1] +  ".second_position.z", mainClass.fireset_second_position.get(p.getUniqueId()).getBlockZ());
+					mainClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((mainClass.fireset_first_position.get(p.getUniqueId()).getBlockY()), (mainClass.fireset_second_position.get(p.getUniqueId()).getBlockY())));
+					mainClass.getConfig().set("missions." + args[1] + ".world", mainClass.fireset_first_position.get(p.getUniqueId()).getWorld().getName());
 					if (args.length >= 3) {
 						String description = "";
 						for (int i = 2; i < args.length; i++) {

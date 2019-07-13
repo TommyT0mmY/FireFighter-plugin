@@ -3,7 +3,6 @@ package firefighter.events;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,6 +16,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import firefighter.Main;
+import firefighter.utility.XMaterial;
+import firefighter.utility.XSound;
 
 public class FireExtinguisherActivation implements Listener
 {
@@ -25,6 +26,7 @@ public class FireExtinguisherActivation implements Listener
 		this.mainClass = mainClass;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		try {
@@ -49,7 +51,7 @@ public class FireExtinguisherActivation implements Listener
 			if (item.getDurability() > 249) {
 				e.setCancelled(true);
 				p.getInventory().remove(item);
-				playSound(p.getLocation(), Sound.ENTITY_ITEM_BREAK);
+				XSound.ENTITY_ITEM_BREAK.playSound(p, 5, 0);
 				return;
 			}
 			//particle effects and turning off fire
@@ -85,7 +87,7 @@ public class FireExtinguisherActivation implements Listener
 								break;
 							}
 							Block currBlock2 = loc2.getBlock(); //if the block inside the range is fire
-							if (currBlock2.getType() == Material.FIRE) {
+							if (currBlock2.getType() == XMaterial.FIRE.parseMaterial()) {
 								currBlock2.setType(Material.AIR);
 								playExtinguishingSound = true;
 							}
@@ -93,12 +95,12 @@ public class FireExtinguisherActivation implements Listener
 					}
 					//extinguishing the fire along the facing direction without offset
 					Block currBlock = loc.getBlock();
-					if (currBlock.getType() == Material.FIRE) {
+					if (currBlock.getType() == XMaterial.FIRE.parseMaterial()) {
 						currBlock.setType(Material.AIR);
 						playExtinguishingSound = true;
 					}
 					if (playExtinguishingSound) {
-						playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1, 0);
+						XSound.BLOCK_FIRE_EXTINGUISH.playSound(p, 1, 0);
 					}
 					
 					loc.subtract(x, y, z);
@@ -112,8 +114,8 @@ public class FireExtinguisherActivation implements Listener
 				int t = 0;
 				public void run() {
 					t++;
-					playSound(p.getLocation(), Sound.BLOCK_CLOTH_STEP, 3, 0);
-					playSound(p.getLocation(), Sound.BLOCK_SAND_PLACE, 3, 0);
+					XSound.BLOCK_WOOL_STEP.playSound(p, 3, 0);
+					XSound.BLOCK_SAND_PLACE.playSound(p, 3, 0);
 					if (t > 3) {
 						this.cancel();
 					}
@@ -128,20 +130,10 @@ public class FireExtinguisherActivation implements Listener
 		if (item == null) {return false;}
 		if (!item.hasItemMeta()) {return false;}
 		ItemMeta meta = item.getItemMeta();
-		if (item.getType() != Material.IRON_HOE) {return false;}
+		if (item.getType() != XMaterial.IRON_HOE.parseMaterial()) {return false;}
 		if (!meta.hasLore()) {return false;}
 		if (!(meta.getLore().get(0).equals("Fire Extinguisher"))) {return false;}
 		return true;
-	}
-	
-	private void playSound(Location loc, Sound sound) {
-		World w = loc.getWorld();
-		w.playSound(loc, sound, 5, 0);
-	}
-	
-	private void playSound(Location loc, Sound sound, int volume, int pitch) {
-		World w = loc.getWorld();
-		w.playSound(loc, sound, volume, pitch);
 	}
 	
 	private void showParticle(Location loc, Particle particle, int count,int offsetXZ) {
