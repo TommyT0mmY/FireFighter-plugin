@@ -1,3 +1,6 @@
+/**	Thanks to Zombie_Striker from the Bukkit.org community for having published this very useful class	
+ * 	Source:	[URL]https://bukkit.org/threads/send-hotbar-messages.440664/[/URL]
+ */
 package firefighter.utility;
 
 import java.lang.reflect.*;
@@ -135,9 +138,9 @@ public class TitleActionBarUtil {
     }
 
     private static void failsafe(String message) {
-        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] ActionBar and Titles System disabled! Something went wrong with: " + message);
-        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] Report this to SBDeveloper");
-        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] Needed Information: " + Bukkit.getName() + ", " + Bukkit.getVersion() + ", " + Bukkit.getBukkitVersion());
-        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] [URL]https://github.com/DeveloperBoy/ShootingGallery[/URL]");
+        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] ActionBar and Titles System disabled! Something went wrong with: " + message);
+        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] Report this to Zombie_Striker");
+        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] Needed Information: " + Bukkit.getName() + ", " + Bukkit.getVersion() + ", " + Bukkit.getBukkitVersion());
+        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] [URL]https://github.com/ZombieStriker/PluginConstructorAPI[/URL]");
     }
 }
