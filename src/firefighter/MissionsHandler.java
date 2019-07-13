@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import firefighter.utility.HotbarMessager;
+import firefighter.utility.TitleActionBarUtil;
 import firefighter.utility.XMaterial;
 
 public class MissionsHandler extends BukkitRunnable {
@@ -148,13 +148,14 @@ public class MissionsHandler extends BukkitRunnable {
             if (!dest.hasPermission(permission)) {
                 continue;
             }
-            dest.sendTitle(title, subtitle, 10, 100, 20);
+            TitleActionBarUtil.sendTitle(dest, title, 10, 100, 20);
+            TitleActionBarUtil.sendSubTitle(dest,  subtitle, 10, 100, 20);
             try {
                 new BukkitRunnable() {
                     int timer = 0;
                     public void run() {
                         timer++;
-                        HotBarMessage(dest, hotbar);
+                        TitleActionBarUtil.sendActionBarMessage(dest, hotbar);
                         if (timer >= 4) {
                             cancel();
                         }
@@ -162,12 +163,6 @@ public class MissionsHandler extends BukkitRunnable {
                 }.runTaskTimer(mainClass, 0, 50);
             } catch (Exception e) {}
         }
-    }
-
-    private void HotBarMessage(Player p, String message) {
-        try {
-            HotbarMessager.sendHotBarMessage(p, message);
-        } catch (Exception e) {}
     }
 
     private void Broadcast(World w, String message, String permission) {

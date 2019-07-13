@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import firefighter.Main;
-import firefighter.utility.HotbarMessager;
+import firefighter.utility.TitleActionBarUtil;
 import firefighter.utility.XMaterial;
 
 public class Firetool implements CommandExecutor {
@@ -48,9 +48,7 @@ public class Firetool implements CommandExecutor {
         fire_extinguisher.setItemMeta(meta);
         Inventory inventory = p.getInventory();
         inventory.addItem(fire_extinguisher);
-        try {
-            HotbarMessager.sendHotBarMessage(p, "§e§n" + mainClass.messages.get("hold_right_click"));
-        } catch (Exception e) {}
+        TitleActionBarUtil.sendActionBarMessage(p, "§e§n" + mainClass.messages.get("hold_right_click"));
 
         return true;
     }

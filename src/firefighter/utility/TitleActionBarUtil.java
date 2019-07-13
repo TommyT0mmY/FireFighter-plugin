@@ -1,7 +1,3 @@
-/*	Thanks to Zombie_Striker from the Bukkit.org community for having published this very useful class
- * 				Source:
- *  https://bukkit.org/threads/send-hotbar-messages.440664/
- */
 package firefighter.utility;
 
 import java.lang.reflect.*;
@@ -10,7 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class HotbarMessager {
+public class TitleActionBarUtil {
 
     // These are the Class instances. Needed to get fields or methods for classes.
     private static Class < ? > CRAFTPLAYERCLASS, PACKET_PLAYER_CHAT_CLASS, ICHATCOMP, CHATMESSAGE, PACKET_CLASS,
@@ -67,7 +63,7 @@ public class HotbarMessager {
      * @param message
      * @throws Exception
      */
-    public static void sendHotBarMessage(Player player, String message) throws Exception {
+    public static void sendActionBarMessage(Player player, String message) {
         try {
             // This creates the IChatComponentBase instance
             Object icb = CHATMESSAGE_CONSTRUCTOR.newInstance(message, new Object[0]);
@@ -86,18 +82,62 @@ public class HotbarMessager {
             // This sends the packet.
             SENDPACKET.invoke(playerConnection, packet);
         } catch (Exception e) {
-            failsafe("sendHotBarMessage");
-            throw e;
+            failsafe("sendActionBarMessage");
+        }
+    }
+    
+    public static void sendTitle(Player p, String text, int fadein, int showtime, int fadeout) {
+    	try {
+    	    Object enumTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
+    	    Object titleChat = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + text + "\"}");
+
+    	    Constructor < ? > titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+    	    Object titlePacket = titleConstructor.newInstance(enumTitle, titleChat, fadein, showtime, fadeout);
+
+    	    sendPacket(p, titlePacket);
+    	} catch (Exception e) {
+    		failsafe("sendTitle");
+    	}
+    }
+    
+    public static void sendSubTitle(Player p, String text, int fadein, int showtime, int fadeout) {
+    	try {
+    		Object enumSubtitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
+            Object subtitleChat = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + text + "\"}");
+
+    	    Constructor < ? > titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+    	    Object subtitlePacket = titleConstructor.newInstance(enumSubtitle, subtitleChat, fadein, showtime, fadeout);
+
+    	    sendPacket(p, subtitlePacket);
+    	} catch (Exception e) {
+    		failsafe("sendSubTitle");
+    	}
+    }
+    
+    private static Class <?> getNMSClass(String name) {
+        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        try {
+            return Class.forName("net.minecraft.server." + version + "." + name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private static void sendPacket(Player player, Object packet) {
+        try {
+            Object handle = player.getClass().getMethod("getHandle").invoke(player);
+            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
+            playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private static void failsafe(String message) {
-        Bukkit.getLogger().log(Level.WARNING,
-            "[PluginConstructorAPI] HotBarMessager disabled! Something went wrong with: " + message);
-        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] Report this to Zombie_Striker");
-        Bukkit.getLogger().log(Level.WARNING, "[PluginConstructorAPI] Needed Information: " + Bukkit.getName() + ", " +
-            Bukkit.getVersion() + ", " + Bukkit.getBukkitVersion());
-        Bukkit.getLogger().log(Level.WARNING,
-            "[PluginConstructorAPI] [URL]https://github.com/ZombieStriker/PluginConstructorAPI[/URL]");
+        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] ActionBar and Titles System disabled! Something went wrong with: " + message);
+        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] Report this to SBDeveloper");
+        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] Needed Information: " + Bukkit.getName() + ", " + Bukkit.getVersion() + ", " + Bukkit.getBukkitVersion());
+        Bukkit.getLogger().log(Level.WARNING, "[ShootingGallery] [URL]https://github.com/DeveloperBoy/ShootingGallery[/URL]");
     }
 }
