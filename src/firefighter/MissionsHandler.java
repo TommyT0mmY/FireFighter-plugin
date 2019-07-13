@@ -113,7 +113,7 @@ public class MissionsHandler extends BukkitRunnable {
                     }*/
                     currBlock.setType(XMaterial.FIRE.parseMaterial());
                 }
-                mainClass.toExtinguish.clear();
+                //mainClass.toExtinguish.clear();
             }
 
         }.runTaskTimer(mainClass, 0, 100);
@@ -125,7 +125,7 @@ public class MissionsHandler extends BukkitRunnable {
                 mainClass.console.info("Mission ended");
                 mainClass.startedMission = false;
                 mainClass.missionName = "";
-                mainClass.toExtinguish.clear();
+                //mainClass.toExtinguish.clear();
                 setOnFire.clear();
                 cancel();
             }
