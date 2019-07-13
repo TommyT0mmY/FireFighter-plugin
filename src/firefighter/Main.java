@@ -1,7 +1,9 @@
 package firefighter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -28,16 +30,14 @@ public class Main extends JavaPlugin {
     public File datafolder = getDataFolder();
     public String prefix = "[" + this.getDescription().getPrefix() + "] ";
     public final String version = this.getDescription().getVersion();
-    // for the MissionsHandler class //
     public boolean startedMission = false;
-    //public HashMap<UUID, Integer> PlayerContribution = new HashMap<>(); TODO
+    public HashMap<UUID, Integer> PlayerContribution = new HashMap<>();
     public String missionName = "";
-    //public List<Location> toExtinguish = new ArrayList<>(); TODO
-    //for the fireset command
+    public List<Location> toExtinguish = new ArrayList<>();
     public HashMap<UUID, Location> fireset_first_position = new HashMap<UUID, Location>();
     public HashMap<UUID, Location> fireset_second_position = new HashMap<UUID, Location>();
     @SuppressWarnings("serial")
-    public final Map < String, String > permissions = new HashMap < String, String > () { // PERMISSIONS //
+	public final Map < String, String > permissions = new HashMap < String, String > () {
         {
             put("firefighter", "firefighter.help");
             put("firetool_get", "firefighter.firetool.get");
@@ -49,7 +49,7 @@ public class Main extends JavaPlugin {
     };
 
     @SuppressWarnings("serial")
-    public Map < String, String > messages = new HashMap < String, String > () { // MESSAGES //
+    public Map < String, String > messages = new HashMap < String, String > () {
         {
             put("invalid_permissions", "§4" + prefix + "Invalid permissions!");
             put("page_not_found", "§4" + prefix + "Page not found!");
@@ -67,7 +67,7 @@ public class Main extends JavaPlugin {
     };
 
     Server server = Bukkit.getServer();
-    public Logger console = getLogger(); //console.info(message);
+    public Logger console = getLogger();
 
     public void onEnable() {
         console.info("FireFighter v" + version + " enabled succesfully");

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import firefighter.utility.HotbarMessager;
+import firefighter.utility.XMaterial;
 
 public class MissionsHandler extends BukkitRunnable {
     private Main mainClass;
@@ -28,7 +29,6 @@ public class MissionsHandler extends BukkitRunnable {
 
     @Override
     public void run() {
-        //try {
         if (firstRun) {
             firstRun = false;
             return;
@@ -79,7 +79,7 @@ public class MissionsHandler extends BukkitRunnable {
                 }
                 currLocation.add(0, 1, 0);
                 Block currBlock = currLocation.getBlock();
-                currBlock.setType(Material.FIRE);
+                currBlock.setType(XMaterial.FIRE.parseMaterial());
                 setOnFire.add(currBlock);
             }
         }
@@ -95,15 +95,14 @@ public class MissionsHandler extends BukkitRunnable {
                 }
                 for (int i = 0; i < setOnFire.size(); i++) {
                     Block currBlock = setOnFire.get(i);
-                    if (currBlock.getType().equals(Material.FIRE) && !currBlock.getType().equals(Material.AIR)) {
+                    if (currBlock.getType().equals(XMaterial.FIRE.parseMaterial()) && !currBlock.getType().equals(Material.AIR)) {
                         continue;
                     }
                     if (random.nextInt(2) == 1) { //randomizing the respawn of the fire
                         setOnFire.remove(i);
                         continue;
                     }
-                    /*	TODO
-                    for (int j = 0; j < mainClass.toExtinguish.size(); j++) {
+                    /*TODO for (int j = 0; j < mainClass.toExtinguish.size(); j++) {
                     	if (currBlock.getLocation().equals(mainClass.toExtinguish.get(j))) {
                     		mainClass.toExtinguish.remove(j);
                     		if (random.nextInt(3) == 1) { //randomizing the respawn of the fire
@@ -111,11 +110,10 @@ public class MissionsHandler extends BukkitRunnable {
                     			continue;
                     		}
                     	}
-                    }
-                    */
-                    currBlock.setType(Material.FIRE);
+                    }*/
+                    currBlock.setType(XMaterial.FIRE.parseMaterial());
                 }
-                //mainClass.toExtinguish.clear();
+                mainClass.toExtinguish.clear();
             }
 
         }.runTaskTimer(mainClass, 0, 100);
@@ -127,13 +125,11 @@ public class MissionsHandler extends BukkitRunnable {
                 mainClass.console.info("Mission ended");
                 mainClass.startedMission = false;
                 mainClass.missionName = "";
-                //mainClass.toExtinguish.clear();
+                mainClass.toExtinguish.clear();
                 setOnFire.clear();
                 cancel();
             }
         }.runTaskTimer(mainClass, (long)(fire_lasting_ticks * (1.5)), 1);
-
-        //}catch(Exception e) {}
     }
 
     private World getWorldByName(String name) {
