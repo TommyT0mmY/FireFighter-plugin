@@ -4,6 +4,7 @@
  author: Tommy_T0mmY
  main: firefighter.Main
  prefix: FireFighter
+ api-version: 1.13
  commands:
    firefighter:
      usage: "Usage: /<command> [command name|page] ..."
