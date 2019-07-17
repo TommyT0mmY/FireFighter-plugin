@@ -102,18 +102,8 @@ public class MissionsHandler extends BukkitRunnable {
                         setOnFire.remove(i);
                         continue;
                     }
-                    /*TODO for (int j = 0; j < mainClass.toExtinguish.size(); j++) {
-                    	if (currBlock.getLocation().equals(mainClass.toExtinguish.get(j))) {
-                    		mainClass.toExtinguish.remove(j);
-                    		if (random.nextInt(3) == 1) { //randomizing the respawn of the fire
-                    			setOnFire.remove(i);
-                    			continue;
-                    		}
-                    	}
-                    }*/
                     currBlock.setType(XMaterial.FIRE.parseMaterial());
                 }
-                //mainClass.toExtinguish.clear();
             }
 
         }.runTaskTimer(mainClass, 0, 100);
@@ -125,7 +115,6 @@ public class MissionsHandler extends BukkitRunnable {
                 mainClass.console.info("Mission ended");
                 mainClass.startedMission = false;
                 mainClass.missionName = "";
-                //mainClass.toExtinguish.clear();
                 setOnFire.clear();
                 cancel();
             }

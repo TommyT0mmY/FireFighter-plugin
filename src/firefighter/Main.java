@@ -1,9 +1,7 @@
 package firefighter;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -17,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import firefighter.MissionsHandler;
 import firefighter.commands.Fireset;
 import firefighter.commands.Firetool;
 import firefighter.commands.Help;
@@ -33,7 +32,6 @@ public class Main extends JavaPlugin {
     public boolean startedMission = false;
     public HashMap<UUID, Integer> PlayerContribution = new HashMap<>();
     public String missionName = "";
-    public List<Location> toExtinguish = new ArrayList<>();
     public HashMap<UUID, Location> fireset_first_position = new HashMap<UUID, Location>();
     public HashMap<UUID, Location> fireset_second_position = new HashMap<UUID, Location>();
     @SuppressWarnings("serial")
@@ -111,7 +109,6 @@ public class Main extends JavaPlugin {
             setMessage("fireset_delete");
             setMessage("fireset_invalid_selection");
             getConfig().set("messages.hold_right_click", messages.get("hold_right_click"));
-            getConfig().set("firetool.cooldown", 1800);
             getConfig().set("missions_interval", 3600);
             getConfig().set("fire_lasting_seconds", 300);
             ItemStack wand = new ItemStack(Material.STICK);
