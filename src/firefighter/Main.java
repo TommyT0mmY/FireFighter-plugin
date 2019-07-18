@@ -21,6 +21,7 @@ import firefighter.commands.Firetool;
 import firefighter.commands.Help;
 import firefighter.events.FireExtinguisherActivation;
 import firefighter.events.FiresetWand;
+import firefighter.events.RewardsetGUI;
 import firefighter.tabcompleters.FiresetTabCompleter;
 import firefighter.tabcompleters.HelpTabCompleter;
 
@@ -41,6 +42,7 @@ public class Main extends JavaPlugin {
             put("firetool_get", "firefighter.firetool.get");
             put("firetool_use", "firefighter.firetool.use");
             put("firetool.freeze-durability", "firefighter.firetool.freeze-durability");
+            put("rewardset", "firefighter.fireset.rewardset");
             put("fireset", "firefighter.fireset");
             put("set_wand", "firefighter.setwand");
             put("onduty", "firefighter.onduty");
@@ -84,6 +86,7 @@ public class Main extends JavaPlugin {
     private void loadEvents() {
         this.getServer().getPluginManager().registerEvents(new FireExtinguisherActivation(this), this);
         this.getServer().getPluginManager().registerEvents(new FiresetWand(this), this);
+        this.getServer().getPluginManager().registerEvents(new RewardsetGUI(this), this);
     }
 
     private void loadCommands() {
