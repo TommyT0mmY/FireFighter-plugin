@@ -40,6 +40,7 @@ public class Main extends JavaPlugin {
             put("firefighter", "firefighter.help");
             put("firetool_get", "firefighter.firetool.get");
             put("firetool_use", "firefighter.firetool.use");
+            put("firetool.freeze-durability", "firefighter.firetool.freeze-durability");
             put("fireset", "firefighter.fireset");
             put("set_wand", "firefighter.setwand");
             put("onduty", "firefighter.onduty");

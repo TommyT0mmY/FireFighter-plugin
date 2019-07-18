@@ -46,13 +46,16 @@ public class FireExtinguisherActivation implements Listener {
             }
 
             //durability
-            item.setDurability((short)(item.getDurability() + 1));
-            if (item.getDurability() > 249) {
-                e.setCancelled(true);
-                p.getInventory().remove(item);
-                XSound.ENTITY_ITEM_BREAK.playSound(p, 5, 0);
-                return;
+            if (!p.hasPermission(mainClass.getPermission("firetool.freeze-durability"))) {
+	            item.setDurability((short)(item.getDurability() + 1));
+	            if (item.getDurability() > 249) {
+	                e.setCancelled(true);
+	                p.getInventory().remove(item);
+	                XSound.ENTITY_ITEM_BREAK.playSound(p, 5, 0);
+	                return;
+	            }
             }
+            
             //particle effects and turning off fire
             new BukkitRunnable() {
                 Location loc = p.getLocation();
