@@ -83,6 +83,9 @@ public class FiresetTabCompleter implements TabCompleter {
                 if (startsWith(args[2], "description")) {
                     suggestions.add("description");
                 }
+                if (startsWith(args[2], "rewards")) {
+                    suggestions.add("rewards");
+                }
             }
         }
         return suggestions;

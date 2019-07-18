@@ -1,14 +1,21 @@
 package firefighter.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import firefighter.Main;
+import firefighter.utility.XMaterial;
 
 public class Fireset implements CommandExecutor {
     private Main mainClass;
@@ -61,21 +68,27 @@ public class Fireset implements CommandExecutor {
                         p.sendMessage(mainClass.messages.get("fireset_mission_not_found"));
                         break;
                     }
-                    if (args[2].equals("name")) {
+                    if (args[2].equals("name")) { //editing mission's name
                         String newName = args[3];
                         MemorySection mission = (MemorySection) mainClass.getConfig().get("missions." + args[1]);
                         mainClass.getConfig().set("missions." + args[1], null); //removes the path
                         mainClass.saveConfig();
                         mainClass.getConfig().set("missions." + newName, mission);
                         mainClass.saveConfig();
-                    } else if (args[2].equals("description")) {
+                    } else if (args[2].equals("description")) { //editing mission's description
                         String newDescription = args[3];
                         for (int i = 3; i < args.length; i++) {
                             newDescription += args[i] + " ";
                         }
                         mainClass.getConfig().set("missions." + args[1] + ".description", newDescription);
                         mainClass.saveConfig();
-                    } else {
+                    } else if (args[2].equals("rewards")) { //editing mission's rewards
+                    	if (!p.hasPermission(mainClass.getPermission("rewardset"))) { //invalid permissions
+                    		p.sendMessage(mainClass.messages.get("invalid_permissions"));
+                    		return true;
+                    	}
+                    	openRewardsGUI(args[1], p);
+                    }else {
                         p.sendMessage(getUsage());
                         break;
                     }
@@ -135,5 +148,53 @@ public class Fireset implements CommandExecutor {
         }
         return false;
     }
+    
+    private void openRewardsGUI(String missionName, Player inventoryOwner) {
+    	//reading rewards informations from config.yml
+    	List < ItemStack > inventoryContent = new ArrayList< ItemStack >();
+    	String rewardsPath = "missions." + missionName + ".rewards";
+    	int Size = 9;
+    	String title = "§d§lRewards - " + missionName;
+    	if (mainClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
+    		int rewardsCount = mainClass.getConfig().getInt(rewardsPath + ".size");
+    		Size = (rewardsCount / 9 + 1) * 9;
+    		for (int i = 0; i < rewardsCount; i++) {
+    			ItemStack tmp = mainClass.getConfig().getItemStack(rewardsPath + "." + i);
+    			inventoryContent.add(tmp);
+    		}
+    	} else {
+    		mainClass.getConfig().set(rewardsPath + ".size", "0");
+    	}
+    	//initializing GUI
+    	Inventory GUI = Bukkit.createInventory(inventoryOwner, Size + 9, title);
+    	for (int i = 0; i < inventoryContent.size(); i++) {
+    		ItemStack tmp = inventoryContent.get(i);
+    		GUI.setItem(i, tmp);
+    	}
+    	ItemStack item1 = XMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.parseItem();
+    	ItemMeta im1 = item1.getItemMeta();
+    	im1.setDisplayName("§r");
+    	item1.setItemMeta(im1);
+    	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
+    	ItemMeta im2 = item2.getItemMeta();
+    	im2.setDisplayName("§aAdd a line");
+    	item2.setItemMeta(im2);
+    	ItemStack item3 = XMaterial.RED_STAINED_GLASS_PANE.parseItem();
+    	ItemMeta im3 = item3.getItemMeta();
+    	im3.setDisplayName("§cRemove a line");
+    	item3.setItemMeta(im3);
+    	GUI.setItem(Size + 0, item1);
+    	GUI.setItem(Size + 1, item1);
+    	GUI.setItem(Size + 2, item1);
+    	GUI.setItem(Size + 3, item2);
+    	GUI.setItem(Size + 4, item1);
+    	GUI.setItem(Size + 5, item3);
+    	GUI.setItem(Size + 6, item1);
+    	GUI.setItem(Size + 7, item1);
+    	GUI.setItem(Size + 8, item1);
+    	//opening GUI
+    	inventoryOwner.openInventory(GUI);
+    }
 
 }
+
