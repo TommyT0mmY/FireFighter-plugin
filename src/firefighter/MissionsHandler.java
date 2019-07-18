@@ -52,9 +52,11 @@ public class MissionsHandler extends BukkitRunnable {
             return;
         }
         String missionName = missions.get(random.nextInt(missions.size()));
+        mainClass.missionName = missionName;
         String missionPath = "missions." + missionName;
+        mainClass.PlayerContribution.clear();
         //broadcast message
-        World world = getWorldByName(config.get(missionPath + ".world").toString());
+        World world = mainClass.getServer().getWorld((config.get(missionPath + ".world").toString()));
         Broadcast(world, "§4Fire alert", config.get(missionPath + ".description").toString(), "§eAt coordinates " + getMediumCoord(missionName), mainClass.getPermission("onduty"));
         Broadcast(world, "§4§lFire alert at coordinates §r§e" + getMediumCoord(missionName), mainClass.getPermission("onduty"));
         mainClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
@@ -116,20 +118,11 @@ public class MissionsHandler extends BukkitRunnable {
                 mainClass.startedMission = false;
                 mainClass.missionName = "";
                 setOnFire.clear();
+                giveRewards();
+                mainClass.PlayerContribution.clear();
                 cancel();
             }
         }.runTaskTimer(mainClass, (long)(fire_lasting_ticks * (1.5)), 1);
-    }
-
-    private World getWorldByName(String name) {
-        World result = null;
-        for (World currWorld: mainClass.getServer().getWorlds()) {
-            if (currWorld.getName().equals(name)) {
-                result = currWorld;
-                break;
-            }
-        }
-        return result;
     }
 
     private void Broadcast(World w, String title, String subtitle, String hotbar, String permission) {
@@ -171,6 +164,10 @@ public class MissionsHandler extends BukkitRunnable {
         res += " ";
         res += (((Integer.valueOf(config.get(missionPath + ".first_position.z").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.z").toString())) / 2) + ""); // Z
         return res;
+    }
+    
+    private void giveRewards() { //TODO
+    	
     }
 
 }
