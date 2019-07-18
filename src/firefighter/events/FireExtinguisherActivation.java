@@ -91,6 +91,7 @@ public class FireExtinguisherActivation implements Listener {
                             Block currBlock2 = loc2.getBlock(); //if the block inside the range is fire
                             if (currBlock2.getType() == XMaterial.FIRE.parseMaterial()) {
                                 currBlock2.setType(Material.AIR);
+                                increaseContribution(p, loc2);
                                 playExtinguishingSound = true;
                             }
                         }
@@ -99,6 +100,7 @@ public class FireExtinguisherActivation implements Listener {
                     Block currBlock = loc.getBlock();
                     if (currBlock.getType() == XMaterial.FIRE.parseMaterial()) {
                         currBlock.setType(Material.AIR);
+                        increaseContribution(p, loc);
                         playExtinguishingSound = true;
                     }
                     if (playExtinguishingSound) {
@@ -153,6 +155,40 @@ public class FireExtinguisherActivation implements Listener {
     private void showParticle(Location loc, Particle particle, int count, int offsetXZ) {
         World w = loc.getWorld();
         w.spawnParticle(particle, loc, count, offsetXZ, 0, offsetXZ, 0);
+    }
+    
+    private void increaseContribution(Player p, Location fireLocation) {
+    	if (!mainClass.startedMission) { //checks if a mission is started, if not the player hasn't contributed on a mission
+    		return;
+    	}
+    	//getting the mission's location (two opposite points of the rectangular selection, missionPos1 and missionPos2)
+    	String missionPath = "missions." + mainClass.missionName;
+    	World missionWorld = mainClass.getServer().getWorld((String) mainClass.getConfig().get(missionPath + ".world"));
+    	Location missionPos1 =  new Location(missionWorld, //world
+    			mainClass.getConfig().getInt(missionPath + ".first_position.x"), //x
+    			mainClass.getConfig().getInt(missionPath + ".altitude"), //y
+    			mainClass.getConfig().getInt(missionPath + "first_position.z")); //z
+    	Location missionPos2 =  new Location(missionWorld, //world
+    			mainClass.getConfig().getInt(missionPath + ".second_position.x"), //x
+    			mainClass.getConfig().getInt(missionPath + ".altitude"), //y
+    			mainClass.getConfig().getInt(missionPath + "second_position.z")); //z
+    	//checking if the fire extinguished is inside the mission's area
+    	if (!fireLocation.getWorld().equals(missionPos1.getWorld())) { //if the world isn't the same
+    		return;
+    	}
+    	if (fireLocation.getBlockX() > Math.max(missionPos1.getBlockX(), missionPos2.getBlockX()) || fireLocation.getBlockX() < Math.min(missionPos1.getBlockX(), missionPos2.getBlockX())) { //x position out of range
+    		return;
+    	}
+    	if (fireLocation.getBlockZ() > Math.max(missionPos1.getBlockZ(), missionPos2.getBlockZ()) || fireLocation.getBlockZ() < Math.min(missionPos1.getBlockZ(), missionPos2.getBlockZ())) { //z position out of range
+    		return;
+    	}
+    	//incrementing by one the player's contibutions count or setting it to 1 if it's the first contribution
+    	if (mainClass.PlayerContribution.containsKey(p.getUniqueId())) {
+    		int tmp = mainClass.PlayerContribution.get(p.getUniqueId()) + 1;
+    		mainClass.PlayerContribution.put(p.getUniqueId(), tmp);
+    	}else {
+    		mainClass.PlayerContribution.put(p.getUniqueId(), 1);
+    	}
     }
 
 }
