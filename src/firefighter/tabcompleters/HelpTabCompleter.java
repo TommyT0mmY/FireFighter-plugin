@@ -72,6 +72,7 @@ public class HelpTabCompleter implements TabCompleter {
                 suggestions.add("1");
                 suggestions.add("2");
                 suggestions.add("3");
+                suggestions.add("4");
             };
         }
         return suggestions;

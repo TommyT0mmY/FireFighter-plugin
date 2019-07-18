@@ -79,9 +79,9 @@ public class Help implements CommandExecutor {
                 msg += (beforeCommand + "§eDescription: §7Sets a new point that will catch at a random time on fire, firefighters ");
                 msg += ("§7should extinguish the fire to get a reward.§8 §oN.B. Only admins should have access to this command\n");
                 msg += ("§7You can change the wand with §o/fireset setwand§7 with the permission " + mainClass.getPermission("set_wand") + "\n");
-                msg += ("§c§l+ - §r§epage 1/3§c§l- - - - - - - - - - - - +§r");
+                msg += ("§c§l+ - §r§epage 1/4§c§l- - - - - - - - - - - - +§r");
                 break;
-            case "fireset2":
+            case "fireset2": //adding a mission page
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'fireset' Command\n");
                 msg += (beforeCommand + "§e - How to add a mission - \n");
@@ -89,9 +89,9 @@ public class Help implements CommandExecutor {
                 msg += ("§e2)§7Create a new mission with §o/fireset addmission <name> [description]\n");
                 msg += (beforeCommand + "§ename §7The name that identifies the mission\n");
                 msg += (beforeCommand + "§edescription §7The message that will be broadcasted\n");
-                msg += ("§c§l+ - §r§epage 2/3§c§l- - - - - - - - - - - - +§r");
+                msg += ("§c§l+ - §r§epage 2/4§c§l- - - - - - - - - - - - +§r");
                 break;
-            case "fireset3":
+            case "fireset3": //editing a mission page
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'fireset' Command\n");
                 msg += (beforeCommand + "§e - How to edit a mission - \n");
@@ -99,8 +99,18 @@ public class Help implements CommandExecutor {
                 msg += (beforeCommand + "§ename §7The name that identifies the mission\n");
                 msg += (beforeCommand + "§ename|description §7The parameter that will be modified\n");
                 msg += (beforeCommand + "§enew value §7The new value of the parameter\n");
-                msg += ("§c§l+ - §r§epage 3/3§c§l- - - - - - - - - - - - +§r");
+                msg += ("§c§l+ - §r§epage 3/4§c§l- - - - - - - - - - - - +§r");
                 break;
+            case "fireset4": //rewards page
+                msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
+                msg += (beforeParagraph + "§c'fireset' Command\n");
+                msg += (beforeCommand + "§e - How to add/edit rewards of a mission - \n");
+                msg += ("§7§o/fireset editmission <name> rewards\n");
+                msg += (beforeCommand + "§ename §7The name that identifies the mission\n");
+                msg += (beforeCommand + "§7The GUI that contains rewards will open, ");
+                msg += ("§7if there are no rewards set for that specific mission the GUI will be empty\n");
+                msg += ("§c§l+ - §r§epage 4/4§c§l- - - - - - - - - - - - +§r");
+            	break;
             case "firetool1":
             case "firetool": // FIRETOOL PAGE //
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
@@ -129,7 +139,9 @@ public class Help implements CommandExecutor {
                 msg += (beforeCommand + "§7" + mainClass.getPermission("firefighter") + "§e To execute the §7§o/firefighter§e command\n");
                 msg += (beforeCommand + "§7" + mainClass.getPermission("firetool_get") + "§e To get a fire extinguisher (§7§o/firetool§e)\n");
                 msg += (beforeCommand + "§7" + mainClass.getPermission("firetool_use") + "§e To utilize a fire extinguisher\n");
+                msg += (beforeCommand + "§7" + mainClass.getPermission("firetool.freeze-durability") + "§e To freeze the usage of fire extinguishers\n");
                 msg += (beforeCommand + "§7" + mainClass.getPermission("fireset") + "§e To execute the §7§o/fireset§e command (§oadd/edit/delete missions§7)\n");
+                msg += (beforeCommand + "§7" + mainClass.getPermission("rewardset") + "§e To edit the rewards list of a mission\n");
                 msg += (beforeCommand + "§7" + mainClass.getPermission("set_wand") + "§e To execute the §7§o/firetool setwand§e command\n");
                 msg += (beforeCommand + "§7" + mainClass.getPermission("onduty") + "§e To receive missions\n");
                 msg += ("§c§l+ - - - - - - - - - - - - - - - - - +§r");
