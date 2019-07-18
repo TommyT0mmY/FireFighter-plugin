@@ -166,8 +166,8 @@ public class MissionsHandler extends BukkitRunnable {
         return res;
     }
     
-    private void giveRewards() { //TODO
-    	
+    private void giveRewards() { 
+    	//TODO
     }
 
 }
