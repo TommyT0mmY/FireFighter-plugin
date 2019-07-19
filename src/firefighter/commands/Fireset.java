@@ -171,18 +171,23 @@ public class Fireset implements CommandExecutor {
     		ItemStack tmp = inventoryContent.get(i);
     		GUI.setItem(i, tmp);
     	}
-    	ItemStack item1 = XMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.parseItem();
+    	ItemStack item1 = XMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.parseItem(); //void part of the footer
     	ItemMeta im1 = item1.getItemMeta();
     	im1.setDisplayName("§r");
     	item1.setItemMeta(im1);
-    	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
+    	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem(); //'add a line' button
     	ItemMeta im2 = item2.getItemMeta();
     	im2.setDisplayName("§aAdd a line");
     	item2.setItemMeta(im2);
-    	ItemStack item3 = XMaterial.RED_STAINED_GLASS_PANE.parseItem();
+    	ItemStack item3 = XMaterial.RED_STAINED_GLASS_PANE.parseItem(); //'remove a line' button
     	ItemMeta im3 = item3.getItemMeta();
     	im3.setDisplayName("§cRemove a line");
     	item3.setItemMeta(im3);
+    	ItemStack item4 = XMaterial.LIME_STAINED_GLASS.parseItem(); //'save changes' button
+    	ItemMeta im4 = item4.getItemMeta();
+    	im4.setDisplayName("§aSave changes");
+    	item4.setItemMeta(im4);
+    	//placing the footer in the inventory
     	GUI.setItem(Size + 0, item1);
     	GUI.setItem(Size + 1, item1);
     	GUI.setItem(Size + 2, item1);
@@ -191,7 +196,7 @@ public class Fireset implements CommandExecutor {
     	GUI.setItem(Size + 5, item3);
     	GUI.setItem(Size + 6, item1);
     	GUI.setItem(Size + 7, item1);
-    	GUI.setItem(Size + 8, item1);
+    	GUI.setItem(Size + 8, item4);
     	//opening GUI
     	inventoryOwner.openInventory(GUI);
     }
