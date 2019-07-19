@@ -182,7 +182,7 @@ public class FireExtinguisherActivation implements Listener {
     	if (fireLocation.getBlockZ() > Math.max(missionPos1.getBlockZ(), missionPos2.getBlockZ()) || fireLocation.getBlockZ() < Math.min(missionPos1.getBlockZ(), missionPos2.getBlockZ())) { //z position out of range
     		return;
     	}
-    	//incrementing by one the player's contibutions count or setting it to 1 if it's the first contribution
+    	//incrementing by one the player's contribution count or setting it to 1 if it's the first contribution
     	if (mainClass.PlayerContribution.containsKey(p.getUniqueId())) {
     		int tmp = mainClass.PlayerContribution.get(p.getUniqueId()) + 1;
     		mainClass.PlayerContribution.put(p.getUniqueId(), tmp);
