@@ -3,7 +3,9 @@ package firefighter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import firefighter.utility.TitleActionBarUtil;
@@ -115,10 +118,10 @@ public class MissionsHandler extends BukkitRunnable {
         new BukkitRunnable() {
             public void run() {
                 mainClass.console.info("Mission ended");
+                giveRewards();
                 mainClass.startedMission = false;
                 mainClass.missionName = "";
                 setOnFire.clear();
-                giveRewards();
                 mainClass.PlayerContribution.clear();
                 cancel();
             }
@@ -166,8 +169,44 @@ public class MissionsHandler extends BukkitRunnable {
         return res;
     }
     
-    private void giveRewards() { 
-    	//TODO
+    private void giveRewards() {
+    	String missionPath = "missions." + mainClass.missionName;
+    	String rewardsPath = missionPath + ".rewards";
+    	String worldName = (String) mainClass.getConfig().get(missionPath + ".world");
+    	if (mainClass.getConfig().get(rewardsPath) == null || mainClass.getConfig().getInt(rewardsPath + ".size") == 0) { //no rewards set
+    		mainClass.getConfig().set(rewardsPath + ".size", 0);
+    		mainClass.console.info("There aren't rewards set for the mission! Who will complete that mission won't receive a reward :(");
+    		mainClass.console.info("Begin setting rewards with '/fireset editmission <name> rewards', drag items in and out and then save!");
+    	}else {
+    		//picking up a random reward from the rewardsList
+    		Random random = new Random();
+    		int randomIndex = random.nextInt(mainClass.getConfig().getInt(rewardsPath + ".size"));
+    		ItemStack reward = mainClass.getConfig().getItemStack(rewardsPath + "." + randomIndex);
+    		//picking the best player
+    		UUID bestPlayer = null;
+    		for (Player p : Bukkit.getWorld(worldName).getPlayers()) {
+    			UUID currentUUID = p.getUniqueId();
+    			if (mainClass.PlayerContribution.get(currentUUID) == null) {
+    				continue;
+    			}
+    			if (mainClass.PlayerContribution.get(currentUUID) == 0) {
+    				continue;
+    			}
+    			if (mainClass.PlayerContribution.get(bestPlayer) != null) {
+	    			if (mainClass.PlayerContribution.get(bestPlayer) < mainClass.PlayerContribution.get(currentUUID)) {
+	    				bestPlayer = currentUUID;
+	    			}
+    			}else if (mainClass.PlayerContribution.get(currentUUID) > 0) {
+    				bestPlayer = currentUUID;
+    			}
+    		}
+    		//giving the best player the selected reward
+    		if (bestPlayer != null) {
+    			Bukkit.getPlayer(bestPlayer).getInventory().addItem(reward);
+    			Bukkit.getPlayer(bestPlayer).sendMessage(mainClass.messages.get("received_reward"));
+    		}else {
+    			mainClass.console.info("No one contributed to the mission!");
+    		}
+    	}
     }
-
 }

@@ -164,22 +164,21 @@ public class FireExtinguisherActivation implements Listener {
     	//getting the mission's location (two opposite points of the rectangular selection, missionPos1 and missionPos2)
     	String missionPath = "missions." + mainClass.missionName;
     	World missionWorld = mainClass.getServer().getWorld((String) mainClass.getConfig().get(missionPath + ".world"));
-    	Location missionPos1 =  new Location(missionWorld, //world
-    			mainClass.getConfig().getInt(missionPath + ".first_position.x"), //x
-    			mainClass.getConfig().getInt(missionPath + ".altitude"), //y
-    			mainClass.getConfig().getInt(missionPath + "first_position.z")); //z
-    	Location missionPos2 =  new Location(missionWorld, //world
-    			mainClass.getConfig().getInt(missionPath + ".second_position.x"), //x
-    			mainClass.getConfig().getInt(missionPath + ".altitude"), //y
-    			mainClass.getConfig().getInt(missionPath + "second_position.z")); //z
+    	int minX = Math.min(mainClass.getConfig().getInt(missionPath + ".first_position.x"), mainClass.getConfig().getInt(missionPath + ".second_position.x"));
+    	int maxX = Math.max(mainClass.getConfig().getInt(missionPath + ".first_position.x"), mainClass.getConfig().getInt(missionPath + ".second_position.x"));
+    	int minZ = Math.min(mainClass.getConfig().getInt(missionPath + ".first_position.z"), mainClass.getConfig().getInt(missionPath + ".second_position.z"));
+    	int maxZ = Math.max(mainClass.getConfig().getInt(missionPath + ".first_position.z"), mainClass.getConfig().getInt(missionPath + ".second_position.z"));
+    	int currX = fireLocation.getBlockX();
+    	int currZ = fireLocation.getBlockZ();
+    	
     	//checking if the fire extinguished is inside the mission's area
-    	if (!fireLocation.getWorld().equals(missionPos1.getWorld())) { //if the world isn't the same
+    	if (!fireLocation.getWorld().equals(missionWorld)) { //if the world isn't the same
     		return;
     	}
-    	if (fireLocation.getBlockX() > Math.max(missionPos1.getBlockX(), missionPos2.getBlockX()) || fireLocation.getBlockX() < Math.min(missionPos1.getBlockX(), missionPos2.getBlockX())) { //x position out of range
+    	if (currX > maxX || currX < minX) { //x position out of range
     		return;
     	}
-    	if (fireLocation.getBlockZ() > Math.max(missionPos1.getBlockZ(), missionPos2.getBlockZ()) || fireLocation.getBlockZ() < Math.min(missionPos1.getBlockZ(), missionPos2.getBlockZ())) { //z position out of range
+    	if (currZ > maxZ || currZ < minZ) { //z position out of range
     		return;
     	}
     	//incrementing by one the player's contribution count or setting it to 1 if it's the first contribution

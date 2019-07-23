@@ -31,10 +31,10 @@ public class Main extends JavaPlugin {
     public String prefix = "[" + this.getDescription().getPrefix() + "] ";
     public final String version = this.getDescription().getVersion();
     public boolean startedMission = false;
-    public HashMap<UUID, Integer> PlayerContribution = new HashMap<>();
+    public HashMap< UUID, Integer > PlayerContribution = new HashMap<>();
     public String missionName = "";
-    public HashMap<UUID, Location> fireset_first_position = new HashMap<UUID, Location>();
-    public HashMap<UUID, Location> fireset_second_position = new HashMap<UUID, Location>();
+    public HashMap< UUID, Location > fireset_first_position = new HashMap< UUID, Location >();
+    public HashMap< UUID, Location > fireset_second_position = new HashMap< UUID, Location >();
     @SuppressWarnings("serial")
 	public final Map < String, String > permissions = new HashMap < String, String > () {
         {
@@ -64,6 +64,7 @@ public class Main extends JavaPlugin {
             put("fireset_delete", "§e" + prefix + "Mission successfully deleted!");
             put("fireset_invalid_selection", "§4" + prefix + "Invalid selection!");
             put("fireset_added_mission", "§e" + prefix + "Mission successfully added!");
+            put("received_reward", "§e" + prefix + "You received a reward for completing the mission!");
         }
     };
 
@@ -102,16 +103,6 @@ public class Main extends JavaPlugin {
         if (!configFile.exists()) {
             getConfig().options().copyDefaults(true);
             getConfig().set("prefix", prefix);
-            setMessage("invalid_permissions");
-            setMessage("page_not_found");
-            setMessage("unknown_command");
-            setMessage("fireset_wand_instructions");
-            setMessage("fireset_first_position_set");
-            setMessage("fireset_second_position_set");
-            setMessage("fireset_wand_setted");
-            setMessage("fireset_mission_not_found");
-            setMessage("fireset_delete");
-            setMessage("fireset_invalid_selection");
             getConfig().set("messages.hold_right_click", messages.get("hold_right_click"));
             getConfig().set("missions_interval", 3600);
             getConfig().set("fire_lasting_seconds", 300);
@@ -120,8 +111,19 @@ public class Main extends JavaPlugin {
             wandMeta.setDisplayName("§eFireset Wand");
             wand.setItemMeta(wandMeta);
             getConfig().set("fireset.wand", wand);
-            saveConfig();
         }
+        setMessage("invalid_permissions");
+        setMessage("page_not_found");
+        setMessage("unknown_command");
+        setMessage("fireset_wand_instructions");
+        setMessage("fireset_first_position_set");
+        setMessage("fireset_second_position_set");
+        setMessage("fireset_wand_setted");
+        setMessage("fireset_mission_not_found");
+        setMessage("fireset_delete");
+        setMessage("fireset_invalid_selection");
+        setMessage("received_reward");
+        saveConfig();
         readConfigs();
     }
 
@@ -138,6 +140,7 @@ public class Main extends JavaPlugin {
         readMessage("fireset_mission_not_found");
         readMessage("fireset_delete");
         readMessage("fireset_invalid_selection");
+        readMessage("received_reward");
         int fls = Integer.valueOf(getConfig().get("fire_lasting_seconds").toString());
         int mi = Integer.valueOf(getConfig().get("missions_interval").toString());
         if (fls >= mi) {
@@ -155,7 +158,9 @@ public class Main extends JavaPlugin {
     }
 
     private void setMessage(String name) {
-        getConfig().set("messages." + name, messages.get(name).replace(prefix, "<prefix>"));
+    	if (getConfig().get(name) == null) {
+    		getConfig().set("messages." + name, messages.get(name).replace(prefix, "<prefix>"));
+    	}
     }
 
     public String getPermission(String commandName) {

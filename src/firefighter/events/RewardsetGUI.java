@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -65,6 +64,7 @@ public class RewardsetGUI implements Listener {
     	
     }
     
+    /*
     private int getItemCount(Inventory inv) { //currently unused but probably useful for future modifications, it detects how many slots have been used in the given inventory inv
     	int count = 0;
     	ItemStack[] contents = inv.getContents();
@@ -75,6 +75,7 @@ public class RewardsetGUI implements Listener {
     	}
     	return count;
     }
+    */
     
     @SuppressWarnings("deprecation")
     private void openNewInventory(Player InventoryOwner, Inventory inv, int newSize) { //opens a new inventory with the same contents but with a different size
@@ -135,7 +136,8 @@ public class RewardsetGUI implements Listener {
     	return Origin;
     }
     
-    private void saveRewards (Inventory inv) { //saves to config.yml the content of the inventory (excluding the footer)
+    @SuppressWarnings({ "unlikely-arg-type", "deprecation" })
+	private void saveRewards (Inventory inv) { //saves to config.yml the content of the inventory (excluding the footer)
     	int Size = inv.getContents().length;
     	String missionName = inv.getName().replace("§d§lRewards - ", "");
     	String missionPath = "missions." + missionName;
