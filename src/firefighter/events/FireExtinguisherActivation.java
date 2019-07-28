@@ -158,7 +158,7 @@ public class FireExtinguisherActivation implements Listener {
     }
     
     private void increaseContribution(Player p, Location fireLocation) {
-    	if (!mainClass.startedMission) { //checks if a mission is started, if not the player hasn't contributed on a mission
+    	if (!mainClass.startedMission || mainClass.missionName == "") { //checks if a mission is started, if not the player hasn't contributed on a mission
     		return;
     	}
     	//getting the mission's location (two opposite points of the rectangular selection, missionPos1 and missionPos2)

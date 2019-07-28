@@ -1,5 +1,5 @@
  name: FireFighter
- version: 1.1
+ version: 1.1.1
  description: A roleplay plugin that allows players to play as firefighters. 
  author: Tommy_T0mmY
  main: firefighter.Main

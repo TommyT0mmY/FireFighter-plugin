@@ -59,7 +59,14 @@ public class MissionsHandler extends BukkitRunnable {
         String missionPath = "missions." + missionName;
         mainClass.PlayerContribution.clear();
         //broadcast message
+        if (config.get(missionPath + ".world").toString() == null) { //avoids NPE
+        	turnOffInstructions();
+        	cancel();
+        }
         World world = mainClass.getServer().getWorld((config.get(missionPath + ".world").toString()));
+        if (world == null) { //avoids NPE
+        	return;
+        }
         Broadcast(world, "§4Fire alert", config.get(missionPath + ".description").toString(), "§eAt coordinates " + getMediumCoord(missionName), mainClass.getPermission("onduty"));
         Broadcast(world, "§4§lFire alert at coordinates §r§e" + getMediumCoord(missionName), mainClass.getPermission("onduty"));
         mainClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
@@ -117,18 +124,16 @@ public class MissionsHandler extends BukkitRunnable {
 
         new BukkitRunnable() {
             public void run() {
-                mainClass.console.info("Mission ended");
-                giveRewards();
-                mainClass.startedMission = false;
-                mainClass.missionName = "";
-                setOnFire.clear();
-                mainClass.PlayerContribution.clear();
+            	turnOffInstructions();
                 cancel();
             }
         }.runTaskTimer(mainClass, (long)(fire_lasting_ticks * (1.5)), 1);
     }
 
     private void Broadcast(World w, String title, String subtitle, String hotbar, String permission) {
+    	if (w == null) { //avoids NPE
+    		return;
+    	}
         for (Player dest: w.getPlayers()) {
             if (!dest.hasPermission(permission)) {
                 continue;
@@ -151,6 +156,9 @@ public class MissionsHandler extends BukkitRunnable {
     }
 
     private void Broadcast(World w, String message, String permission) {
+    	if (w == null) { //avoids NPE
+    		return;
+    	}
         for (Player dest: w.getPlayers()) {
             if (dest.hasPermission(permission)) {
                 dest.sendMessage(message);
@@ -208,5 +216,14 @@ public class MissionsHandler extends BukkitRunnable {
     			mainClass.console.info("No one contributed to the mission!");
     		}
     	}
+    }
+    
+    private void turnOffInstructions() {
+        mainClass.console.info("Mission ended");
+        giveRewards();
+        mainClass.startedMission = false;
+        mainClass.missionName = "";
+        setOnFire.clear();
+        mainClass.PlayerContribution.clear();
     }
 }
