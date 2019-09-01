@@ -1,5 +1,7 @@
-package firefighter.events;
+package com.github.tommyt0mmy.firefighter.events;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,13 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import firefighter.Main;
-import firefighter.utility.XMaterial;
-import firefighter.utility.XSound;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 public class RewardsetGUI implements Listener {
-    private Main mainClass;
-    public RewardsetGUI(Main mainClass) {
+    private FireFighter mainClass;
+    public RewardsetGUI(FireFighter mainClass) {
         this.mainClass = mainClass;
     }
     @SuppressWarnings("deprecation")

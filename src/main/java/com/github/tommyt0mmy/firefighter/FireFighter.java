@@ -1,4 +1,4 @@
-package firefighter;
+package com.github.tommyt0mmy.firefighter;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,17 +15,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import firefighter.MissionsHandler;
-import firefighter.commands.Fireset;
-import firefighter.commands.Firetool;
-import firefighter.commands.Help;
-import firefighter.events.FireExtinguisherActivation;
-import firefighter.events.FiresetWand;
-import firefighter.events.RewardsetGUI;
-import firefighter.tabcompleters.FiresetTabCompleter;
-import firefighter.tabcompleters.HelpTabCompleter;
+import com.github.tommyt0mmy.firefighter.commands.Fireset;
+import com.github.tommyt0mmy.firefighter.commands.Firetool;
+import com.github.tommyt0mmy.firefighter.commands.Help;
+import com.github.tommyt0mmy.firefighter.events.FireExtinguisherActivation;
+import com.github.tommyt0mmy.firefighter.events.FiresetWand;
+import com.github.tommyt0mmy.firefighter.events.RewardsetGUI;
+import com.github.tommyt0mmy.firefighter.tabcompleters.FiresetTabCompleter;
+import com.github.tommyt0mmy.firefighter.tabcompleters.HelpTabCompleter;
 
-public class Main extends JavaPlugin {
+public class FireFighter extends JavaPlugin {
 
     public File datafolder = getDataFolder();
     public String prefix = "[" + this.getDescription().getPrefix() + "] ";
@@ -38,7 +37,7 @@ public class Main extends JavaPlugin {
     @SuppressWarnings("serial")
 	public final Map < String, String > permissions = new HashMap < String, String > () {
         {
-            put("firefighter", "firefighter.help");
+            put("com/github/tommyt0mmy/firefighter", "firefighter.help");
             put("firetool_get", "firefighter.firetool.get");
             put("firetool_use", "firefighter.firetool.use");
             put("firetool.freeze-durability", "firefighter.firetool.freeze-durability");
@@ -91,10 +90,10 @@ public class Main extends JavaPlugin {
     }
 
     private void loadCommands() {
-        getCommand("firefighter").setExecutor(new Help(this));
+        getCommand("com/github/tommyt0mmy/firefighter").setExecutor(new Help(this));
         getCommand("fireset").setExecutor(new Fireset(this));
         getCommand("firetool").setExecutor(new Firetool(this));
-        getCommand("firefighter").setTabCompleter(new HelpTabCompleter(this));
+        getCommand("com/github/tommyt0mmy/firefighter").setTabCompleter(new HelpTabCompleter(this));
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter(this));
     }
 

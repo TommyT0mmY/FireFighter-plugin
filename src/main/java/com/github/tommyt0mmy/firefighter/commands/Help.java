@@ -1,32 +1,31 @@
-package firefighter.commands;
+package com.github.tommyt0mmy.firefighter.commands;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import firefighter.Main;
-
 public class Help implements CommandExecutor {
     /* firefighter command */
-    private Main mainClass;
-    public Help(Main mainClass) {
-        this.mainClass = mainClass;
+    private FireFighter fireFighterClass;
+    public Help(FireFighter fireFighterClass) {
+        this.fireFighterClass = fireFighterClass;
     }
 
     private String getUsage() {
-        return ((String) mainClass.getDescription().getCommands().get("firefighter").get("usage")).replaceAll("<command>", "firefighter");
+        return ((String) fireFighterClass.getDescription().getCommands().get("com/github/tommyt0mmy/firefighter").get("usage")).replaceAll("<command>", "com/github/tommyt0mmy/firefighter");
     }
 
     @Override
     public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args) {
         if (!(Sender instanceof Player)) {
-            Sender.sendMessage(mainClass.prefix + "Only players can execute this command!");
+            Sender.sendMessage(fireFighterClass.prefix + "Only players can execute this command!");
             return true;
         }
         Player p = (Player) Sender;
-        if (!(p.hasPermission(mainClass.getPermission("firefighter")) || p.isOp())) {
-            p.sendMessage(mainClass.messages.get("invalid_permissions"));
+        if (!(p.hasPermission(fireFighterClass.getPermission("com/github/tommyt0mmy/firefighter")) || p.isOp())) {
+            p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
             return true;
         }
 
@@ -43,8 +42,8 @@ public class Help implements CommandExecutor {
     }
 
     private String getCommandDescription(String commandName) {
-        if (mainClass.getDescription().getCommands().get(commandName).get("description") != null) {
-            return (String) mainClass.getDescription().getCommands().get(commandName).get("description");
+        if (fireFighterClass.getDescription().getCommands().get(commandName).get("description") != null) {
+            return (String) fireFighterClass.getDescription().getCommands().get(commandName).get("description");
         } else {
             return "No description";
         }
@@ -57,7 +56,7 @@ public class Help implements CommandExecutor {
 
         switch (index) {
             default:
-                destination.sendMessage(mainClass.messages.get("page_not_found"));
+                destination.sendMessage(fireFighterClass.messages.get("page_not_found"));
                 return;
             case "1": // PAGE 1 //
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
@@ -66,7 +65,7 @@ public class Help implements CommandExecutor {
                 msg += ("§7§o/firefighter permissions §e§oTo get a list of the permissions \n");
                 msg += (beforeCommand + "§7fireset§e " + getCommandDescription("fireset") + "\n");
                 msg += (beforeCommand + "§7firetool§e " + getCommandDescription("firetool") + "\n");
-                msg += (beforeCommand + "§7firefighter [command|page] ...§e " + getCommandDescription("firefighter") + "\n");
+                msg += (beforeCommand + "§7firefighter [command|page] ...§e " + getCommandDescription("com/github/tommyt0mmy/firefighter") + "\n");
                 //		(beforeCommand + "§7...§e ..."); //reference
                 msg += ("§c§l+ - §r§epage 1/1§c§l- - - - - - - - - - - - +§r");
                 break;
@@ -75,10 +74,10 @@ public class Help implements CommandExecutor {
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'fireset' Command\n");
                 msg += (beforeCommand + "§eUsage: §7/fireset [setwand|addmission|editmission|deletemission] ...\n");
-                msg += (beforeCommand + "§ePermission node: §7" + mainClass.getPermission("fireset") + "\n");
+                msg += (beforeCommand + "§ePermission node: §7" + fireFighterClass.getPermission("fireset") + "\n");
                 msg += (beforeCommand + "§eDescription: §7Sets a new point that will catch at a random time on fire, firefighters ");
                 msg += ("§7should extinguish the fire to get a reward.§8 §oN.B. Only admins should have access to this command\n");
-                msg += ("§7You can change the wand with §o/fireset setwand§7 with the permission " + mainClass.getPermission("set_wand") + "\n");
+                msg += ("§7You can change the wand with §o/fireset setwand§7 with the permission " + fireFighterClass.getPermission("set_wand") + "\n");
                 msg += ("§c§l+ - §r§epage 1/4§c§l- - - - - - - - - - - - +§r");
                 break;
             case "fireset2": //adding a mission page
@@ -116,18 +115,18 @@ public class Help implements CommandExecutor {
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'firetool' Command\n");
                 msg += (beforeCommand + "§eUsage: §7/firetool\n");
-                msg += (beforeCommand + "§ePermission node: §7" + mainClass.getPermission("firetool_get") + "\n");
+                msg += (beforeCommand + "§ePermission node: §7" + fireFighterClass.getPermission("firetool_get") + "\n");
                 msg += (beforeCommand + "§eDescription: §7Gives a fire extinguisher to the player. The fire extinguisher ");
                 msg += ("§7can be used to extinguish a fire and in the firefighter missions. Hold right click to use the fire extinguisher. ");
-                msg += ("§7To use the fire extinguisher the player needs the permission " + mainClass.getPermission("firetool_use") + "\n");
+                msg += ("§7To use the fire extinguisher the player needs the permission " + fireFighterClass.getPermission("firetool_use") + "\n");
                 msg += ("§c§l+ - - - - - - - - - - - - - - - - - +§r");
                 break;
             case "firefighter1":
-            case "firefighter": // FIREFIGHTER PAGE //
+            case "com/github/tommyt0mmy/firefighter": // FIREFIGHTER PAGE //
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'firefirghter' Command\n");
                 msg += (beforeCommand + "§eUsage: §7/firefighter [command|page] ...\n");
-                msg += (beforeCommand + "§ePermission node: §7" + mainClass.getPermission("firefighter") + "\n");
+                msg += (beforeCommand + "§ePermission node: §7" + fireFighterClass.getPermission("com/github/tommyt0mmy/firefighter") + "\n");
                 msg += (beforeCommand + "§eDescription: §7Shows the help menu, pressing tab while typing §o/firefighter §r");
                 msg += ("§7will autocomplete the command showing every existent page that you can have access to.\n");
                 msg += ("§c§l+ - - - - - - - - - - - - - - - - - +§r");
@@ -136,14 +135,14 @@ public class Help implements CommandExecutor {
             case "permissions": // PERMISSIONS PAGE //
                 msg += ("§c§l+ - - - §e§l§oFireFighter help§c§l - - - +§r\n");
                 msg += (beforeParagraph + "§c'Permissions list\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("firefighter") + "§e To execute the §7§o/firefighter§e command\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("firetool_get") + "§e To get a fire extinguisher (§7§o/firetool§e)\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("firetool_use") + "§e To utilize a fire extinguisher\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("firetool.freeze-durability") + "§e To freeze the usage of fire extinguishers\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("fireset") + "§e To execute the §7§o/fireset§e command (§oadd/edit/delete missions§7)\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("rewardset") + "§e To edit the rewards list of a mission\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("set_wand") + "§e To execute the §7§o/firetool setwand§e command\n");
-                msg += (beforeCommand + "§7" + mainClass.getPermission("onduty") + "§e To receive missions\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("com/github/tommyt0mmy/firefighter") + "§e To execute the §7§o/firefighter§e command\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("firetool_get") + "§e To get a fire extinguisher (§7§o/firetool§e)\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("firetool_use") + "§e To utilize a fire extinguisher\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("firetool.freeze-durability") + "§e To freeze the usage of fire extinguishers\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("fireset") + "§e To execute the §7§o/fireset§e command (§oadd/edit/delete missions§7)\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("rewardset") + "§e To edit the rewards list of a mission\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("set_wand") + "§e To execute the §7§o/firetool setwand§e command\n");
+                msg += (beforeCommand + "§7" + fireFighterClass.getPermission("onduty") + "§e To receive missions\n");
                 msg += ("§c§l+ - - - - - - - - - - - - - - - - - +§r");
         }
         destination.sendMessage(msg);

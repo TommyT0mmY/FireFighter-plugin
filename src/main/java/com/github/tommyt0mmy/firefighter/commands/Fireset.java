@@ -1,8 +1,9 @@
-package firefighter.commands;
+package com.github.tommyt0mmy.firefighter.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,36 +15,35 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import firefighter.Main;
-import firefighter.utility.XMaterial;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 public class Fireset implements CommandExecutor {
-    private Main mainClass;
-    public Fireset(Main mainClass) {
-        this.mainClass = mainClass;
+    private FireFighter fireFighterClass;
+    public Fireset(FireFighter fireFighterClass) {
+        this.fireFighterClass = fireFighterClass;
     }
 
     private String getUsage() {
-        return ((String) mainClass.getDescription().getCommands().get("fireset").get("usage")).replaceAll("<command>", "fireset");
+        return ((String) fireFighterClass.getDescription().getCommands().get("fireset").get("usage")).replaceAll("<command>", "fireset");
     }
 
     @Override
     public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args) {
         if (!(Sender instanceof Player)) {
-            Sender.sendMessage(mainClass.prefix + "Only players can execute this command!");
+            Sender.sendMessage(fireFighterClass.prefix + "Only players can execute this command!");
             return true;
         }
         Player p = (Player) Sender;
-        if (!(p.hasPermission(mainClass.getPermission("fireset")) || p.isOp())) {
-            p.sendMessage(mainClass.messages.get("invalid_permissions"));
+        if (!(p.hasPermission(fireFighterClass.getPermission("fireset")) || p.isOp())) {
+            p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
             return true;
         }
 
-        ItemStack wand = mainClass.getConfig().getItemStack("fireset.wand");
+        ItemStack wand = fireFighterClass.getConfig().getItemStack("fireset.wand");
 
         if (args.length == 0) { //giving the wand
             p.getInventory().addItem(wand);
-            p.sendMessage(mainClass.messages.get("fireset_wand_instructions"));
+            p.sendMessage(fireFighterClass.messages.get("fireset_wand_instructions"));
         } else if (args.length > 0) {
             switch (args[0]) {
                 case "deletemission": ///DELETE MISSION///
@@ -52,11 +52,11 @@ public class Fireset implements CommandExecutor {
                         break;
                     }
                     if (existsMission(args[1])) {
-                        mainClass.getConfig().set("missions." + args[1], null); //removes the path
-                        mainClass.saveConfig();
-                        p.sendMessage(mainClass.messages.get("fireset_delete"));
+                        fireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
+                        fireFighterClass.saveConfig();
+                        p.sendMessage(fireFighterClass.messages.get("fireset_delete"));
                     } else {
-                        p.sendMessage(mainClass.messages.get("fireset_mission_not_found"));
+                        p.sendMessage(fireFighterClass.messages.get("fireset_mission_not_found"));
                     }
                     break;
                 case "editmission": ///EDIT MISSION///
@@ -65,26 +65,26 @@ public class Fireset implements CommandExecutor {
                         break;
                     }
                     if (!existsMission(args[1])) {
-                        p.sendMessage(mainClass.messages.get("fireset_mission_not_found"));
+                        p.sendMessage(fireFighterClass.messages.get("fireset_mission_not_found"));
                         break;
                     }
                     if (args[2].equals("name")) { //editing mission's name
                         String newName = args[3];
-                        MemorySection mission = (MemorySection) mainClass.getConfig().get("missions." + args[1]);
-                        mainClass.getConfig().set("missions." + args[1], null); //removes the path
-                        mainClass.saveConfig();
-                        mainClass.getConfig().set("missions." + newName, mission);
-                        mainClass.saveConfig();
+                        MemorySection mission = (MemorySection) fireFighterClass.getConfig().get("missions." + args[1]);
+                        fireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
+                        fireFighterClass.saveConfig();
+                        fireFighterClass.getConfig().set("missions." + newName, mission);
+                        fireFighterClass.saveConfig();
                     } else if (args[2].equals("description")) { //editing mission's description
                         String newDescription = args[3];
                         for (int i = 3; i < args.length; i++) {
                             newDescription += args[i] + " ";
                         }
-                        mainClass.getConfig().set("missions." + args[1] + ".description", newDescription);
-                        mainClass.saveConfig();
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".description", newDescription);
+                        fireFighterClass.saveConfig();
                     } else if (args[2].equals("rewards")) { //editing mission's rewards
-                    	if (!p.hasPermission(mainClass.getPermission("rewardset"))) { //invalid permissions
-                    		p.sendMessage(mainClass.messages.get("invalid_permissions"));
+                    	if (!p.hasPermission(fireFighterClass.getPermission("rewardset"))) { //invalid permissions
+                    		p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
                     		return true;
                     	}
                     	openRewardsGUI(args[1], p);
@@ -98,26 +98,26 @@ public class Fireset implements CommandExecutor {
                         p.sendMessage(getUsage());
                         break;
                     }
-                    if (mainClass.fireset_first_position.containsKey(p.getUniqueId()) && mainClass.fireset_second_position.containsKey(p.getUniqueId())) { //checks if the area is setted
-                        mainClass.getConfig().set("missions." + args[1] + ".first_position.x", mainClass.fireset_first_position.get(p.getUniqueId()).getBlockX());
-                        mainClass.getConfig().set("missions." + args[1] + ".first_position.z", mainClass.fireset_first_position.get(p.getUniqueId()).getBlockZ());
-                        mainClass.getConfig().set("missions." + args[1] + ".second_position.x", mainClass.fireset_second_position.get(p.getUniqueId()).getBlockX());
-                        mainClass.getConfig().set("missions." + args[1] + ".second_position.z", mainClass.fireset_second_position.get(p.getUniqueId()).getBlockZ());
-                        mainClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((mainClass.fireset_first_position.get(p.getUniqueId()).getBlockY()), (mainClass.fireset_second_position.get(p.getUniqueId()).getBlockY())));
-                        mainClass.getConfig().set("missions." + args[1] + ".world", mainClass.fireset_first_position.get(p.getUniqueId()).getWorld().getName());
+                    if (fireFighterClass.fireset_first_position.containsKey(p.getUniqueId()) && fireFighterClass.fireset_second_position.containsKey(p.getUniqueId())) { //checks if the area is setted
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".first_position.x", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockX());
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".first_position.z", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockZ());
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".second_position.x", fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockX());
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".second_position.z", fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockZ());
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockY()), (fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockY())));
+                        fireFighterClass.getConfig().set("missions." + args[1] + ".world", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getWorld().getName());
                         if (args.length >= 3) {
                             String description = "";
                             for (int i = 2; i < args.length; i++) {
                                 description += args[i] + " ";
                             }
-                            mainClass.getConfig().set("missions." + args[1] + ".description", description);
+                            fireFighterClass.getConfig().set("missions." + args[1] + ".description", description);
                         } else {
-                            mainClass.getConfig().set("missions." + args[1] + ".description", "§cFire at the " + args[1]);
+                            fireFighterClass.getConfig().set("missions." + args[1] + ".description", "§cFire at the " + args[1]);
                         }
-                        p.sendMessage(mainClass.messages.get("fireset_added_mission"));
-                        mainClass.saveConfig();
+                        p.sendMessage(fireFighterClass.messages.get("fireset_added_mission"));
+                        fireFighterClass.saveConfig();
                     } else {
-                        p.sendMessage(mainClass.messages.get("fireset_invalid_selection"));
+                        p.sendMessage(fireFighterClass.messages.get("fireset_invalid_selection"));
                         break;
                     }
                     break;
@@ -129,9 +129,9 @@ public class Fireset implements CommandExecutor {
                     ItemStack newWand = p.getInventory().getItemInMainHand();
                     if (newWand.getType() != Material.AIR) { //checks if the player has something in his hand
                         newWand.setAmount(1);
-                        mainClass.getConfig().set("fireset.wand", newWand);
-                        mainClass.saveConfig();
-                        p.sendMessage(mainClass.messages.get("fireset_wand_setted"));
+                        fireFighterClass.getConfig().set("fireset.wand", newWand);
+                        fireFighterClass.saveConfig();
+                        p.sendMessage(fireFighterClass.messages.get("fireset_wand_setted"));
                     }
                     break;
                 default:
@@ -143,7 +143,7 @@ public class Fireset implements CommandExecutor {
     }
 
     private boolean existsMission(String name) {
-        if (mainClass.getConfig().contains("missions." + name)) {
+        if (fireFighterClass.getConfig().contains("missions." + name)) {
             return true;
         }
         return false;
@@ -155,15 +155,15 @@ public class Fireset implements CommandExecutor {
     	String rewardsPath = "missions." + missionName + ".rewards";
     	int Size = 9;
     	String title = "§d§lRewards - " + missionName;
-    	if (mainClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
-    		int rewardsCount = mainClass.getConfig().getInt(rewardsPath + ".size");
+    	if (fireFighterClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
+    		int rewardsCount = fireFighterClass.getConfig().getInt(rewardsPath + ".size");
     		Size = (rewardsCount / 9 + 1) * 9;
     		for (int i = 0; i < rewardsCount; i++) {
-    			ItemStack tmp = mainClass.getConfig().getItemStack(rewardsPath + "." + i);
+    			ItemStack tmp = fireFighterClass.getConfig().getItemStack(rewardsPath + "." + i);
     			inventoryContent.add(tmp);
     		}
     	} else {
-    		mainClass.getConfig().set(rewardsPath + ".size", "0");
+    		fireFighterClass.getConfig().set(rewardsPath + ".size", "0");
     	}
     	//initializing GUI
     	Inventory GUI = Bukkit.createInventory(inventoryOwner, Size + 9, title);

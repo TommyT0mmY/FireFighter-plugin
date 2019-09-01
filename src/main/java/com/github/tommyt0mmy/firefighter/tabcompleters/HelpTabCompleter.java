@@ -1,18 +1,17 @@
-package firefighter.tabcompleters;
+package com.github.tommyt0mmy.firefighter.tabcompleters;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import firefighter.Main;
-
 public class HelpTabCompleter implements TabCompleter {
-    private Main mainClass;
-    public HelpTabCompleter(Main mainClass) {
+    private FireFighter mainClass;
+    public HelpTabCompleter(FireFighter mainClass) {
         this.mainClass = mainClass;
     }
 
@@ -40,7 +39,7 @@ public class HelpTabCompleter implements TabCompleter {
     @Override
     public List < String > onTabComplete(CommandSender sender, Command command, String paramString, String[] args) {
 
-        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("firefighter"))))) {
+        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("com/github/tommyt0mmy/firefighter"))))) {
             return null;
         }
         if (args.length > 2) { //invalid number of arguments
@@ -50,13 +49,13 @@ public class HelpTabCompleter implements TabCompleter {
         List < String > suggestions = new ArrayList < > ();
 
         if (args.length == 0) {
-            suggestions.add("firefighter");
+            suggestions.add("com/github/tommyt0mmy/firefighter");
             suggestions.add("firetool");
             suggestions.add("fireset");
             suggestions.add("permissions");
         } else if (args.length == 1) {
-            if (startsWith(args[0], "firefighter")) {
-                suggestions.add("firefighter");
+            if (startsWith(args[0], "com/github/tommyt0mmy/firefighter")) {
+                suggestions.add("com/github/tommyt0mmy/firefighter");
             }
             if (startsWith(args[0], "permissions")) {
                 suggestions.add("permissions");

@@ -2,7 +2,7 @@
  version: ${version}
  description: A roleplay plugin that allows players to play as firefighters. 
  author: Tommy_T0mmY
- main: firefighter.Main
+ main: com.github.tommyt0mmy.firefighter.FireFighter
  prefix: FireFighter
  api-version: 1.13
  commands:

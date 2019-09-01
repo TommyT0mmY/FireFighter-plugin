@@ -1,5 +1,8 @@
-package firefighter.events;
+package com.github.tommyt0mmy.firefighter.events;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -15,13 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import firefighter.Main;
-import firefighter.utility.XMaterial;
-import firefighter.utility.XSound;
-
 public class FireExtinguisherActivation implements Listener {
-    private Main mainClass;
-    public FireExtinguisherActivation(Main mainClass) {
+    private FireFighter mainClass;
+    public FireExtinguisherActivation(FireFighter mainClass) {
         this.mainClass = mainClass;
     }
 

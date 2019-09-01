@@ -23,7 +23,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package firefighter.utility;
+package com.github.tommyt0mmy.firefighter.utility;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;

@@ -1,10 +1,12 @@
-package firefighter;
+package com.github.tommyt0mmy.firefighter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,12 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import firefighter.utility.TitleActionBarUtil;
-import firefighter.utility.XMaterial;
-
 public class MissionsHandler extends BukkitRunnable {
-    private Main mainClass;
-    public MissionsHandler(Main mainClass) {
+    private FireFighter mainClass;
+    public MissionsHandler(FireFighter mainClass) {
         this.mainClass = mainClass;
         config = mainClass.getConfig();
     }

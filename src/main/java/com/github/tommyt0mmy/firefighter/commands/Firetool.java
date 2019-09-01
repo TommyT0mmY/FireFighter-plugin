@@ -1,8 +1,9 @@
-package firefighter.commands;
+package com.github.tommyt0mmy.firefighter.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,25 +13,24 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import firefighter.Main;
-import firefighter.utility.TitleActionBarUtil;
-import firefighter.utility.XMaterial;
+import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 public class Firetool implements CommandExecutor {
-    private Main mainClass;
-    public Firetool(Main mainClass) {
-        this.mainClass = mainClass;
+    private FireFighter fireFighterClass;
+    public Firetool(FireFighter fireFighterClass) {
+        this.fireFighterClass = fireFighterClass;
     }
 
     @Override
     public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args) {
         if (!(Sender instanceof Player)) {
-            Sender.sendMessage(mainClass.prefix + "Only players can execute this command!");
+            Sender.sendMessage(fireFighterClass.prefix + "Only players can execute this command!");
             return true;
         }
         Player p = (Player) Sender;
-        if (!(p.hasPermission(mainClass.getPermission("firetool_get")) || p.isOp())) {
-            p.sendMessage(mainClass.messages.get("invalid_permissions"));
+        if (!(p.hasPermission(fireFighterClass.getPermission("firetool_get")) || p.isOp())) {
+            p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
             return true;
         }
         ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
@@ -40,7 +40,7 @@ public class Firetool implements CommandExecutor {
         meta.setDisplayName("§c§lFire Extinguisher");
         List < String > lore = new ArrayList < String > ();
         lore.add("Fire Extinguisher");
-        lore.add("§e§n" + mainClass.messages.get("hold_right_click"));
+        lore.add("§e§n" + fireFighterClass.messages.get("hold_right_click"));
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         //setting meta
@@ -48,7 +48,7 @@ public class Firetool implements CommandExecutor {
         fire_extinguisher.setItemMeta(meta);
         Inventory inventory = p.getInventory();
         inventory.addItem(fire_extinguisher);
-        TitleActionBarUtil.sendActionBarMessage(p, "§e§n" + mainClass.messages.get("hold_right_click"));
+        TitleActionBarUtil.sendActionBarMessage(p, "§e§n" + fireFighterClass.messages.get("hold_right_click"));
 
         return true;
     }

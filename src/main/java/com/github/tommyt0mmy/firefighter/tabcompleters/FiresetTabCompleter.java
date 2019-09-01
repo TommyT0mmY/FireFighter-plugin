@@ -1,19 +1,18 @@
-package firefighter.tabcompleters;
+package com.github.tommyt0mmy.firefighter.tabcompleters;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 
-import firefighter.Main;
-
 public class FiresetTabCompleter implements TabCompleter {
-    private Main mainClass;
-    public FiresetTabCompleter(Main mainClass) {
+    private FireFighter mainClass;
+    public FiresetTabCompleter(FireFighter mainClass) {
         this.mainClass = mainClass;
     }
 

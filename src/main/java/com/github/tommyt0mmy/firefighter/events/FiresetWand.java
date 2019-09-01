@@ -1,5 +1,6 @@
-package firefighter.events;
+package com.github.tommyt0mmy.firefighter.events;
 
+import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,11 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import firefighter.Main;
-
 public class FiresetWand implements Listener {
-    private Main mainClass;
-    public FiresetWand(Main mainClass) {
+    private FireFighter mainClass;
+    public FiresetWand(FireFighter mainClass) {
         this.mainClass = mainClass;
     }
 

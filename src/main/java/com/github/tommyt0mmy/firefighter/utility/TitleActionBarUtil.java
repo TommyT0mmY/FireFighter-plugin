@@ -1,7 +1,7 @@
 /**	Thanks to Zombie_Striker from the Bukkit.org community for having published this very useful class	
  * 	Source:	[URL]https://bukkit.org/threads/send-hotbar-messages.440664/[/URL]
  */
-package firefighter.utility;
+package com.github.tommyt0mmy.firefighter.utility;
 
 import java.lang.reflect.*;
 import java.util.logging.Level;
