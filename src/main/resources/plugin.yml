@@ -1,0 +1,17 @@
+ name: FireFighter
+ version: ${version}
+ description: A roleplay plugin that allows players to play as firefighters. 
+ author: Tommy_T0mmY
+ main: firefighter.Main
+ prefix: FireFighter
+ api-version: 1.13
+ commands:
+   firefighter:
+     usage: "Usage: /<command> [command name|page] ..."
+     description: Shows the help menu
+   fireset:
+     usage: "Usage: /<command> [setwand|addmission|editmission|deletemission] ..."
+     description: Sets,edits or deletes missions
+   firetool:
+     usage: "Usage: /<command>"
+     description: Gives you a fire extinguisher
