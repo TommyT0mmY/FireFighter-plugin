@@ -7,10 +7,7 @@ import java.util.UUID;
 
 import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -66,8 +63,8 @@ public class MissionsHandler extends BukkitRunnable {
         if (world == null) { //avoids NPE
         	return;
         }
-        Broadcast(world, "§4Fire alert", config.get(missionPath + ".description").toString(), "§eAt coordinates " + getMediumCoord(missionName), mainClass.getPermission("onduty"));
-        Broadcast(world, "§4§lFire alert at coordinates §r§e" + getMediumCoord(missionName), mainClass.getPermission("onduty"));
+        Broadcast(world, ChatColor.DARK_RED + "Fire alert", config.get(missionPath + ".description").toString(), ChatColor.YELLOW + "At coordinates " + getMediumCoord(missionName), mainClass.getPermission("onduty"));
+        Broadcast(world, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Fire alert at coordinates " + ChatColor.RESET + ChatColor.YELLOW + getMediumCoord(missionName), mainClass.getPermission("onduty"));
         mainClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
         //starting fire
         int y = Integer.valueOf(config.get(missionPath + ".altitude").toString());

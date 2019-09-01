@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,10 +38,10 @@ public class Firetool implements CommandExecutor {
         //getting meta
         ItemMeta meta = fire_extinguisher.getItemMeta();
         //modifying meta
-        meta.setDisplayName("§c§lFire Extinguisher");
+        meta.setDisplayName("" + ChatColor.RED + "" + ChatColor.BOLD + "Fire Extinguisher");
         List < String > lore = new ArrayList < String > ();
         lore.add("Fire Extinguisher");
-        lore.add("§e§n" + fireFighterClass.messages.get("hold_right_click"));
+        lore.add(ChatColor.YELLOW + "" + ChatColor.UNDERLINE + fireFighterClass.messages.get("hold_right_click"));
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         //setting meta
@@ -48,7 +49,7 @@ public class Firetool implements CommandExecutor {
         fire_extinguisher.setItemMeta(meta);
         Inventory inventory = p.getInventory();
         inventory.addItem(fire_extinguisher);
-        TitleActionBarUtil.sendActionBarMessage(p, "§e§n" + fireFighterClass.messages.get("hold_right_click"));
+        TitleActionBarUtil.sendActionBarMessage(p,ChatColor.YELLOW + "" + ChatColor.UNDERLINE + fireFighterClass.messages.get("hold_right_click"));
 
         return true;
     }

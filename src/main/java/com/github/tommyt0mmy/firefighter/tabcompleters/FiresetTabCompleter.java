@@ -60,6 +60,9 @@ public class FiresetTabCompleter implements TabCompleter {
         }
         if (args.length == 2) {
             if (args[0].equals("editmission")) {
+                if (mainClass.getConfig().get("missions") == null) {
+                    return suggestions;
+                }
                 for (String missionName: ((MemorySection) mainClass.getConfig().get("missions")).getKeys(false)) {
                     if (startsWith(args[1], missionName)) {
                         suggestions.add(missionName);

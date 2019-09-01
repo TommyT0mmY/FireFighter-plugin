@@ -1,18 +1,18 @@
 prefix: '[FireFighter] '
 messages:
-  invalid_permissions: ง4<prefix>Invalid permissions!
-  page_not_found: ง4<prefix>Page not found!
-  hold_right_click: Hold Right Click
-  unknown_command: Unknown command. Type "/help" for help.
-  fireset_wand_instructions: 'งe<prefix>Left click: select pos #1; Right click: select
+  invalid_permissions: "ยง4<prefix>Invalid permissions!"
+  page_not_found: "ยง4<prefix>Page not found!"
+  hold_right_click: "Hold Right Click"
+  unknown_command: "Unknown command. Type '/help' for help."
+  fireset_wand_instructions: 'ยงe<prefix>Left click: select pos #1; Right click: select
     pos #2'
-  fireset_wand_setted: 'งe<prefix>New wand setted!'
-  fireset_first_position_set: 'งe<prefix>First position set at <x>, <y>, <z>'
-  fireset_second_position_set: 'งe<prefix>Second position set at <x>, <y>, <z>'
-  fireset_mission_not_found: ง4<prefix>Mission not found!
-  fireset_delete: 'งe<prefix>Mission successfully deleted!'
-  fireset_invalid_selection: ง4<prefix>Invalid selection!
-  fireset_added_mission: งe<prefix>Mission successfully added!
+  fireset_wand_setted: 'ยงe<prefix>New wand setted!'
+  fireset_first_position_set: 'ยงe<prefix>First position set at <x>, <y>, <z>'
+  fireset_second_position_set: 'ยงe<prefix>Second position set at <x>, <y>, <z>'
+  fireset_mission_not_found: "ยง4<prefix>Mission not found!"
+  fireset_delete: 'ยงe<prefix>Mission successfully deleted!'
+  fireset_invalid_selection: "ยง4<prefix>Invalid selection!"
+  fireset_added_mission: "ยงe<prefix>Mission successfully added!"
 firetool:
   cooldown: 1800
 fireset:

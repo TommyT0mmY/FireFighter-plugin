@@ -39,7 +39,7 @@ public class HelpTabCompleter implements TabCompleter {
     @Override
     public List < String > onTabComplete(CommandSender sender, Command command, String paramString, String[] args) {
 
-        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("com/github/tommyt0mmy/firefighter"))))) {
+        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("firefighter"))))) {
             return null;
         }
         if (args.length > 2) { //invalid number of arguments
@@ -49,13 +49,13 @@ public class HelpTabCompleter implements TabCompleter {
         List < String > suggestions = new ArrayList < > ();
 
         if (args.length == 0) {
-            suggestions.add("com/github/tommyt0mmy/firefighter");
+            suggestions.add("firefighter");
             suggestions.add("firetool");
             suggestions.add("fireset");
             suggestions.add("permissions");
         } else if (args.length == 1) {
-            if (startsWith(args[0], "com/github/tommyt0mmy/firefighter")) {
-                suggestions.add("com/github/tommyt0mmy/firefighter");
+            if (startsWith(args[0], "firefighter")) {
+                suggestions.add("firefighter");
             }
             if (startsWith(args[0], "permissions")) {
                 suggestions.add("permissions");

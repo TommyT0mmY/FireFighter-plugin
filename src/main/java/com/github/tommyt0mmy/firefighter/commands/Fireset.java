@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -69,13 +70,22 @@ public class Fireset implements CommandExecutor {
                         break;
                     }
                     if (args[2].equals("name")) { //editing mission's name
+                        if (args.length < 4) {
+                            p.sendMessage(getUsage());
+                            break;
+                        }
                         String newName = args[3];
                         MemorySection mission = (MemorySection) fireFighterClass.getConfig().get("missions." + args[1]);
                         fireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
                         fireFighterClass.saveConfig();
                         fireFighterClass.getConfig().set("missions." + newName, mission);
                         fireFighterClass.saveConfig();
+
                     } else if (args[2].equals("description")) { //editing mission's description
+                        if (args.length < 4) {
+                            p.sendMessage(getUsage());
+                            break;
+                        }
                         String newDescription = args[3];
                         for (int i = 3; i < args.length; i++) {
                             newDescription += args[i] + " ";
@@ -112,7 +122,7 @@ public class Fireset implements CommandExecutor {
                             }
                             fireFighterClass.getConfig().set("missions." + args[1] + ".description", description);
                         } else {
-                            fireFighterClass.getConfig().set("missions." + args[1] + ".description", "§cFire at the " + args[1]);
+                            fireFighterClass.getConfig().set("missions." + args[1] + ".description",ChatColor.RED + "Fire at the " + args[1]);
                         }
                         p.sendMessage(fireFighterClass.messages.get("fireset_added_mission"));
                         fireFighterClass.saveConfig();
@@ -154,7 +164,7 @@ public class Fireset implements CommandExecutor {
     	List < ItemStack > inventoryContent = new ArrayList< ItemStack >();
     	String rewardsPath = "missions." + missionName + ".rewards";
     	int Size = 9;
-    	String title = "§d§lRewards - " + missionName;
+    	String title = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Rewards - " + missionName;
     	if (fireFighterClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
     		int rewardsCount = fireFighterClass.getConfig().getInt(rewardsPath + ".size");
     		Size = (rewardsCount / 9 + 1) * 9;
@@ -177,15 +187,15 @@ public class Fireset implements CommandExecutor {
     	item1.setItemMeta(im1);
     	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem(); //'add a line' button
     	ItemMeta im2 = item2.getItemMeta();
-    	im2.setDisplayName("§aAdd a line");
+    	im2.setDisplayName (ChatColor.GREEN + "Add a line");
     	item2.setItemMeta(im2);
     	ItemStack item3 = XMaterial.RED_STAINED_GLASS_PANE.parseItem(); //'remove a line' button
     	ItemMeta im3 = item3.getItemMeta();
-    	im3.setDisplayName("§cRemove a line");
+    	im3.setDisplayName (ChatColor.RED + "Remove a line");
     	item3.setItemMeta(im3);
     	ItemStack item4 = XMaterial.LIME_STAINED_GLASS.parseItem(); //'save changes' button
     	ItemMeta im4 = item4.getItemMeta();
-    	im4.setDisplayName("§aSave changes");
+    	im4.setDisplayName (ChatColor.GREEN + "Save changes");
     	item4.setItemMeta(im4);
     	//placing the footer in the inventory
     	GUI.setItem(Size + 0, item1);

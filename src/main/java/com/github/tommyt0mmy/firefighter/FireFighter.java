@@ -6,10 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +34,7 @@ public class FireFighter extends JavaPlugin {
     @SuppressWarnings("serial")
 	public final Map < String, String > permissions = new HashMap < String, String > () {
         {
-            put("com/github/tommyt0mmy/firefighter", "firefighter.help");
+            put("firefighter", "firefighter.help");
             put("firetool_get", "firefighter.firetool.get");
             put("firetool_use", "firefighter.firetool.use");
             put("firetool.freeze-durability", "firefighter.firetool.freeze-durability");
@@ -51,19 +48,19 @@ public class FireFighter extends JavaPlugin {
     @SuppressWarnings("serial")
     public Map < String, String > messages = new HashMap < String, String > () {
         {
-            put("invalid_permissions", "§4" + prefix + "Invalid permissions!");
-            put("page_not_found", "§4" + prefix + "Page not found!");
+            put("invalid_permissions", ChatColor.DARK_RED + prefix + "Invalid permissions!");
+            put("page_not_found", ChatColor.DARK_RED + prefix + "Page not found!");
             put("hold_right_click", "Hold Right Click");
-            put("unknown_command", "Unknown command. Type \"/help\" for help.");
-            put("fireset_wand_instructions", "§e" + prefix + "Left click: select pos #1; Right click: select pos #2");
-            put("fireset_first_position_set", "§e" + prefix + "First position set at <x>, <y>, <z>");
-            put("fireset_second_position_set", "§e" + prefix + "Second position set at <x>, <y>, <z>");
-            put("fireset_wand_setted", "§e" + prefix + "New wand setted!");
-            put("fireset_mission_not_found", "§4" + prefix + "Mission not found!");
-            put("fireset_delete", "§e" + prefix + "Mission successfully deleted!");
-            put("fireset_invalid_selection", "§4" + prefix + "Invalid selection!");
-            put("fireset_added_mission", "§e" + prefix + "Mission successfully added!");
-            put("received_reward", "§e" + prefix + "You received a reward for completing the mission!");
+            put("unknown_command", "Unknown command. Type '/help' for help.");
+            put("fireset_wand_instructions", ChatColor.YELLOW + prefix + "Left click: select pos #1; Right click: select pos #2");
+            put("fireset_first_position_set", ChatColor.YELLOW + prefix + "First position set at <x>, <y>, <z>");
+            put("fireset_second_position_set", ChatColor.YELLOW + prefix + "Second position set at <x>, <y>, <z>");
+            put("fireset_wand_setted", ChatColor.YELLOW + prefix + "New wand setted!");
+            put("fireset_mission_not_found", ChatColor.DARK_RED + prefix + "Mission not found!");
+            put("fireset_delete", ChatColor.YELLOW + prefix + "Mission successfully deleted!");
+            put("fireset_invalid_selection", ChatColor.DARK_RED + prefix + "Invalid selection!");
+            put("fireset_added_mission", ChatColor.YELLOW + prefix + "Mission successfully added!");
+            put("received_reward", ChatColor.YELLOW + prefix + "You received a reward for completing the mission!");
         }
     };
 
@@ -90,10 +87,10 @@ public class FireFighter extends JavaPlugin {
     }
 
     private void loadCommands() {
-        getCommand("com/github/tommyt0mmy/firefighter").setExecutor(new Help(this));
+        getCommand("firefighter").setExecutor(new Help(this));
         getCommand("fireset").setExecutor(new Fireset(this));
         getCommand("firetool").setExecutor(new Firetool(this));
-        getCommand("com/github/tommyt0mmy/firefighter").setTabCompleter(new HelpTabCompleter(this));
+        getCommand("firefighter").setTabCompleter(new HelpTabCompleter(this));
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter(this));
     }
 
@@ -107,7 +104,7 @@ public class FireFighter extends JavaPlugin {
             getConfig().set("fire_lasting_seconds", 300);
             ItemStack wand = new ItemStack(Material.STICK);
             ItemMeta wandMeta = wand.getItemMeta();
-            wandMeta.setDisplayName("§eFireset Wand");
+            wandMeta.setDisplayName(ChatColor.YELLOW + "Fireset Wand");
             wand.setItemMeta(wandMeta);
             getConfig().set("fireset.wand", wand);
         }

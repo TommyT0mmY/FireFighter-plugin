@@ -3,6 +3,7 @@ package com.github.tommyt0mmy.firefighter.events;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +28,7 @@ public class RewardsetGUI implements Listener {
     	Inventory inv = e.getInventory();
     	InventoryView invview = e.getView();
     	String inventoryName = invview.getTitle();
-    	if (!inventoryName.contains("§d§lRewards - ")) {
+    	if (!inventoryName.contains(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Rewards - ")) {
     		return;
     	}
     	Player p = (Player) e.getWhoClicked();
@@ -142,7 +143,7 @@ public class RewardsetGUI implements Listener {
     @SuppressWarnings({ "unlikely-arg-type", "deprecation" })
 	private void saveRewards (Inventory inv, String inventoryName) { //saves to config.yml the content of the inventory (excluding the footer)
     	int Size = inv.getContents().length;
-    	String missionName = inventoryName.replace("§d§lRewards - ", "");
+    	String missionName = inventoryName.replace(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Rewards - ", "");
     	String missionPath = "missions." + missionName;
     	String rewardsPath = missionPath + ".rewards";
     	//clearing previous rewards
@@ -165,28 +166,28 @@ public class RewardsetGUI implements Listener {
     private ItemStack getFooterPart1() {
     	ItemStack item1 = XMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.parseItem(); //void part of the footer
     	ItemMeta im1 = item1.getItemMeta();
-    	im1.setDisplayName("§r");
+    	im1.setDisplayName(ChatColor.RESET + "");
     	item1.setItemMeta(im1);
     	return item1;
     }
     private ItemStack getFooterPart2() {
     	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem(); //'add a line' button
     	ItemMeta im2 = item2.getItemMeta();
-    	im2.setDisplayName("§aAdd a line");
+    	im2.setDisplayName(ChatColor.GREEN + "Add a line");
     	item2.setItemMeta(im2);
     	return item2;
     }
     private ItemStack getFooterPart3() {
     	ItemStack item3 = XMaterial.RED_STAINED_GLASS_PANE.parseItem(); //'remove a line' button
     	ItemMeta im3 = item3.getItemMeta();
-    	im3.setDisplayName("§cRemove a line");
+    	im3.setDisplayName(ChatColor.RED + "Remove a line");
     	item3.setItemMeta(im3);
     	return item3;
     }
     private ItemStack getFooterPart4() {
     	ItemStack item4 = XMaterial.LIME_STAINED_GLASS.parseItem(); //'save changes' button
     	ItemMeta im4 = item4.getItemMeta();
-    	im4.setDisplayName("§aSave changes");
+    	im4.setDisplayName(ChatColor.GREEN + "Save changes");
     	item4.setItemMeta(im4);
     	return item4;
     }
