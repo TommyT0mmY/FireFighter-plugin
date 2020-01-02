@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.*;
@@ -16,10 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MissionsHandler extends BukkitRunnable {
-    private FireFighter mainClass;
-    public MissionsHandler(FireFighter mainClass) {
-        this.mainClass = mainClass;
-        config = mainClass.getConfig();
+
+    private FireFighter FireFighterClass = FireFighter.getInstance();
+
+    public MissionsHandler() {
+        config = FireFighterClass.getConfig();
     }
 
     private Boolean firstRun = true;
@@ -33,45 +35,45 @@ public class MissionsHandler extends BukkitRunnable {
             return;
         }
         if (!config.contains("missions")) {
-            mainClass.console.info("There are no missions! Start setting up new missions by typing in-game '/firefighter fireset 2'");
+            FireFighterClass.console.info("There are no missions! Start setting up new missions by typing in-game '/firefighter fireset 2'");
             return;
         }
-        if (mainClass.startedMission) {
+        if (FireFighterClass.startedMission) {
             return;
         }
 
-        int fire_lasting_ticks = Integer.valueOf(mainClass.getConfig().get("fire_lasting_seconds").toString()) * 20;
-        mainClass.startedMission = true;
-        mainClass.loadConfigs();
+        int fire_lasting_ticks = Integer.parseInt(FireFighterClass.getConfig().get("fire_lasting_seconds").toString()) * 20;
+        FireFighterClass.startedMission = true;
+        FireFighterClass.configs.loadConfigs();
         //selecting random mission
         Random random = new Random();
         List < String > missions = new ArrayList < > (((MemorySection) config.get("missions")).getKeys(false));
         if (missions.size() < 1) {
-            mainClass.console.info("There are no missions! Start setting up new missions by typing in-game '/firefighter fireset 2'");
+            FireFighterClass.console.info("There are no missions! Start setting up new missions by typing in-game '/firefighter fireset 2'");
             return;
         }
         String missionName = missions.get(random.nextInt(missions.size()));
-        mainClass.missionName = missionName;
+        FireFighterClass.missionName = missionName;
         String missionPath = "missions." + missionName;
-        mainClass.PlayerContribution.clear();
+        FireFighterClass.PlayerContribution.clear();
         //broadcast message
         if (config.get(missionPath + ".world").toString() == null) { //avoids NPE
         	turnOffInstructions();
         	cancel();
         }
-        World world = mainClass.getServer().getWorld((config.get(missionPath + ".world").toString()));
+        World world = FireFighterClass.getServer().getWorld((config.get(missionPath + ".world").toString()));
         if (world == null) { //avoids NPE
         	return;
         }
-        Broadcast(world, ChatColor.DARK_RED + "Fire alert", config.get(missionPath + ".description").toString(), ChatColor.YELLOW + "At coordinates " + getMediumCoord(missionName), mainClass.getPermission("onduty"));
-        Broadcast(world, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Fire alert at coordinates " + ChatColor.RESET + ChatColor.YELLOW + getMediumCoord(missionName), mainClass.getPermission("onduty"));
-        mainClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
+        Broadcast(world, ChatColor.DARK_RED + "Fire alert", config.get(missionPath + ".description").toString(), ChatColor.YELLOW + "At coordinates " + getMediumCoord(missionName), Permissions.ON_DUTY.getNode()); //TODO CUSTOM MESSAGES
+        Broadcast(world, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Fire alert at coordinates " + ChatColor.RESET + ChatColor.YELLOW + getMediumCoord(missionName), Permissions.ON_DUTY.getNode()); //TODO CUSTOM MESSAGES
+        FireFighterClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
         //starting fire
-        int y = Integer.valueOf(config.get(missionPath + ".altitude").toString());
-        int x1 = Integer.valueOf(config.get(missionPath + ".first_position.x").toString());
-        int z1 = Integer.valueOf(config.get(missionPath + ".first_position.z").toString());
-        int x2 = Integer.valueOf(config.get(missionPath + ".second_position.x").toString());
-        int z2 = Integer.valueOf(config.get(missionPath + ".second_position.z").toString());
+        int y = Integer.parseInt(config.get(missionPath + ".altitude").toString());
+        int x1 = Integer.parseInt(config.get(missionPath + ".first_position.x").toString());
+        int z1 = Integer.parseInt(config.get(missionPath + ".first_position.z").toString());
+        int x2 = Integer.parseInt(config.get(missionPath + ".second_position.x").toString());
+        int z2 = Integer.parseInt(config.get(missionPath + ".second_position.z").toString());
         for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
             for (int z = Math.min(z1, z2); z <= Math.max(z1, z2); z++) {
                 Location currLocation = new Location(world, x, y, z);
@@ -96,7 +98,6 @@ public class MissionsHandler extends BukkitRunnable {
         new BukkitRunnable() {
             int timer = 0;
             public void run() {
-                //mainClass.console.info("FLAG" + timer); debug
                 timer++;
                 if (timer >= fire_lasting_ticks / 100) {
                     cancel();
@@ -114,7 +115,7 @@ public class MissionsHandler extends BukkitRunnable {
                 }
             }
 
-        }.runTaskTimer(mainClass, 0, 100);
+        }.runTaskTimer(FireFighterClass, 0, 100);
 
         //TURNING OFF THE MISSION
 
@@ -123,7 +124,7 @@ public class MissionsHandler extends BukkitRunnable {
             	turnOffInstructions();
                 cancel();
             }
-        }.runTaskTimer(mainClass, (long)(fire_lasting_ticks * (1.5)), 1);
+        }.runTaskTimer(FireFighterClass, (long)(fire_lasting_ticks * (1.5)), 1);
     }
 
     private void Broadcast(World w, String title, String subtitle, String hotbar, String permission) {
@@ -146,8 +147,8 @@ public class MissionsHandler extends BukkitRunnable {
                             cancel();
                         }
                     }
-                }.runTaskTimer(mainClass, 0, 50);
-            } catch (Exception e) {}
+                }.runTaskTimer(FireFighterClass, 0, 50);
+            } catch (Exception ignored) {}
         }
     }
 
@@ -165,61 +166,61 @@ public class MissionsHandler extends BukkitRunnable {
     private String getMediumCoord(String missionName) { //returns the medium position of the mission
         String res = "";
         String missionPath = "missions." + missionName;
-        res += (((Integer.valueOf(config.get(missionPath + ".first_position.x").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.x").toString())) / 2) + ""); //X
+        res += (((Integer.parseInt(config.get(missionPath + ".first_position.x").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.x").toString())) / 2) + ""); //X
         res += " ";
         res += (config.get(missionPath + ".altitude").toString()); // Y
         res += " ";
-        res += (((Integer.valueOf(config.get(missionPath + ".first_position.z").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.z").toString())) / 2) + ""); // Z
+        res += (((Integer.parseInt(config.get(missionPath + ".first_position.z").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.z").toString())) / 2) + ""); // Z
         return res;
     }
     
     private void giveRewards() {
-    	String missionPath = "missions." + mainClass.missionName;
+    	String missionPath = "missions." + FireFighterClass.missionName;
     	String rewardsPath = missionPath + ".rewards";
-    	String worldName = (String) mainClass.getConfig().get(missionPath + ".world");
-    	if (mainClass.getConfig().get(rewardsPath) == null || mainClass.getConfig().getInt(rewardsPath + ".size") == 0) { //no rewards set
-    		mainClass.getConfig().set(rewardsPath + ".size", 0);
-    		mainClass.console.info("There aren't rewards set for the mission! Who will complete that mission won't receive a reward :(");
-    		mainClass.console.info("Begin setting rewards with '/fireset editmission <name> rewards', drag items in and out and then save!");
+    	String worldName = (String) FireFighterClass.getConfig().get(missionPath + ".world");
+    	if (FireFighterClass.getConfig().get(rewardsPath) == null || FireFighterClass.getConfig().getInt(rewardsPath + ".size") == 0) { //no rewards set
+    		FireFighterClass.getConfig().set(rewardsPath + ".size", 0);
+    		FireFighterClass.console.info("There aren't rewards set for the mission! Who will complete that mission won't receive a reward :(");
+    		FireFighterClass.console.info("Begin setting rewards with '/fireset editmission <name> rewards', drag items in and out and then save!");
     	}else {
     		//picking up a random reward from the rewardsList
     		Random random = new Random();
-    		int randomIndex = random.nextInt(mainClass.getConfig().getInt(rewardsPath + ".size"));
-    		ItemStack reward = mainClass.getConfig().getItemStack(rewardsPath + "." + randomIndex);
+    		int randomIndex = random.nextInt(FireFighterClass.getConfig().getInt(rewardsPath + ".size"));
+    		ItemStack reward = FireFighterClass.getConfig().getItemStack(rewardsPath + "." + randomIndex);
     		//picking the best player
     		UUID bestPlayer = null;
     		for (Player p : Bukkit.getWorld(worldName).getPlayers()) {
     			UUID currentUUID = p.getUniqueId();
-    			if (mainClass.PlayerContribution.get(currentUUID) == null) {
+    			if (FireFighterClass.PlayerContribution.get(currentUUID) == null) {
     				continue;
     			}
-    			if (mainClass.PlayerContribution.get(currentUUID) == 0) {
+    			if (FireFighterClass.PlayerContribution.get(currentUUID) == 0) {
     				continue;
     			}
-    			if (mainClass.PlayerContribution.get(bestPlayer) != null) {
-	    			if (mainClass.PlayerContribution.get(bestPlayer) < mainClass.PlayerContribution.get(currentUUID)) {
+    			if (FireFighterClass.PlayerContribution.get(bestPlayer) != null) {
+	    			if (FireFighterClass.PlayerContribution.get(bestPlayer) < FireFighterClass.PlayerContribution.get(currentUUID)) {
 	    				bestPlayer = currentUUID;
 	    			}
-    			}else if (mainClass.PlayerContribution.get(currentUUID) > 0) {
+    			}else if (FireFighterClass.PlayerContribution.get(currentUUID) > 0) {
     				bestPlayer = currentUUID;
     			}
     		}
     		//giving the best player the selected reward
     		if (bestPlayer != null) {
     			Bukkit.getPlayer(bestPlayer).getInventory().addItem(reward);
-    			Bukkit.getPlayer(bestPlayer).sendMessage(mainClass.messages.get("received_reward"));
+    			Bukkit.getPlayer(bestPlayer).sendMessage(FireFighterClass.messages.formattedMessage("§a", "received_reward"));
     		}else {
-    			mainClass.console.info("No one contributed to the mission!");
+    			FireFighterClass.console.info("No one contributed to the mission!");
     		}
     	}
     }
     
     private void turnOffInstructions() {
-        mainClass.console.info("Mission ended");
+        FireFighterClass.console.info("Mission ended");
         giveRewards();
-        mainClass.startedMission = false;
-        mainClass.missionName = "";
+        FireFighterClass.startedMission = false;
+        FireFighterClass.missionName = "";
         setOnFire.clear();
-        mainClass.PlayerContribution.clear();
+        FireFighterClass.PlayerContribution.clear();
     }
 }
