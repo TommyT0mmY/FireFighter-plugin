@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.github.tommyt0mmy.firefighter.utility.Configs;
 import com.github.tommyt0mmy.firefighter.utility.Messages;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -82,4 +83,8 @@ public class FireFighter extends JavaPlugin {
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter());
     }
 
+    @Override
+    public FileConfiguration getConfig() throws NullPointerException {
+        return null;
+    }
 }

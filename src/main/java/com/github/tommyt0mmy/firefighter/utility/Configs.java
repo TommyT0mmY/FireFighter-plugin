@@ -69,7 +69,12 @@ public class Configs {
         } catch (IOException e) { logError(); }
     }
 
-    public FileConfiguration getConfigsConfiguration() {
+    public void set(String path, Object object) {
+        configsConfiguration.set(path, object);
+    }
+
+    public FileConfiguration getConfig() {
+        loadConfigs();
         return configsConfiguration;
     }
 

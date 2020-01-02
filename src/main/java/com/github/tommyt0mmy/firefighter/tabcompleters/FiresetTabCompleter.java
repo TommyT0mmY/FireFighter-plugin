@@ -58,19 +58,20 @@ public class FiresetTabCompleter implements TabCompleter {
             }
         }
         if (args.length == 2) {
+            FireFighterClass.configs.loadConfigs();
             if (args[0].equals("editmission")) {
-                if (FireFighterClass.getConfig().get("missions") == null) {
+                if (FireFighterClass.configs.getConfig().get("missions") == null) {
                     return suggestions;
                 }
-                for (String missionName: ((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false)) {
+                for (String missionName: ((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false)) {
                     if (startsWith(args[1], missionName)) {
                         suggestions.add(missionName);
                     }
                 }
             }
             if (args[0].equals("deletemission")) {
-                if ( !(((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
-                    for (String missionName : ((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false)) {
+                if ( !(((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
+                    for (String missionName : ((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false)) {
                         if (startsWith(args[1], missionName)) {
                             suggestions.add(missionName);
                         }

@@ -18,6 +18,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
+import java.util.Objects;
+
 public class RewardsetGUI implements Listener {
 
     private FireFighter FireFighterClass = FireFighter.getInstance();
@@ -42,10 +44,10 @@ public class RewardsetGUI implements Listener {
     	}
     	
     	//detecting clicks on the footer
-    	if (e.getCurrentItem().equals(getFooterPart1())) { //if clicked a void part of the footer
+    	if (Objects.equals(e.getCurrentItem(), getFooterPart1())) { //if clicked a void part of the footer
     		e.setCancelled(true);
     	}
-    	if (e.getCurrentItem().equals(getFooterPart2())) { //if clicked the 'add a line' button
+    	if (Objects.equals(e.getCurrentItem(), getFooterPart2())) { //if clicked the 'add a line' button
     		e.setCancelled(true);
     		if (inv.getContents().length < 45) { //only if the size of the inventory is less than 45 slots the inventory can expand    			
     			openNewInventory(p, inv, inv.getContents().length + 9, inventoryName);
@@ -53,7 +55,7 @@ public class RewardsetGUI implements Listener {
     			XSound.BLOCK_ANVIL_PLACE.playSound(p, 3, 2); //error sound
     		}
     	}
-    	if (e.getCurrentItem().equals(getFooterPart3())) { //if clicked the 'remove a line' button
+    	if (Objects.equals(e.getCurrentItem(), getFooterPart3())) { //if clicked the 'remove a line' button
     		e.setCancelled(true);
     		if (inv.getContents().length > 18) { //only if the size of the inventory is bigger than 18 slots the inventory can shrink    			
     			openNewInventory(p, inv, inv.getContents().length - 9, inventoryName);
@@ -61,11 +63,11 @@ public class RewardsetGUI implements Listener {
     			XSound.BLOCK_ANVIL_PLACE.playSound(p, 3, 2); //error sound
     		}
     	}
-    	if (e.getCurrentItem().equals(getFooterPart4())) { //if clicked the 'save changes' button
+    	if (Objects.equals(e.getCurrentItem(), getFooterPart4())) { //if clicked the 'save changes' button
     		e.setCancelled(true);
     		saveRewards(inv, inventoryName);
     	}
-    	
+
     }
     
     /*
@@ -128,7 +130,7 @@ public class RewardsetGUI implements Listener {
     private Inventory addFooter (Inventory Origin) {
     	int Size = Origin.getContents().length - 9;
     	//placing the footer in the inventory
-    	Origin.setItem(Size + 0, getFooterPart1());
+    	Origin.setItem(Size, getFooterPart1());
     	Origin.setItem(Size + 1, getFooterPart1());
     	Origin.setItem(Size + 2, getFooterPart1());
     	Origin.setItem(Size + 3, getFooterPart2());
@@ -140,26 +142,26 @@ public class RewardsetGUI implements Listener {
     	return Origin;
     }
     
-    @SuppressWarnings({ "unlikely-arg-type", "deprecation" })
+    @SuppressWarnings({ "unlikely-arg-type"})
 	private void saveRewards (Inventory inv, String inventoryName) { //saves to config.yml the content of the inventory (excluding the footer)
     	int Size = inv.getContents().length;
     	String missionName = inventoryName.replace(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Rewards - ", "");
     	String missionPath = "missions." + missionName;
     	String rewardsPath = missionPath + ".rewards";
     	//clearing previous rewards
-    	FireFighterClass.getConfig().set(rewardsPath, null);
-    	FireFighterClass.getConfig().set(rewardsPath + ".size", 0);
+    	FireFighterClass.configs.set(rewardsPath, null);
+    	FireFighterClass.configs.set(rewardsPath + ".size", 0);
     	//writing new rewards
     	int rewardsCount = 0;
     	for (int slotNumber = 0; slotNumber < Size - 9; slotNumber++) {
     		ItemStack currItem = inv.getContents()[slotNumber];
-    		if (currItem == null || currItem.getType().equals(XMaterial.AIR.parseItem())) continue; //filtering void spaces
+    		if (currItem == null || Objects.equals(currItem.getType(), XMaterial.AIR.parseItem().getType())) continue; //filtering void spaces
     		String currPath = rewardsPath + "." + rewardsCount;
-    		FireFighterClass.getConfig().set(currPath, currItem);
+    		FireFighterClass.configs.set(currPath, currItem);
     		rewardsCount++;    		
     	}
-    	FireFighterClass.getConfig().set(rewardsPath + ".size", rewardsCount);
-    	FireFighterClass.saveConfig();
+    	FireFighterClass.configs.set(rewardsPath + ".size", rewardsCount);
+    	FireFighterClass.configs.saveToFile();
     }
     
     //footer parts
