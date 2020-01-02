@@ -1,0 +1,106 @@
+# GENERAL MESSAGES
+
+messages:
+  fire_extinguisher: 'Fire Extinguisher'
+  only_players_command: 'Only players can execute this command'
+  ingame_prefix: '[FireFighter]'
+  invalid_permissions: 'Invalid permissions!'
+  page_not_found: 'Page not found!'
+  hold_right_click: 'Hold Right Click'
+  unknown_command: "Unknown command. Type '/help' for help."
+  fireset_wand: 'Fireset Wand'
+  fireset_wand_instructions: 'Left click: select pos #1; Right click: select pos #2'
+  fireset_wand_set: 'New wand set!'
+  fireset_first_position_set: 'First position set at <x>, <y>, <z>'
+  fireset_second_position_set: 'Second position set at <x>, <y>, <z>'
+  fireset_mission_not_found: 'Mission not found!'
+  fireset_delete: 'Mission successfully deleted!'
+  fireset_invalid_selection: 'Invalid selection!'
+  fireset_added_mission: 'Mission successfully added!'
+
+
+#COMMANDS DESCRIPTIONS
+
+description:
+  firefighter: 'Shows the help menu'
+  firetool: 'Gives you a fire extinguisher'
+  fireset: 'Sets,edits or deletes missions'
+
+
+#HELP PAGES
+
+help:
+  page1:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: '<arrow2>&cCommands overall'
+    line3: '&7&o/firefighter [command name] [page #] &e&oTo get a more detailed description of the command'
+    line4: '&7&o/firefighter permissions &e&oTo get a list of the permissions'
+    line5: '<arrow1>&7fireset&e <fireset_description>'
+    line6: '<arrow1>&7firetool&e <firetool_description>'
+    line7: '<arrow1>&7firefighter [command|page] ...&e <firefighter_description>'
+    line8: '&c&l+ - &r&epage 1/1&c&l- - - - - - - - - - - - +&r'
+  fireset1:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&eUsage: &7/fireset [setwand|addmission|editmission|deletemission] ...'
+    line4: '<arrow1>&ePermission node: &7<fireset_permission>'
+    line5: '<arrow1>&eDescription: &7Sets a new point that will catch at a random time on fire, firefighters '
+    line6: '&7should extinguish the fire to get a reward.&8 &oN.B. Only admins should have access to this command'
+    line7: '&7You can change the wand with &o/fireset setwand&7 with the permission <setwand_permission>'
+    line8: '&c&l+ - &r&epage 1/4&c&l- - - - - - - - - - - - +&r'
+  fireset2:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&e - How to add a mission - '
+    line4: '&e1)&7Select with the wand (&o/fireset&7) the area of the mission that will be set on fire'
+    line5: '&e2)&7Create a new mission with &o/fireset addmission <name> [description]'
+    line6: '<arrow1>&ename &7The name that identifies the mission'
+    line7: '<arrow1>&edescription &7The message that will be broadcasted'
+    line8: '&c&l+ - &r&epage 2/4&c&l- - - - - - - - - - - - +&r'
+  fireset3:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&e - How to edit a mission - '
+    line4: '&7&o/fireset editmission <name> <name|description> <new value>'
+    line5: '<arrow1>&ename &7The name that identifies the mission'
+    line6: '<arrow1>&ename|description &7The parameter that will be modified'
+    line7: '<arrow1>&enew value &7The new value of the parameter'
+    line8: '&c&l+ - &r&epage 3/4&c&l- - - - - - - - - - - - +&r'
+  fireset4:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&e - How to add/edit rewards of a mission - '
+    line4: '&7&o/fireset editmission <name> rewards'
+    line5: '<arrow1>&ename &7The name that identifies the mission'
+    line6: '<arrow1>&7The GUI that contains rewards will open, '
+    line7: '&7if there are no rewards set for that specific mission the GUI will be empty'
+    line8: '&c&l+ - &r&epage 4/4&c&l- - - - - - - - - - - - +&r'
+  firetool1:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'firetool' Command"
+    line3: '<arrow1>&eUsage: &7/firetool'
+    line4: '<arrow1>&ePermission node: &7<get-extinguisher_permission>'
+    line5: '<arrow1>&eDescription: &7Gives a fire extinguisher to the player. The fire extinguisher '
+    line6: '&7can be used to extinguish a fire and in the firefighter missions. Hold right click to use the fire extinguisher. '
+    line7: '&7To use the fire extinguisher the player needs the permission <use-extinguisher_permission>'
+    line8: '&c&l+ - - - - - - - - - - - - - - - - - +&r'
+  firefighter1:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'firefirghter' Command"
+    line3: '<arrow1>&eUsage: &7/firefighter [command|page] ...'
+    line4: '<arrow1>&ePermission node: &7<firefighter_permission>'
+    line5: '<arrow1>&eDescription: &7Shows the help menu, pressing tab while typing &o/firefighter &r'
+    line6: '&7will autocomplete the command showing every existent page that you can have access to.'
+    line7: '&c&l+ - - - - - - - - - - - - - - - - - +&r'
+  permissions1:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: '<arrow2>&cPermissions list'
+    line3: '<arrow1>&7<firefighter_permission>&e To execute the &7&o/firefighter&e command'
+    line4: '<arrow1>&7<get-extinguisher_permission>&e To get a fire extinguisher (&7&o/firetool&e)'
+    line5: '<arrow1>&7<use-extinguisher_permission>&e To utilize a fire extinguisher'
+    line6: '<arrow1>&7<freeze.extinguisher_permission>&e To freeze the usage of fire extinguishers'
+    line7: '<arrow1>&7<fireset_permission>&e To execute the &7&o/fireset&e command (&oadd/edit/delete missions&7)'
+    line8: '<arrow1>&7<setrewards_permission>&e To edit the rewards list of a mission'
+    line9: '<arrow1>&7<setwand_permission>&e To execute the &7&o/firetool setwand&e command'
+    line10: '<arrow1>&7<onduty_permission>&e To receive missions'
+    line11: '&c&l+ - - - - - - - - - - - - - - - - - +&r'
