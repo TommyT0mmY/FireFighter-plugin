@@ -1,6 +1,7 @@
 package com.github.tommyt0mmy.firefighter.events;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Location;
@@ -19,10 +20,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class FireExtinguisherActivation implements Listener {
-    private FireFighter mainClass;
-    public FireExtinguisherActivation(FireFighter mainClass) {
-        this.mainClass = mainClass;
-    }
+
+    private FireFighter FireFighterClass = FireFighter.getInstance();
 
     @SuppressWarnings("deprecation")
     @EventHandler
@@ -39,13 +38,13 @@ public class FireExtinguisherActivation implements Listener {
             if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) { //only right clicks
                 return;
             }
-            if (!p.hasPermission(mainClass.getPermission("firetool_use"))) {
-                p.sendMessage(mainClass.messages.get("invalid_permissions"));
+            if (!p.hasPermission(Permissions.USE_EXTINGUISHER.getNode())) {
+                p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
                 return;
             }
 
             //durability
-            if (!p.hasPermission(mainClass.getPermission("firetool.freeze-durability"))) {
+            if (!p.hasPermission(Permissions.FREEZE_EXTINGUISHER.getNode())) {
 	            item.setDurability((short)(item.getDurability() + 1));
 	            if (item.getDurability() > 249) {
 	                e.setCancelled(true);
@@ -111,7 +110,7 @@ public class FireExtinguisherActivation implements Listener {
                         this.cancel();
                     }
                 }
-            }.runTaskTimer(mainClass, 0, 1);
+            }.runTaskTimer(FireFighterClass, 0, 1);
             //sound
             new BukkitRunnable() {
                 int t = 0;
@@ -123,12 +122,11 @@ public class FireExtinguisherActivation implements Listener {
                         this.cancel();
                     }
                 }
-            }.runTaskTimer(mainClass, 0, 1);
-            return;
+            }.runTaskTimer(FireFighterClass, 0, 1);
 
         } catch (Exception E) {
             E.printStackTrace();
-        };
+        }
     }
 
     private boolean isFireExtinguisher(ItemStack item) {
@@ -145,10 +143,7 @@ public class FireExtinguisherActivation implements Listener {
         if (!meta.hasLore()) {
             return false;
         }
-        if (!(meta.getLore().get(0).equals("Fire Extinguisher"))) {
-            return false;
-        }
-        return true;
+        return meta.getLore().get(0).equals(FireFighterClass.messages.getMessage("fire_extinguisher"));
     }
 
     private void showParticle(Location loc, Particle particle, int count, int offsetXZ) {
@@ -157,16 +152,16 @@ public class FireExtinguisherActivation implements Listener {
     }
     
     private void increaseContribution(Player p, Location fireLocation) {
-    	if (!mainClass.startedMission || mainClass.missionName == "") { //checks if a mission is started, if not the player hasn't contributed on a mission
+    	if (!FireFighterClass.startedMission || FireFighterClass.missionName.equals("")) { //checks if a mission is started, if not the player will not contribute on a mission
     		return;
     	}
     	//getting the mission's location (two opposite points of the rectangular selection, missionPos1 and missionPos2)
-    	String missionPath = "missions." + mainClass.missionName;
-    	World missionWorld = mainClass.getServer().getWorld((String) mainClass.getConfig().get(missionPath + ".world"));
-    	int minX = Math.min(mainClass.getConfig().getInt(missionPath + ".first_position.x"), mainClass.getConfig().getInt(missionPath + ".second_position.x"));
-    	int maxX = Math.max(mainClass.getConfig().getInt(missionPath + ".first_position.x"), mainClass.getConfig().getInt(missionPath + ".second_position.x"));
-    	int minZ = Math.min(mainClass.getConfig().getInt(missionPath + ".first_position.z"), mainClass.getConfig().getInt(missionPath + ".second_position.z"));
-    	int maxZ = Math.max(mainClass.getConfig().getInt(missionPath + ".first_position.z"), mainClass.getConfig().getInt(missionPath + ".second_position.z"));
+    	String missionPath = "missions." + FireFighterClass.missionName;
+    	World missionWorld = FireFighterClass.getServer().getWorld((String) FireFighterClass.getConfig().get(missionPath + ".world"));
+    	int minX = Math.min(FireFighterClass.getConfig().getInt(missionPath + ".first_position.x"), FireFighterClass.getConfig().getInt(missionPath + ".second_position.x"));
+    	int maxX = Math.max(FireFighterClass.getConfig().getInt(missionPath + ".first_position.x"), FireFighterClass.getConfig().getInt(missionPath + ".second_position.x"));
+    	int minZ = Math.min(FireFighterClass.getConfig().getInt(missionPath + ".first_position.z"), FireFighterClass.getConfig().getInt(missionPath + ".second_position.z"));
+    	int maxZ = Math.max(FireFighterClass.getConfig().getInt(missionPath + ".first_position.z"), FireFighterClass.getConfig().getInt(missionPath + ".second_position.z"));
     	int currX = fireLocation.getBlockX();
     	int currZ = fireLocation.getBlockZ();
     	
@@ -181,11 +176,11 @@ public class FireExtinguisherActivation implements Listener {
     		return;
     	}
     	//incrementing by one the player's contribution count or setting it to 1 if it's the first contribution
-    	if (mainClass.PlayerContribution.containsKey(p.getUniqueId())) {
-    		int tmp = mainClass.PlayerContribution.get(p.getUniqueId()) + 1;
-    		mainClass.PlayerContribution.put(p.getUniqueId(), tmp);
+    	if (FireFighterClass.PlayerContribution.containsKey(p.getUniqueId())) {
+    		int tmp = FireFighterClass.PlayerContribution.get(p.getUniqueId()) + 1;
+    		FireFighterClass.PlayerContribution.put(p.getUniqueId(), tmp);
     	}else {
-    		mainClass.PlayerContribution.put(p.getUniqueId(), 1);
+    		FireFighterClass.PlayerContribution.put(p.getUniqueId(), 1);
     	}
     }
 

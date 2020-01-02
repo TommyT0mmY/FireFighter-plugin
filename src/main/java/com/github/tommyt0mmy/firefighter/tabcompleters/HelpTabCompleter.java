@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 public class HelpTabCompleter implements TabCompleter {
-    private FireFighter mainClass;
-    public HelpTabCompleter(FireFighter mainClass) {
-        this.mainClass = mainClass;
-    }
+
+    private FireFighter FireFighterClass = FireFighter.getInstance();
 
     private boolean startsWith(String partialString, String completeString) { //if 'completeString' starts with 'partialString'
         if (partialString.equalsIgnoreCase(completeString)) {
@@ -39,7 +38,7 @@ public class HelpTabCompleter implements TabCompleter {
     @Override
     public List < String > onTabComplete(CommandSender sender, Command command, String paramString, String[] args) {
 
-        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("firefighter"))))) {
+        if ((!(sender instanceof Player)) || (!(sender.hasPermission( Permissions.HELP_MENU.getNode() )))) {
             return null;
         }
         if (args.length > 2) { //invalid number of arguments

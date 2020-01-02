@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -11,10 +12,8 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 
 public class FiresetTabCompleter implements TabCompleter {
-    private FireFighter mainClass;
-    public FiresetTabCompleter(FireFighter mainClass) {
-        this.mainClass = mainClass;
-    }
+
+    private FireFighter FireFighterClass = FireFighter.getInstance();
 
     private boolean startsWith(String partialString, String completeString) { //if 'completeString' starts with 'partialString'
         if (partialString.equalsIgnoreCase(completeString)) {
@@ -39,7 +38,7 @@ public class FiresetTabCompleter implements TabCompleter {
 
     @Override
     public List < String > onTabComplete(CommandSender sender, Command command, String paramString, String[] args) {
-        if ((!(sender instanceof Player)) || (!(sender.hasPermission(mainClass.getPermission("fireset"))))) {
+        if ((!(sender instanceof Player)) || (!(sender.hasPermission( Permissions.FIRESET.getNode() )))) {
             return null;
         }
 
@@ -60,19 +59,21 @@ public class FiresetTabCompleter implements TabCompleter {
         }
         if (args.length == 2) {
             if (args[0].equals("editmission")) {
-                if (mainClass.getConfig().get("missions") == null) {
+                if (FireFighterClass.getConfig().get("missions") == null) {
                     return suggestions;
                 }
-                for (String missionName: ((MemorySection) mainClass.getConfig().get("missions")).getKeys(false)) {
+                for (String missionName: ((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false)) {
                     if (startsWith(args[1], missionName)) {
                         suggestions.add(missionName);
                     }
                 }
             }
             if (args[0].equals("deletemission")) {
-                for (String missionName: ((MemorySection) mainClass.getConfig().get("missions")).getKeys(false)) {
-                    if (startsWith(args[1], missionName)) {
-                        suggestions.add(missionName);
+                if ( !(((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
+                    for (String missionName : ((MemorySection) FireFighterClass.getConfig().get("missions")).getKeys(false)) {
+                        if (startsWith(args[1], missionName)) {
+                            suggestions.add(missionName);
+                        }
                     }
                 }
             }

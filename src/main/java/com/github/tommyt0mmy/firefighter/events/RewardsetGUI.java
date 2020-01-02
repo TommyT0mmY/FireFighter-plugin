@@ -1,6 +1,7 @@
 package com.github.tommyt0mmy.firefighter.events;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,10 +19,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 public class RewardsetGUI implements Listener {
-    private FireFighter mainClass;
-    public RewardsetGUI(FireFighter mainClass) {
-        this.mainClass = mainClass;
-    }
+
+    private FireFighter FireFighterClass = FireFighter.getInstance();
+
     @SuppressWarnings("deprecation")
 	@EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -32,9 +32,9 @@ public class RewardsetGUI implements Listener {
     		return;
     	}
     	Player p = (Player) e.getWhoClicked();
-    	if (!p.hasPermission(mainClass.getPermission("rewardset"))) { //invalid permissions
+    	if (!p.hasPermission(Permissions.SET_REWARDS.getNode())) { //invalid permissions
     		p.closeInventory();
-    		p.sendMessage(mainClass.messages.get("invalid_permissions"));
+    		p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
     		return;
     	}
     	if (e.getAction() == InventoryAction.NOTHING) { //if nothing will happen from the click, prevents NPEs
@@ -122,7 +122,7 @@ public class RewardsetGUI implements Listener {
                 
             	}catch (Exception e) {cancel();}
             }
-        }.runTaskTimer(mainClass, 1, 1);
+        }.runTaskTimer(FireFighterClass, 1, 1);
     }
     
     private Inventory addFooter (Inventory Origin) {
@@ -147,19 +147,19 @@ public class RewardsetGUI implements Listener {
     	String missionPath = "missions." + missionName;
     	String rewardsPath = missionPath + ".rewards";
     	//clearing previous rewards
-    	mainClass.getConfig().set(rewardsPath, null);
-    	mainClass.getConfig().set(rewardsPath + ".size", 0);
+    	FireFighterClass.getConfig().set(rewardsPath, null);
+    	FireFighterClass.getConfig().set(rewardsPath + ".size", 0);
     	//writing new rewards
     	int rewardsCount = 0;
     	for (int slotNumber = 0; slotNumber < Size - 9; slotNumber++) {
     		ItemStack currItem = inv.getContents()[slotNumber];
     		if (currItem == null || currItem.getType().equals(XMaterial.AIR.parseItem())) continue; //filtering void spaces
     		String currPath = rewardsPath + "." + rewardsCount;
-    		mainClass.getConfig().set(currPath, currItem);
+    		FireFighterClass.getConfig().set(currPath, currItem);
     		rewardsCount++;    		
     	}
-    	mainClass.getConfig().set(rewardsPath + ".size", rewardsCount);
-    	mainClass.saveConfig();
+    	FireFighterClass.getConfig().set(rewardsPath + ".size", rewardsCount);
+    	FireFighterClass.saveConfig();
     }
     
     //footer parts
