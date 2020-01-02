@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
+import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,32 +20,31 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 public class Fireset implements CommandExecutor {
-    private FireFighter fireFighterClass;
-    public Fireset(FireFighter fireFighterClass) {
-        this.fireFighterClass = fireFighterClass;
-    }
 
-    private String getUsage() {
-        return ((String) fireFighterClass.getDescription().getCommands().get("fireset").get("usage")).replaceAll("<command>", "fireset");
+    private FireFighter FireFighterClass = FireFighter.getInstance();
+
+    private String getUsage() { //TODO Change method
+        return ((String) FireFighterClass.getDescription().getCommands().get("fireset").get("usage")).replaceAll("<command>", "fireset");
     }
 
     @Override
     public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args) {
         if (!(Sender instanceof Player)) {
-            Sender.sendMessage(fireFighterClass.prefix + "Only players can execute this command!");
-            return true;
-        }
-        Player p = (Player) Sender;
-        if (!(p.hasPermission(fireFighterClass.getPermission("fireset")) || p.isOp())) {
-            p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
+            Sender.sendMessage(FireFighterClass.messages.formattedMessage("", "only_players_command"));
             return true;
         }
 
-        ItemStack wand = fireFighterClass.getConfig().getItemStack("fireset.wand");
+        Player p = (Player) Sender;
+        if (!(p.hasPermission(Permissions.FIRESET.getNode()) || p.isOp())) {
+            p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+            return true;
+        }
+
+        ItemStack wand = FireFighterClass.getConfig().getItemStack("fireset.wand");
 
         if (args.length == 0) { //giving the wand
             p.getInventory().addItem(wand);
-            p.sendMessage(fireFighterClass.messages.get("fireset_wand_instructions"));
+            p.sendMessage(FireFighterClass.messages.formattedMessage("§e", "fireset_wand_instructions"));
         } else if (args.length > 0) {
             switch (args[0]) {
                 case "deletemission": ///DELETE MISSION///
@@ -53,51 +53,53 @@ public class Fireset implements CommandExecutor {
                         break;
                     }
                     if (existsMission(args[1])) {
-                        fireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
-                        fireFighterClass.saveConfig();
-                        p.sendMessage(fireFighterClass.messages.get("fireset_delete"));
+                        FireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
+                        FireFighterClass.saveConfig();
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_delete"));
                     } else {
-                        p.sendMessage(fireFighterClass.messages.get("fireset_mission_not_found"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
                     }
                     break;
                 case "editmission": ///EDIT MISSION///
                     if (args.length < 3) {
-                        p.sendMessage(getUsage());
+                        p.sendMessage(getUsage()); //TODO
                         break;
                     }
                     if (!existsMission(args[1])) {
-                        p.sendMessage(fireFighterClass.messages.get("fireset_mission_not_found"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
                         break;
                     }
                     if (args[2].equals("name")) { //editing mission's name
                         if (args.length < 4) {
-                            p.sendMessage(getUsage());
+                            p.sendMessage(getUsage()); //TODO
                             break;
                         }
                         String newName = args[3];
-                        MemorySection mission = (MemorySection) fireFighterClass.getConfig().get("missions." + args[1]);
-                        fireFighterClass.getConfig().set("missions." + args[1], null); //removes the path
-                        fireFighterClass.saveConfig();
-                        fireFighterClass.getConfig().set("missions." + newName, mission);
-                        fireFighterClass.saveConfig();
+                        FireFighterClass.configs.loadConfigs();
+                        MemorySection mission = (MemorySection) FireFighterClass.configs.getConfigsConfiguration().get("missions." + args[1]);
+                        FireFighterClass.configs.getConfigsConfiguration().set("missions." + args[1], null); //removes the old mission
+                        FireFighterClass.configs.getConfigsConfiguration().set("missions." + newName, mission); //puts the new mission
+                        if ( !(FireFighterClass.configs.saveToFile()) ) return false; //error on saving
 
                     } else if (args[2].equals("description")) { //editing mission's description
                         if (args.length < 4) {
-                            p.sendMessage(getUsage());
+                            p.sendMessage(getUsage()); //TODO
                             break;
                         }
-                        String newDescription = args[3];
+                        StringBuilder newDescription = new StringBuilder();
                         for (int i = 3; i < args.length; i++) {
-                            newDescription += args[i] + " ";
+                            newDescription.append(args[i]).append(" ");
                         }
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".description", newDescription);
-                        fireFighterClass.saveConfig();
+                        FireFighterClass.configs.getConfigsConfiguration().set("missions." + args[1] + ".description", newDescription.toString());
+                        if ( !(FireFighterClass.configs.saveToFile()) ) return false; //error on saving
+
                     } else if (args[2].equals("rewards")) { //editing mission's rewards
-                    	if (!p.hasPermission(fireFighterClass.getPermission("rewardset"))) { //invalid permissions
-                    		p.sendMessage(fireFighterClass.messages.get("invalid_permissions"));
+                    	if (!p.hasPermission(Permissions.SET_REWARDS.getNode())) { //invalid permissions
+                    		p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
                     		return true;
                     	}
                     	openRewardsGUI(args[1], p);
+
                     }else {
                         p.sendMessage(getUsage());
                         break;
@@ -108,26 +110,26 @@ public class Fireset implements CommandExecutor {
                         p.sendMessage(getUsage());
                         break;
                     }
-                    if (fireFighterClass.fireset_first_position.containsKey(p.getUniqueId()) && fireFighterClass.fireset_second_position.containsKey(p.getUniqueId())) { //checks if the area is setted
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".first_position.x", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockX());
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".first_position.z", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockZ());
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".second_position.x", fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockX());
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".second_position.z", fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockZ());
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((fireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockY()), (fireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockY())));
-                        fireFighterClass.getConfig().set("missions." + args[1] + ".world", fireFighterClass.fireset_first_position.get(p.getUniqueId()).getWorld().getName());
+                    if (FireFighterClass.fireset_first_position.containsKey(p.getUniqueId()) && FireFighterClass.fireset_second_position.containsKey(p.getUniqueId())) { //checks if the area is set
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".first_position.x", FireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockX());
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".first_position.z", FireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockZ());
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".second_position.x", FireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockX());
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".second_position.z", FireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockZ());
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".altitude", Math.min((FireFighterClass.fireset_first_position.get(p.getUniqueId()).getBlockY()), (FireFighterClass.fireset_second_position.get(p.getUniqueId()).getBlockY())));
+                        FireFighterClass.getConfig().set("missions." + args[1] + ".world", FireFighterClass.fireset_first_position.get(p.getUniqueId()).getWorld().getName());
                         if (args.length >= 3) {
                             String description = "";
                             for (int i = 2; i < args.length; i++) {
                                 description += args[i] + " ";
                             }
-                            fireFighterClass.getConfig().set("missions." + args[1] + ".description", description);
+                            FireFighterClass.getConfig().set("missions." + args[1] + ".description", description); //TODO
                         } else {
-                            fireFighterClass.getConfig().set("missions." + args[1] + ".description",ChatColor.RED + "Fire at the " + args[1]);
+                            FireFighterClass.getConfig().set("missions." + args[1] + ".description",ChatColor.RED + "Fire at the " + args[1]); //TODO
                         }
-                        p.sendMessage(fireFighterClass.messages.get("fireset_added_mission"));
-                        fireFighterClass.saveConfig();
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_added_mission"));
+                        FireFighterClass.saveConfig();
                     } else {
-                        p.sendMessage(fireFighterClass.messages.get("fireset_invalid_selection"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_invalid_selection"));
                         break;
                     }
                     break;
@@ -139,9 +141,9 @@ public class Fireset implements CommandExecutor {
                     ItemStack newWand = p.getInventory().getItemInMainHand();
                     if (newWand.getType() != Material.AIR) { //checks if the player has something in his hand
                         newWand.setAmount(1);
-                        fireFighterClass.getConfig().set("fireset.wand", newWand);
-                        fireFighterClass.saveConfig();
-                        p.sendMessage(fireFighterClass.messages.get("fireset_wand_setted"));
+                        FireFighterClass.getConfig().set("fireset.wand", newWand);
+                        FireFighterClass.saveConfig();
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_wand_set"));
                     }
                     break;
                 default:
@@ -153,11 +155,11 @@ public class Fireset implements CommandExecutor {
     }
 
     private boolean existsMission(String name) {
-        if (fireFighterClass.getConfig().contains("missions." + name)) {
-            return true;
-        }
-        return false;
+        if (FireFighterClass.getConfig().contains("missions." + name)) {
+        return true;
     }
+        return false;
+}
     
     private void openRewardsGUI(String missionName, Player inventoryOwner) {
     	//reading rewards informations from config.yml
@@ -165,15 +167,15 @@ public class Fireset implements CommandExecutor {
     	String rewardsPath = "missions." + missionName + ".rewards";
     	int Size = 9;
     	String title = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Rewards - " + missionName;
-    	if (fireFighterClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
-    		int rewardsCount = fireFighterClass.getConfig().getInt(rewardsPath + ".size");
+    	if (FireFighterClass.getConfig().get(rewardsPath) != null) { //if there are rewards set
+    		int rewardsCount = FireFighterClass.getConfig().getInt(rewardsPath + ".size");
     		Size = (rewardsCount / 9 + 1) * 9;
     		for (int i = 0; i < rewardsCount; i++) {
-    			ItemStack tmp = fireFighterClass.getConfig().getItemStack(rewardsPath + "." + i);
+    			ItemStack tmp = FireFighterClass.getConfig().getItemStack(rewardsPath + "." + i);
     			inventoryContent.add(tmp);
     		}
     	} else {
-    		fireFighterClass.getConfig().set(rewardsPath + ".size", "0");
+    		FireFighterClass.getConfig().set(rewardsPath + ".size", "0");
     	}
     	//initializing GUI
     	Inventory GUI = Bukkit.createInventory(inventoryOwner, Size + 9, title);
@@ -198,7 +200,7 @@ public class Fireset implements CommandExecutor {
     	im4.setDisplayName (ChatColor.GREEN + "Save changes");
     	item4.setItemMeta(im4);
     	//placing the footer in the inventory
-    	GUI.setItem(Size + 0, item1);
+    	GUI.setItem(Size, item1);
     	GUI.setItem(Size + 1, item1);
     	GUI.setItem(Size + 2, item1);
     	GUI.setItem(Size + 3, item2);
