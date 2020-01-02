@@ -1202,7 +1202,7 @@ public enum XMaterial {
         if ((contains(name) && data <= 0) && (isNewVersion() || !isDuplicated(name)))
             return valueOf(name);
 
-        // TODO Temporary but works - Please find a more reasonable fix for duplicated materials.
+        // to do Temporary but works - Please find a more reasonable fix for duplicated materials.
         if (isDuplicated(name) && !isNewVersion())
             return requestDuplicatedXMaterial(name, data);
 
