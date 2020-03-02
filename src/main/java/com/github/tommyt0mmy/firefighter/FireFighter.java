@@ -82,9 +82,4 @@ public class FireFighter extends JavaPlugin {
         getCommand("firefighter").setTabCompleter(new HelpTabCompleter());
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter());
     }
-
-    @Override
-    public FileConfiguration getConfig() throws NullPointerException {
-        return null;
-    }
 }
