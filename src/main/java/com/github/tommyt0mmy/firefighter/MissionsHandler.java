@@ -166,11 +166,11 @@ public class MissionsHandler extends BukkitRunnable {
     private String getMediumCoord(String missionName) { //returns the medium position of the mission
         String res = "";
         String missionPath = "missions." + missionName;
-        res += (((Integer.parseInt(config.get(missionPath + ".first_position.x").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.x").toString())) / 2) + ""); //X
+        res += (((Integer.parseInt(config.get(missionPath + ".first_position.x").toString()) + Integer.parseInt(config.get(missionPath + ".second_position.x").toString())) / 2) + ""); //X
         res += " ";
         res += (config.get(missionPath + ".altitude").toString()); // Y
         res += " ";
-        res += (((Integer.parseInt(config.get(missionPath + ".first_position.z").toString()) + Integer.valueOf(config.get(missionPath + ".second_position.z").toString())) / 2) + ""); // Z
+        res += (((Integer.parseInt(config.get(missionPath + ".first_position.z").toString()) + Integer.parseInt(config.get(missionPath + ".second_position.z").toString())) / 2) + ""); // Z
         return res;
     }
     
