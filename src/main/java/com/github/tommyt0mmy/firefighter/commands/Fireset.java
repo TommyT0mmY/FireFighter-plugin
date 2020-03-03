@@ -9,14 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Fireset implements CommandExecutor {
 
@@ -49,6 +49,47 @@ public class Fireset implements CommandExecutor {
         } else {
             label:
             switch (args[0]) {
+                case "missions": ///MISSIONS LIST///
+                    //Page selection
+                    int page = 1, count = 0;
+                    if (args.length == 2) {
+                        if (args[1].matches("\\d+")) {
+                            page = Integer.parseInt(args[1]);
+                        } else {
+                            p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "page_not_found"));
+                            return true;
+                        }
+                    } else if (args.length > 2) {
+                        p.sendMessage(getUsage());
+                    }
+                    //two missions per page
+                    Set<String> missions = new TreeSet<>();
+                    missions = FireFighterClass.configs.getConfig().getConfigurationSection("missions").getKeys(false);
+                    if (missions.size() < (page * 2) - 1 || page * 2 <= 0) {
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "page_not_found"));
+                        return true;
+                    }
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("fireset_missions_header")));
+                    for (String curr : missions) {
+                        count++;
+                        if (count == (page * 2) - 1 || count == page * 2) {
+                            ConfigurationSection missionSection = FireFighterClass.configs.getConfig().getConfigurationSection("missions." + curr);
+                            String world_name = missionSection.getString("world");
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("fireset_missions_name").replaceAll("<mission>", curr)));
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("fireset_missions_world").replaceAll("<world>", world_name)));
+                            int x = (missionSection.getInt("first_position.x") + missionSection.getInt("second_position.x")) / 2;
+                            int y = missionSection.getInt("altitude");
+                            int z = (missionSection.getInt("first_position.z") + missionSection.getInt("second_position.z")) / 2;
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("fireset_missions_position")
+                                    .replaceAll("<x>", String.valueOf(x))
+                                    .replaceAll("<y>", String.valueOf(y))
+                                    .replaceAll("<z>", String.valueOf(z))));
+                        }
+                    }
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("fireset_missions_footer")
+                            .replaceAll("<current page>", String.valueOf(page))
+                            .replaceAll("<total>", String.valueOf((missions.size() + 1) / 2))));
+                    break;
                 case "deletemission": ///DELETE MISSION///
                     if (args.length != 2) {
                         p.sendMessage(getUsage());

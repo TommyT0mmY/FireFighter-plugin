@@ -45,12 +45,17 @@ public class Messages {
 			put("messages.fireset_delete",  "Mission successfully deleted!");
 			put("messages.fireset_invalid_selection",  "Invalid selection!");
 			put("messages.fireset_added_mission",  "Mission successfully added!");
+			put("messages.fireset_missions_header", "&c&l+ - - - &e&l&oMissions list&c&l - - - +&r");
+			put("messages.fireset_missions_footer", "&c&l+ - &r&epage <current page>/<total>&c&l- - - - - - - - - - - - +&r");
+			put("messages.fireset_missions_name", "&7-&e<mission>");
+			put("messages.fireset_missions_world", "&7world:&e <world>");
+			put("messages.fireset_missions_position", "&7position:&e x <x> y <y> z <z>");
 
 			//COMMANDS DESCRIPTIONS
 
 			put("description.firefighter", "Shows the help menu");
 			put("description.firetool", "Gives you a fire extinguisher");
-			put("description.fireset", "Sets,edits or deletes missions");
+			put("description.fireset", "Controls missions");
 
 			//HELP PAGES
 

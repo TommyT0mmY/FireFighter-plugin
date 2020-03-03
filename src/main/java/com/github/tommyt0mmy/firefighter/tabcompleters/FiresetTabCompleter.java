@@ -1,8 +1,5 @@
 package com.github.tommyt0mmy.firefighter.tabcompleters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.command.Command;
@@ -10,6 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FiresetTabCompleter implements TabCompleter {
 
@@ -44,6 +44,9 @@ public class FiresetTabCompleter implements TabCompleter {
 
         List < String > suggestions = new ArrayList < > ();
         if (args.length == 1) {
+            if (startsWith(args[0], "missions")) {
+                suggestions.add("missions");
+            }
             if (startsWith(args[0], "setwand")) {
                 suggestions.add("setwand");
             }
@@ -75,6 +78,15 @@ public class FiresetTabCompleter implements TabCompleter {
                         if (startsWith(args[1], missionName)) {
                             suggestions.add(missionName);
                         }
+                    }
+                }
+            }
+            if (args[0].equals("missions")) {
+                FireFighterClass.configs.loadConfigs();
+                if ( !(((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
+                    int totalpages = ((FireFighterClass.configs.getConfig().getConfigurationSection("missions")).getKeys(false).size() + 1) / 2;
+                    for (int i = 1; i <= totalpages; i++) {
+                        suggestions.add(String.valueOf(i));
                     }
                 }
             }

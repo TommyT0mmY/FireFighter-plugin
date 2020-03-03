@@ -17,6 +17,11 @@ messages:
   fireset_delete: 'Mission successfully deleted!'
   fireset_invalid_selection: 'Invalid selection!'
   fireset_added_mission: 'Mission successfully added!'
+  fireset_missions_header: '&c&l+ - - - &e&l&oMissions list&c&l - - - +&r'
+  fireset_missions_footer: '&c&l+ - &r&epage <current page>/<total>&c&l- - - - - - - - - - - - +&r'
+  fireset_missions_name: '&7-&e<mission name>'
+  fireset_missions_world: '&7world:&e <world name>'
+  fireset_missions_position: '&7position:&e x <x> y <y> z <z>'
 
 
 #COMMANDS DESCRIPTIONS
@@ -24,7 +29,7 @@ messages:
 description:
   firefighter: 'Shows the help menu'
   firetool: 'Gives you a fire extinguisher'
-  fireset: 'Sets,edits or deletes missions'
+  fireset: 'Controls missions'
 
 
 #HELP PAGES
