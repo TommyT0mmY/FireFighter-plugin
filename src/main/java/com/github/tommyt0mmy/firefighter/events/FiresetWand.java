@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class FiresetWand implements Listener {
 
@@ -21,7 +22,8 @@ public class FiresetWand implements Listener {
             if (!(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) { //only clicks on blocks
                 return;
             }
-            if (!p.getInventory().getItemInMainHand().equals(FireFighterClass.getConfig().getItemStack("fireset.wand"))) { //only if the player has the wand in his main hand
+            ItemStack wand = FireFighterClass.configs.getConfig().getItemStack("fireset.wand");
+            if (!p.getInventory().getItemInMainHand().isSimilar(wand)) { //only if the player has the wand in his main hand
                 return;
             }
             if (!p.hasPermission(Permissions.FIRESET.getNode())) { //only if the player has the right permission
