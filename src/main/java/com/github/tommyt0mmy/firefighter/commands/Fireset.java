@@ -1,8 +1,6 @@
 package com.github.tommyt0mmy.firefighter.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.cryptomorin.xseries.XMaterial;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.Bukkit;
@@ -17,7 +15,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fireset implements CommandExecutor {
 
@@ -36,7 +35,7 @@ public class Fireset implements CommandExecutor {
 
         Player p = (Player) Sender;
         if (!(p.hasPermission(Permissions.FIRESET.getNode()) || p.isOp())) {
-            p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+            p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "invalid_permissions"));
             return true;
         }
 
@@ -46,7 +45,7 @@ public class Fireset implements CommandExecutor {
 
         if (args.length == 0) { //giving the wand
             p.getInventory().addItem(wand);
-            p.sendMessage(FireFighterClass.messages.formattedMessage("§e", "fireset_wand_instructions"));
+            p.sendMessage(FireFighterClass.messages.formattedMessage("Â§e", "fireset_wand_instructions"));
         } else {
             label:
             switch (args[0]) {
@@ -58,9 +57,9 @@ public class Fireset implements CommandExecutor {
                     if (existsMission(args[1])) {
                         FireFighterClass.configs.set("missions." + args[1], null); //removes the path
                         FireFighterClass.configs.saveToFile();
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_delete"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§a", "fireset_delete"));
                     } else {
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "fireset_mission_not_found"));
                     }
                     break;
                 case "editmission": ///EDIT MISSION///
@@ -69,7 +68,7 @@ public class Fireset implements CommandExecutor {
                         break;
                     }
                     if (!existsMission(args[1])) {
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "fireset_mission_not_found"));
                         break;
                     }
                     switch (args[2]) {
@@ -103,7 +102,7 @@ public class Fireset implements CommandExecutor {
                             break;
                         case "rewards":  //editing mission's rewards
                             if (!p.hasPermission(Permissions.SET_REWARDS.getNode())) { //invalid permissions
-                                p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+                                p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "invalid_permissions"));
                                 return true;
                             }
                             openRewardsGUI(args[1], p);
@@ -135,10 +134,10 @@ public class Fireset implements CommandExecutor {
                         } else {
                             FireFighterClass.configs.set("missions." + args[1] + ".description", ChatColor.RED + "Fire at: " + args[1]);
                         }
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_added_mission"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§a", "fireset_added_mission"));
                         FireFighterClass.configs.saveToFile();
                     } else {
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_invalid_selection"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "fireset_invalid_selection"));
                         break;
                     }
                     break;
@@ -152,7 +151,7 @@ public class Fireset implements CommandExecutor {
                         newWand.setAmount(1);
                         FireFighterClass.configs.set("fireset.wand", newWand);
                         FireFighterClass.configs.saveToFile();
-                        p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_wand_set"));
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("Â§a", "fireset_wand_set"));
                     }
                     break;
                 default:
@@ -194,7 +193,7 @@ public class Fireset implements CommandExecutor {
     	}
     	ItemStack item1 = XMaterial.LIGHT_GRAY_STAINED_GLASS_PANE.parseItem(); //void part of the footer
     	ItemMeta im1 = item1.getItemMeta();
-    	im1.setDisplayName("§r");
+    	im1.setDisplayName("Â§r");
     	item1.setItemMeta(im1);
     	ItemStack item2 = XMaterial.LIME_STAINED_GLASS_PANE.parseItem(); //'add a line' button
     	ItemMeta im2 = item2.getItemMeta();

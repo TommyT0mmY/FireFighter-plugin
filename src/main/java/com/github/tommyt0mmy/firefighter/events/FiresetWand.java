@@ -53,7 +53,7 @@ public class FiresetWand implements Listener {
 
     private void setFirstPosition(Player p, Location loc) {
         FireFighterClass.fireset_first_position.put(p.getUniqueId(), loc);
-        String msg = FireFighterClass.messages.formattedMessage("§e", "fireset_first_position_set");
+        String msg = FireFighterClass.messages.formattedMessage("Â§e", "fireset_first_position_set");
         msg = msg.replace("<x>", loc.getBlockX() + "");
         msg = msg.replace("<y>", loc.getBlockY() + "");
         msg = msg.replace("<z>", loc.getBlockZ() + "");
@@ -62,7 +62,7 @@ public class FiresetWand implements Listener {
 
     private void setSecondPosition(Player p, Location loc) {
         FireFighterClass.fireset_second_position.put(p.getUniqueId(), loc);
-        String msg = FireFighterClass.messages.formattedMessage("§e", "fireset_second_position_set");
+        String msg = FireFighterClass.messages.formattedMessage("Â§e", "fireset_second_position_set");
         msg = msg.replace("<x>", loc.getBlockX() + "");
         msg = msg.replace("<y>", loc.getBlockY() + "");
         msg = msg.replace("<z>", loc.getBlockZ() + "");

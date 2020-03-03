@@ -1,10 +1,9 @@
 package com.github.tommyt0mmy.firefighter.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.cryptomorin.xseries.XMaterial;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
+import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,8 +14,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
-import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Firetool implements CommandExecutor {
 

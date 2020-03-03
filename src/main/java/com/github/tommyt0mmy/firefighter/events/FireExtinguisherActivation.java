@@ -1,9 +1,9 @@
 package com.github.tommyt0mmy.firefighter.events;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
-import com.github.tommyt0mmy.firefighter.utility.XMaterial;
-import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -39,7 +39,7 @@ public class FireExtinguisherActivation implements Listener {
                 return;
             }
             if (!p.hasPermission(Permissions.USE_EXTINGUISHER.getNode())) {
-                p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+                p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "invalid_permissions"));
                 return;
             }
 

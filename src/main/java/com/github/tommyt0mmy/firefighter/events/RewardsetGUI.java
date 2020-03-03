@@ -1,8 +1,9 @@
 package com.github.tommyt0mmy.firefighter.events;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
-import com.github.tommyt0mmy.firefighter.utility.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,8 +16,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 
 import java.util.Objects;
 
@@ -36,7 +35,7 @@ public class RewardsetGUI implements Listener {
     	Player p = (Player) e.getWhoClicked();
     	if (!p.hasPermission(Permissions.SET_REWARDS.getNode())) { //invalid permissions
     		p.closeInventory();
-    		p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+    		p.sendMessage(FireFighterClass.messages.formattedMessage("Â§c", "invalid_permissions"));
     		return;
     	}
     	if (e.getAction() == InventoryAction.NOTHING) { //if nothing will happen from the click, prevents NPEs
