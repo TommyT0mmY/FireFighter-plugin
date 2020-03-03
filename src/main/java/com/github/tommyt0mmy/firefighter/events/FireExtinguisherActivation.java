@@ -1,7 +1,7 @@
 package com.github.tommyt0mmy.firefighter.events;
 
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSound;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import com.github.tommyt0mmy.firefighter.utility.XSound;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.Location;

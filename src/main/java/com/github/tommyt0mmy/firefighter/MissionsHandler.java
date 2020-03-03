@@ -1,8 +1,8 @@
 package com.github.tommyt0mmy.firefighter;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;

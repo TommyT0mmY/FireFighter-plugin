@@ -1,9 +1,9 @@
 package com.github.tommyt0mmy.firefighter.events;
 
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSound;
+import com.github.tommyt0mmy.firefighter.utility.XSound;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

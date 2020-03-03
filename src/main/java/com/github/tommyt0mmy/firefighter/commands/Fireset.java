@@ -1,8 +1,8 @@
 package com.github.tommyt0mmy.firefighter.commands;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

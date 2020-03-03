@@ -1,9 +1,9 @@
 package com.github.tommyt0mmy.firefighter.commands;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
