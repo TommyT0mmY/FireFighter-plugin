@@ -27,6 +27,8 @@ public class FiresetWand implements Listener {
                 return;
             }
             if (!p.hasPermission(Permissions.FIRESET.getNode())) { //only if the player has the right permission
+                p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+                e.setCancelled(true);
                 return;
             }
 
