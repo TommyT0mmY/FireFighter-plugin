@@ -48,6 +48,7 @@ public class Configs {
 
         int fire_lasting_seconds = configsConfiguration.getInt("fire_lasting_seconds", -1);
         int missions_interval = configsConfiguration.getInt("missions_interval", -1);
+        FireFighterClass.missionsIntervalState = configsConfiguration.getBoolean("allow_missions_interval", false);
         if (fire_lasting_seconds == -1) {
             fire_lasting_seconds = 300;
             configsConfiguration.set("fire_lasting_seconds", fire_lasting_seconds);

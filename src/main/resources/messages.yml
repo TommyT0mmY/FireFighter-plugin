@@ -20,9 +20,11 @@ messages:
   fireset_added_mission: 'Mission successfully added!'
   fireset_missions_header: '&c&l+ - - - &e&l&oMissions list&c&l - - - +&r'
   fireset_missions_footer: '&c&l+ - &r&epage <current page>/<total>&c&l- - - - - - - - - - - - +&r'
-  fireset_missions_name: '&7-&e<mission name>'
-  fireset_missions_world: '&7world:&e <world name>'
+  fireset_missions_name: '&7-&e<mission>'
+  fireset_missions_world: '&7world:&e <world>'
   fireset_missions_position: '&7position:&e x <x> y <y> z <z>'
+  fireset_another_mission_started: '&cAnother mission started!'
+  fireset_started_mission: '&aMission started successfully!'
 
 
 #COMMANDS DESCRIPTIONS
@@ -53,7 +55,7 @@ help:
     line5: '<arrow1>&eDescription: &7Sets a new point that will catch at a random time on fire, firefighters '
     line6: '&7should extinguish the fire to get a reward.&8 &oN.B. Only admins should have access to this command'
     line7: '&7You can change the wand with &o/fireset setwand&7 with the permission <setwand_permission>'
-    line8: '&c&l+ - &r&epage 1/4&c&l- - - - - - - - - - - - +&r'
+    line8: '&c&l+ - &r&epage 1/6&c&l- - - - - - - - - - - - +&r'
   fireset2:
     line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
     line2: "<arrow2>&c'fireset' Command"
@@ -62,7 +64,7 @@ help:
     line5: '&e2)&7Create a new mission with &o/fireset addmission <name> [description]'
     line6: '<arrow1>&ename &7The name that identifies the mission'
     line7: '<arrow1>&edescription &7The message that will be broadcasted'
-    line8: '&c&l+ - &r&epage 2/4&c&l- - - - - - - - - - - - +&r'
+    line8: '&c&l+ - &r&epage 2/6&c&l- - - - - - - - - - - - +&r'
   fireset3:
     line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
     line2: "<arrow2>&c'fireset' Command"
@@ -71,7 +73,7 @@ help:
     line5: '<arrow1>&ename &7The name that identifies the mission'
     line6: '<arrow1>&ename|description &7The parameter that will be modified'
     line7: '<arrow1>&enew value &7The new value of the parameter'
-    line8: '&c&l+ - &r&epage 3/4&c&l- - - - - - - - - - - - +&r'
+    line8: '&c&l+ - &r&epage 3/6&c&l- - - - - - - - - - - - +&r'
   fireset4:
     line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
     line2: "<arrow2>&c'fireset' Command"
@@ -80,7 +82,25 @@ help:
     line5: '<arrow1>&ename &7The name that identifies the mission'
     line6: '<arrow1>&7The GUI that contains rewards will open, '
     line7: '&7if there are no rewards set for that specific mission the GUI will be empty'
-    line8: '&c&l+ - &r&epage 4/4&c&l- - - - - - - - - - - - +&r'
+    line8: '&c&l+ - &r&epage 4/6&c&l- - - - - - - - - - - - +&r'
+  fireset5:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&e - How to show a list of every mission - '
+    line4: '&7&o/fireset missions [page]'
+    line5: '<arrow1>&epage &7Specify the number of the page'
+    line6: '<arrow1>&7A menu will be shown, two missions per page, '
+    line7: '&7the menu gives informations about the position of every mission'
+    line8: '&c&l+ - &r&epage 5/6&c&l- - - - - - - - - - - - +&r'
+  fireset6:
+    line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
+    line2: "<arrow2>&c'fireset' Command"
+    line3: '<arrow1>&e - How to manually start a mission - '
+    line4: '&7&o/fireset startmission <name>'
+    line5: '<arrow1>&emission &7The name that identifies the mission'
+    line6: '<arrow1>&7The command will trigger the mission selected, '
+    line7: '&7only one mission per time is supported'
+    line8: '&c&l+ - &r&epage 6/6&c&l- - - - - - - - - - - - +&r'
   firetool1:
     line1: '&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r'
     line2: "<arrow2>&c'firetool' Command"

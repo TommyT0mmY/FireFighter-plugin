@@ -47,8 +47,37 @@ public class Fireset implements CommandExecutor {
             p.getInventory().addItem(wand);
             p.sendMessage(FireFighterClass.messages.formattedMessage("§e", "fireset_wand_instructions"));
         } else {
-            label:
+            command_switch:
             switch (args[0]) {
+
+
+                case "startmission":
+                    //perm check
+                    if (!p.hasPermission(Permissions.START_MISSION.getNode())) {
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
+                    }
+                    //arguments check
+                    if (args.length != 2) {
+                        p.sendMessage(getUsage());
+                        return true;
+                    }
+                    if (existsMission(args[1])) {
+                        if (FireFighterClass.startedMission) {
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.formattedMessage("§c", "fireset_another_mission_started")));
+                            return true;
+                        }
+                        FireFighterClass.missionName = args[1];
+                        FireFighterClass.programmedStart = true;
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.formattedMessage("§a", "fireset_started_mission")));
+                    } else {
+                        p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
+                        return true;
+                    }
+
+                    break;
+
+
+
                 case "missions": ///MISSIONS LIST///
                     //Page selection
                     int page = 1, count = 0;
@@ -90,6 +119,9 @@ public class Fireset implements CommandExecutor {
                             .replaceAll("<current page>", String.valueOf(page))
                             .replaceAll("<total>", String.valueOf((missions.size() + 1) / 2))));
                     break;
+
+
+
                 case "deletemission": ///DELETE MISSION///
                     if (args.length != 2) {
                         p.sendMessage(getUsage());
@@ -103,6 +135,9 @@ public class Fireset implements CommandExecutor {
                         p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "fireset_mission_not_found"));
                     }
                     break;
+
+
+
                 case "editmission": ///EDIT MISSION///
                     if (args.length < 3) {
                         p.sendMessage(getUsage());
@@ -116,7 +151,7 @@ public class Fireset implements CommandExecutor {
                         case "name":  //editing mission's name
                             if (args.length < 4) {
                                 p.sendMessage(getUsage());
-                                break label;
+                                break command_switch;
                             }
                             String newName = args[3];
                             FireFighterClass.configs.loadConfigs();
@@ -130,7 +165,7 @@ public class Fireset implements CommandExecutor {
                         case "description":  //editing mission's description
                             if (args.length < 4) {
                                 p.sendMessage(getUsage());
-                                break label;
+                                break command_switch;
                             }
 
                             StringBuilder newDescription = new StringBuilder();
@@ -151,9 +186,12 @@ public class Fireset implements CommandExecutor {
                             break;
                         default:
                             p.sendMessage(getUsage());
-                            break label;
+                            break command_switch;
                     }
                     break;
+
+
+
                 case "addmission": ///ADD MISSION///
                     if (args.length < 2) {
                         p.sendMessage(getUsage());
@@ -195,6 +233,9 @@ public class Fireset implements CommandExecutor {
                         p.sendMessage(FireFighterClass.messages.formattedMessage("§a", "fireset_wand_set"));
                     }
                     break;
+
+
+
                 default:
                     p.sendMessage(getUsage());
                     break;

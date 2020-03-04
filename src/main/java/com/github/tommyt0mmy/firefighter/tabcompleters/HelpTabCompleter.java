@@ -1,14 +1,14 @@
 package com.github.tommyt0mmy.firefighter.tabcompleters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelpTabCompleter implements TabCompleter {
 
@@ -65,12 +65,11 @@ public class HelpTabCompleter implements TabCompleter {
             if (startsWith(args[0], "fireset")) {
                 suggestions.add("fireset");
             }
-        } else if (args.length == 2) {
+        } else {
             if (startsWith(args[0] + args[1], "fireset")) {
-                suggestions.add("1");
-                suggestions.add("2");
-                suggestions.add("3");
-                suggestions.add("4");
+                for (int i = 1; i <= 6; i++) {
+                    suggestions.add(String.valueOf(i));
+                }
             };
         }
         return suggestions;

@@ -1,5 +1,6 @@
 prefix: '[FireFighter] '
 fireset: {}
 missions_interval: 3600
+allow_missions_interval: false
 fire_lasting_seconds: 300
 missions: {}

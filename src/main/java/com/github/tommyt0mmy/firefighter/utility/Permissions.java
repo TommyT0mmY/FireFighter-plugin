@@ -6,8 +6,9 @@ public enum Permissions {
     GET_EXTINGUISHER("firetool.get"),
     USE_EXTINGUISHER("firetool.use"),
     FREEZE_EXTINGUISHER("firetool.freeze-durability"),
-    SET_REWARDS("fireset.rewardset"),
     FIRESET("fireset"),
+    START_MISSION("fireset.startmission"),
+    SET_REWARDS("fireset.rewardset"),
 	SET_WAND("fireset.setwand"),
 	ON_DUTY("onduty");
 

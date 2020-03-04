@@ -59,6 +59,9 @@ public class FiresetTabCompleter implements TabCompleter {
             if (startsWith(args[0], "deletemission")) {
                 suggestions.add("deletemission");
             }
+            if (startsWith(args[0], "startmission")) {
+                suggestions.add("startmission");
+            }
         }
         if (args.length == 2) {
             FireFighterClass.configs.loadConfigs();
@@ -73,6 +76,15 @@ public class FiresetTabCompleter implements TabCompleter {
                 }
             }
             if (args[0].equals("deletemission")) {
+                if ( !(((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
+                    for (String missionName : ((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false)) {
+                        if (startsWith(args[1], missionName)) {
+                            suggestions.add(missionName);
+                        }
+                    }
+                }
+            }
+            if (args[0].equals("startmission")) {
                 if ( !(((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false).isEmpty()) ) {
                     for (String missionName : ((MemorySection) FireFighterClass.configs.getConfig().get("missions")).getKeys(false)) {
                         if (startsWith(args[1], missionName)) {

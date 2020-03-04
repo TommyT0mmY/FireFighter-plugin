@@ -41,6 +41,12 @@ public class MissionsHandler extends BukkitRunnable {
         if (FireFighterClass.startedMission) {
             return;
         }
+        if (System.currentTimeMillis() < FireFighterClass.nextMissionStart && !FireFighterClass.programmedStart) {
+            return;
+        }
+        if (!FireFighterClass.missionsIntervalState && !FireFighterClass.programmedStart) {
+            return;
+        }
 
         int fire_lasting_ticks = Integer.parseInt(FireFighterClass.getConfig().get("fire_lasting_seconds").toString()) * 20;
         FireFighterClass.startedMission = true;
@@ -52,8 +58,14 @@ public class MissionsHandler extends BukkitRunnable {
             FireFighterClass.console.info("There are no missions! Start setting up new missions by typing in-game '/firefighter fireset 2'");
             return;
         }
-        String missionName = missions.get(random.nextInt(missions.size()));
-        FireFighterClass.missionName = missionName;
+        String missionName = FireFighterClass.missionName;
+        if (!FireFighterClass.programmedStart) { //if started randomly
+            missionName = missions.get(random.nextInt(missions.size()));
+            FireFighterClass.missionName = missionName;
+            FireFighterClass.nextMissionStart = System.currentTimeMillis() + ((FireFighterClass.configs.getConfig().getInt("missions_interval")) * 1000) + ((FireFighterClass.configs.getConfig().getInt("fire_lasting_seconds")) * 1000) ;
+        } else { //if programmed with /fireset startmission
+            FireFighterClass.programmedStart = false;
+        }
         String missionPath = "missions." + missionName;
         FireFighterClass.PlayerContribution.clear();
         //broadcast message
@@ -124,7 +136,7 @@ public class MissionsHandler extends BukkitRunnable {
             	turnOffInstructions();
                 cancel();
             }
-        }.runTaskTimer(FireFighterClass, (long)(fire_lasting_ticks * (1.5)), 1);
+        }.runTaskTimer(FireFighterClass, fire_lasting_ticks, 1);
     }
 
     private void Broadcast(World w, String title, String subtitle, String hotbar, String permission) {

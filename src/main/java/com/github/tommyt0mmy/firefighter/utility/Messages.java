@@ -36,7 +36,7 @@ public class Messages {
 			put("messages.page_not_found",  "Page not found!");
 			put("messages.hold_right_click",  "Hold Right Click");
 			put("messages.unknown_command",  "Unknown command. Type '/help' for help.");
-			put("received_reward", "&aCongratulations you received a reward for being the best firefighter!");
+			put("messages.received_reward", "&aCongratulations you received a reward for being the best firefighter!");
 			put("messages.fireset_wand", "Fireset Wand");
 			put("messages.fireset_wand_instructions",  "Left click: select pos #1; Right click: select pos #2");
 			put("messages.fireset_wand_set",  "New wand set!");
@@ -51,6 +51,8 @@ public class Messages {
 			put("messages.fireset_missions_name", "&7-&e<mission>");
 			put("messages.fireset_missions_world", "&7world:&e <world>");
 			put("messages.fireset_missions_position", "&7position:&e x <x> y <y> z <z>");
+			put("messages.fireset_another_mission_started", "&cAnother mission started!");
+			put("messages.fireset_started_mission", "&aMission started successfully!");
 
 			//COMMANDS DESCRIPTIONS
 
@@ -80,7 +82,7 @@ public class Messages {
 			put("help.fireset1.line5", "<arrow1>&eDescription: &7Sets a new point that will catch at a random time on fire, firefighters ");
 			put("help.fireset1.line6", "&7should extinguish the fire to get a reward.&8 &oN.B. Only admins should have access to this command");
 			put("help.fireset1.line7", "&7You can change the wand with &o/fireset setwand&7 with the permission <setwand_permission>");
-			put("help.fireset1.line8", "&c&l+ - &r&epage 1/4&c&l- - - - - - - - - - - - +&r");
+			put("help.fireset1.line8", "&c&l+ - &r&epage 1/6&c&l- - - - - - - - - - - - +&r");
 
 			//fireset 2
 
@@ -91,7 +93,7 @@ public class Messages {
 			put("help.fireset2.line5", "&e2)&7Create a new mission with &o/fireset addmission <name> [description]");
 			put("help.fireset2.line6", "<arrow1>&ename &7The name that identifies the mission");
 			put("help.fireset2.line7", "<arrow1>&edescription &7The message that will be broadcasted");
-			put("help.fireset2.line8", "&c&l+ - &r&epage 2/4&c&l- - - - - - - - - - - - +&r");
+			put("help.fireset2.line8", "&c&l+ - &r&epage 2/6&c&l- - - - - - - - - - - - +&r");
 
 			//fireset 3
 
@@ -102,7 +104,7 @@ public class Messages {
 			put("help.fireset3.line5", "<arrow1>&ename &7The name that identifies the mission");
 			put("help.fireset3.line6", "<arrow1>&ename|description &7The parameter that will be modified");
 			put("help.fireset3.line7", "<arrow1>&enew value &7The new value of the parameter");
-			put("help.fireset3.line8", "&c&l+ - &r&epage 3/4&c&l- - - - - - - - - - - - +&r");
+			put("help.fireset3.line8", "&c&l+ - &r&epage 3/6&c&l- - - - - - - - - - - - +&r");
 
 			//fireset 4
 
@@ -113,7 +115,29 @@ public class Messages {
 			put("help.fireset4.line5", "<arrow1>&ename &7The name that identifies the mission");
 			put("help.fireset4.line6", "<arrow1>&7The GUI that contains rewards will open, ");
 			put("help.fireset4.line7", "&7if there are no rewards set for that specific mission the GUI will be empty");
-			put("help.fireset4.line8", "&c&l+ - &r&epage 4/4&c&l- - - - - - - - - - - - +&r");
+			put("help.fireset4.line8", "&c&l+ - &r&epage 4/6&c&l- - - - - - - - - - - - +&r");
+
+			//fireset 5
+
+			put("help.fireset5.line1", "&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r");
+			put("help.fireset5.line2", "<arrow2>&c'fireset' Command");
+			put("help.fireset5.line3", "<arrow1>&e - How to show a list of every mission - ");
+			put("help.fireset5.line4", "&7&o/fireset missions [page]");
+			put("help.fireset5.line5", "<arrow1>&epage &7Specify the number of the page");
+			put("help.fireset5.line6", "<arrow1>&7A menu will be shown, two missions per page, ");
+			put("help.fireset5.line7", "&7the menu gives informations about the position of every mission");
+			put("help.fireset5.line8", "&c&l+ - &r&epage 5/6&c&l- - - - - - - - - - - - +&r");
+
+			//fireset 6
+
+			put("help.fireset6.line1", "&c&l+ - - - &e&l&oFireFighter help&c&l - - - +&r");
+			put("help.fireset6.line2", "<arrow2>&c'fireset' Command");
+			put("help.fireset6.line3", "<arrow1>&e - How to manually start a mission - ");
+			put("help.fireset6.line4", "&7&o/fireset startmission <name>");
+			put("help.fireset6.line5", "<arrow1>&emission &7The name that identifies the mission");
+			put("help.fireset6.line6", "<arrow1>&7The command will trigger the mission selected, ");
+			put("help.fireset6.line7", "&7only one mission per time is supported");
+			put("help.fireset6.line8", "&c&l+ - &r&epage 6/6&c&l- - - - - - - - - - - - +&r");
 
 			//firetool 1
 
