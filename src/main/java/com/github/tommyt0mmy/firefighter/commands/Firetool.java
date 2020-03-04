@@ -35,21 +35,8 @@ public class Firetool implements CommandExecutor {
 
         // creating the fire extinguisher's ItemStack object //
 
-        ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
-        //getting meta
-        ItemMeta meta = fire_extinguisher.getItemMeta();
-        //modifying meta
-        meta.setDisplayName("" + ChatColor.RED + "" + ChatColor.BOLD + FireFighterClass.messages.getMessage("fire_extinguisher"));
-        List < String > lore = new ArrayList < String > ();
-        lore.add(FireFighterClass.messages.getMessage("fire_extinguisher"));
-        lore.add(ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.getMessage("hold_right_click"));
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        //setting meta
-        meta.setLore(lore);
-        fire_extinguisher.setItemMeta(meta);
         Inventory inventory = p.getInventory();
-        inventory.addItem(fire_extinguisher);
+        inventory.addItem(FireFighterClass.getFireExtinguisher());
         TitleActionBarUtil.sendActionBarMessage(p,ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.formattedMessage("", "hold_right_click"));
 
         return true;

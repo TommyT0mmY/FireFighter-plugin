@@ -10,12 +10,20 @@ import com.github.tommyt0mmy.firefighter.tabcompleters.FiresetTabCompleter;
 import com.github.tommyt0mmy.firefighter.tabcompleters.HelpTabCompleter;
 import com.github.tommyt0mmy.firefighter.utility.Configs;
 import com.github.tommyt0mmy.firefighter.utility.Messages;
+import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -58,6 +66,7 @@ public class FireFighter extends JavaPlugin {
         //priority 3
         loadEvents();
         loadCommands();
+        loadRecipes();
 
         //priority 4
         @SuppressWarnings("unused")
@@ -83,5 +92,34 @@ public class FireFighter extends JavaPlugin {
         getCommand("firetool").setExecutor(new Firetool());
         getCommand("firefighter").setTabCompleter(new HelpTabCompleter());
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter());
+    }
+
+    private void loadRecipes() {
+        ItemStack fire_extinguisher = getFireExtinguisher();
+        ShapedRecipe fire_extinguisher_recipe = new ShapedRecipe(fire_extinguisher);
+        fire_extinguisher_recipe.shape("aih","awa","aia");
+        fire_extinguisher_recipe.setIngredient('a', XMaterial.AIR.parseMaterial());
+        fire_extinguisher_recipe.setIngredient('i', XMaterial.IRON_INGOT.parseMaterial());
+        fire_extinguisher_recipe.setIngredient('h', XMaterial.HOPPER.parseMaterial());
+        fire_extinguisher_recipe.setIngredient('w', (XMaterial.WATER_BUCKET.parseMaterial()));
+
+        getServer().addRecipe(fire_extinguisher_recipe);
+    }
+
+    public ItemStack getFireExtinguisher() {
+        ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
+        //getting meta
+        ItemMeta meta = fire_extinguisher.getItemMeta();
+        //modifying meta
+        meta.setDisplayName("" + ChatColor.RED + "" + ChatColor.BOLD + messages.getMessage("fire_extinguisher"));
+        List< String > lore = new ArrayList< String >();
+        lore.add(messages.getMessage("fire_extinguisher"));
+        lore.add(ChatColor.YELLOW + "" + ChatColor.UNDERLINE + messages.getMessage("hold_right_click"));
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        //setting meta
+        meta.setLore(lore);
+        fire_extinguisher.setItemMeta(meta);
+        return fire_extinguisher;
     }
 }
