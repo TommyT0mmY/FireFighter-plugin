@@ -77,8 +77,23 @@ public class MissionsHandler extends BukkitRunnable {
         if (world == null) { //avoids NPE
         	return;
         }
-        Broadcast(world, ChatColor.DARK_RED + "Fire alert", config.get(missionPath + ".description").toString(), ChatColor.YELLOW + "At coordinates " + getMediumCoord(missionName), Permissions.ON_DUTY.getNode()); //TODO CUSTOM MESSAGES
-        Broadcast(world, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Fire alert at coordinates " + ChatColor.RESET + ChatColor.YELLOW + getMediumCoord(missionName), Permissions.ON_DUTY.getNode()); //TODO CUSTOM MESSAGES
+
+        String title = ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage( "startedmission_title")
+                .replaceAll("<mission_description>", config.get(missionPath + ".description").toString())
+                .replaceAll("<coordinates>", getMediumCoord(missionName)));
+        String subtitle = ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage( "startedmission_subtitle")
+                .replaceAll("<mission_description>", config.get(missionPath + ".description").toString())
+                .replaceAll("<coordinates>", getMediumCoord(missionName)));
+        String hotbar = ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage( "startedmission_hotbar")
+                .replaceAll("<mission_description>", config.get(missionPath + ".description").toString())
+                .replaceAll("<coordinates>", getMediumCoord(missionName)));
+        String chat = ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.getMessage("startedmission_chat")
+                .replaceAll("<mission_description>", config.get(missionPath + ".description").toString())
+                .replaceAll("<coordinates>", getMediumCoord(missionName)));
+
+        Broadcast(world, title, subtitle, hotbar, Permissions.ON_DUTY.getNode());
+        Broadcast(world, chat, Permissions.ON_DUTY.getNode());
+
         FireFighterClass.console.info("[" + world.getName() + "] Started '" + missionName + "' mission");
         //starting fire
         int y = Integer.parseInt(config.get(missionPath + ".altitude").toString());

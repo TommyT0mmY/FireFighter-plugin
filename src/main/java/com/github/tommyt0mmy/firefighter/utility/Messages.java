@@ -53,6 +53,10 @@ public class Messages {
 			put("messages.fireset_missions_position", "&7position:&e x <x> y <y> z <z>");
 			put("messages.fireset_another_mission_started", "&cAnother mission started!");
 			put("messages.fireset_started_mission", "&aMission started successfully!");
+			put("messages.startedmission_title", "&4Fire alert");
+			put("messages.startedmission_subtitle", "<mission_description>");
+			put("messages.startedmission_hotbar", "&eAt coordinates <coordinates>");
+			put("messages.startedmission_chat", "&4&lFire alert at coordinates &r&e<coordinates>");
 
 			//COMMANDS DESCRIPTIONS
 

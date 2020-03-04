@@ -72,12 +72,12 @@ public class Help implements CommandExecutor {
                 msg += FireFighterClass.messages.getHelpPage("fireset4");
 
             	break;
-            case "fireset5": //rewards page //TODO WRITE THIS PAGE
+            case "fireset5": //rewards page
 
                 msg += FireFighterClass.messages.getHelpPage("fireset5");
 
                 break;
-            case "fireset6": //rewards page //TODO WRITE THIS PAGE
+            case "fireset6": //rewards page
 
                 msg += FireFighterClass.messages.getHelpPage("fireset6");
 

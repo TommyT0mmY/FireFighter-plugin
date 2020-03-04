@@ -25,6 +25,10 @@ messages:
   fireset_missions_position: '&7position:&e x <x> y <y> z <z>'
   fireset_another_mission_started: '&cAnother mission started!'
   fireset_started_mission: '&aMission started successfully!'
+  startedmission_title: '&4Fire alert'
+  startedmission_subtitle: '<mission_description>'
+  startedmission_hotbar: '&eAt coordinates <coordinates>'
+  startedmission_chat: '&4&lFire alert at coordinates &r&e<coordinates>'
 
 
 #COMMANDS DESCRIPTIONS
