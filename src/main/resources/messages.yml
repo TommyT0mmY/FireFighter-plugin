@@ -8,6 +8,7 @@ messages:
   page_not_found: 'Page not found!'
   hold_right_click: 'Hold Right Click'
   unknown_command: "Unknown command. Type '/help' for help."
+  received_reward: '&aCongratulations you received a reward for being the best firefighter!'
   fireset_wand: 'Fireset Wand'
   fireset_wand_instructions: 'Left click: select pos #1; Right click: select pos #2'
   fireset_wand_set: 'New wand set!'

@@ -36,6 +36,7 @@ public class Messages {
 			put("messages.page_not_found",  "Page not found!");
 			put("messages.hold_right_click",  "Hold Right Click");
 			put("messages.unknown_command",  "Unknown command. Type '/help' for help.");
+			put("received_reward", "&aCongratulations you received a reward for being the best firefighter!");
 			put("messages.fireset_wand", "Fireset Wand");
 			put("messages.fireset_wand_instructions",  "Left click: select pos #1; Right click: select pos #2");
 			put("messages.fireset_wand_set",  "New wand set!");

@@ -208,7 +208,7 @@ public class MissionsHandler extends BukkitRunnable {
     		//giving the best player the selected reward
     		if (bestPlayer != null) {
     			Bukkit.getPlayer(bestPlayer).getInventory().addItem(reward);
-    			Bukkit.getPlayer(bestPlayer).sendMessage(FireFighterClass.messages.formattedMessage("§a", "received_reward"));
+    			Bukkit.getPlayer(bestPlayer).sendMessage(ChatColor.translateAlternateColorCodes('&', FireFighterClass.messages.formattedMessage("§a", "received_reward")));
     		}else {
     			FireFighterClass.console.info("No one contributed to the mission!");
     		}
