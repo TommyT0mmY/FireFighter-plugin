@@ -17,18 +17,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Firetool implements CommandExecutor {
+public class Firetool implements CommandExecutor
+{
 
     private FireFighter FireFighterClass = FireFighter.getInstance();
 
     @Override
-    public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args) {
-        if (!(Sender instanceof Player)) {
+    public boolean onCommand(CommandSender Sender, Command cmd, String label, String[] args)
+    {
+        if (!(Sender instanceof Player))
+        {
             Sender.sendMessage(FireFighterClass.messages.formattedMessage("", "only_players_command")); //only pl
             return true;
         }
         Player p = (Player) Sender;
-        if (!(p.hasPermission(Permissions.GET_EXTINGUISHER.getNode()) || p.isOp())) {
+        if (!(p.hasPermission(Permissions.GET_EXTINGUISHER.getNode()) || p.isOp()))
+        {
             p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
             return true;
         }
@@ -37,7 +41,7 @@ public class Firetool implements CommandExecutor {
 
         Inventory inventory = p.getInventory();
         inventory.addItem(FireFighterClass.getFireExtinguisher());
-        TitleActionBarUtil.sendActionBarMessage(p,ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.formattedMessage("", "hold_right_click"));
+        TitleActionBarUtil.sendActionBarMessage(p, ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.formattedMessage("", "hold_right_click"));
 
         return true;
     }

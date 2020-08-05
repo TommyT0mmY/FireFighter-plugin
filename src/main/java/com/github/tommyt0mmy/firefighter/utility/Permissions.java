@@ -1,7 +1,8 @@
 
 package com.github.tommyt0mmy.firefighter.utility;
 
-public enum Permissions {
+public enum Permissions
+{
     HELP_MENU("help"),
     GET_EXTINGUISHER("firetool.get"),
     USE_EXTINGUISHER("firetool.use"),
@@ -9,14 +10,18 @@ public enum Permissions {
     FIRESET("fireset"),
     START_MISSION("fireset.startmission"),
     SET_REWARDS("fireset.rewardset"),
-	SET_WAND("fireset.setwand"),
-	ON_DUTY("onduty");
+    SET_WAND("fireset.setwand"),
+    ON_DUTY("onduty");
 
     private String node;
 
-    Permissions(String node) {
+    Permissions(String node)
+    {
         this.node = node;
     }
 
-    public String getNode() { return "firefighter." + node; }
+    public String getNode()
+    {
+        return "firefighter." + node;
+    }
 }

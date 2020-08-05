@@ -11,8 +11,7 @@ import com.github.tommyt0mmy.firefighter.tabcompleters.HelpTabCompleter;
 import com.github.tommyt0mmy.firefighter.utility.Configs;
 import com.github.tommyt0mmy.firefighter.utility.Messages;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -27,7 +26,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class FireFighter extends JavaPlugin {
+public class FireFighter extends JavaPlugin
+{
 
     private static FireFighter instance;
 
@@ -38,23 +38,26 @@ public class FireFighter extends JavaPlugin {
     public boolean missionsIntervalState = false;
     public boolean programmedStart = false;
     public long nextMissionStart;
-    public HashMap< UUID, Integer > PlayerContribution = new HashMap<>();
+    public HashMap<UUID, Integer> PlayerContribution = new HashMap<>();
     public String missionName = "";
-    public HashMap< UUID, Location > fireset_first_position = new HashMap<>();
-    public HashMap< UUID, Location > fireset_second_position = new HashMap<>();
+    public HashMap<UUID, Location> fireset_first_position = new HashMap<>();
+    public HashMap<UUID, Location> fireset_second_position = new HashMap<>();
     public Logger console = getLogger();
     public Messages messages = null;
     public Configs configs = null;
 
-    public static FireFighter getInstance() {
+    public static FireFighter getInstance()
+    {
         return instance;
     }
 
-    private void setInstance(FireFighter instance) {
+    private void setInstance(FireFighter instance)
+    {
         FireFighter.instance = instance;
     }
 
-    public void onEnable() {
+    public void onEnable()
+    {
         //priority 1
         setInstance(this);
 
@@ -76,17 +79,20 @@ public class FireFighter extends JavaPlugin {
         console.info("FireFighter v" + version + " enabled succesfully");
     }
 
-    public void onDisable() {
+    public void onDisable()
+    {
         console.info("FireFighter v" + version + " disabled succesfully");
     }
 
-    private void loadEvents() {
+    private void loadEvents()
+    {
         this.getServer().getPluginManager().registerEvents(new FireExtinguisherActivation(), this);
         this.getServer().getPluginManager().registerEvents(new FiresetWand(), this);
         this.getServer().getPluginManager().registerEvents(new RewardsetGUI(), this);
     }
 
-    private void loadCommands() {
+    private void loadCommands()
+    {
         getCommand("firefighter").setExecutor(new Help());
         getCommand("fireset").setExecutor(new Fireset());
         getCommand("firetool").setExecutor(new Firetool());
@@ -94,25 +100,30 @@ public class FireFighter extends JavaPlugin {
         getCommand("fireset").setTabCompleter(new FiresetTabCompleter());
     }
 
-    private void loadRecipes() {
+    private void loadRecipes()
+    {
         ItemStack fire_extinguisher = getFireExtinguisher();
-        ShapedRecipe fire_extinguisher_recipe = new ShapedRecipe(fire_extinguisher);
-        fire_extinguisher_recipe.shape("aih","awa","aia");
-        fire_extinguisher_recipe.setIngredient('a', XMaterial.AIR.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('i', XMaterial.IRON_INGOT.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('h', XMaterial.HOPPER.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('w', (XMaterial.WATER_BUCKET.parseMaterial()));
 
-        getServer().addRecipe(fire_extinguisher_recipe);
+        NamespacedKey key = new NamespacedKey(this, "fire_extinguisher");
+        ShapedRecipe fire_extinguisher_recipe = new ShapedRecipe(key, fire_extinguisher);
+
+        fire_extinguisher_recipe.shape("aih", "awa", "aia");
+        fire_extinguisher_recipe.setIngredient('a', Material.AIR);
+        fire_extinguisher_recipe.setIngredient('i', Material.IRON_INGOT);
+        fire_extinguisher_recipe.setIngredient('h', Material.HOPPER);
+        fire_extinguisher_recipe.setIngredient('w', Material.WATER_BUCKET);
+
+        Bukkit.addRecipe(fire_extinguisher_recipe);
     }
 
-    public ItemStack getFireExtinguisher() {
+    public ItemStack getFireExtinguisher()
+    {
         ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
         //getting meta
         ItemMeta meta = fire_extinguisher.getItemMeta();
         //modifying meta
         meta.setDisplayName("" + ChatColor.RED + "" + ChatColor.BOLD + messages.getMessage("fire_extinguisher"));
-        List< String > lore = new ArrayList< String >();
+        List<String> lore = new ArrayList<String>();
         lore.add(messages.getMessage("fire_extinguisher"));
         lore.add(ChatColor.YELLOW + "" + ChatColor.UNDERLINE + messages.getMessage("hold_right_click"));
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
