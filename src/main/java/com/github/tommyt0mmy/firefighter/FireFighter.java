@@ -6,10 +6,12 @@ import com.github.tommyt0mmy.firefighter.commands.Help;
 import com.github.tommyt0mmy.firefighter.events.FireExtinguisherActivation;
 import com.github.tommyt0mmy.firefighter.events.FiresetWand;
 import com.github.tommyt0mmy.firefighter.events.RewardsetGUI;
+import com.github.tommyt0mmy.firefighter.events.onPlayerJoin;
 import com.github.tommyt0mmy.firefighter.tabcompleters.FiresetTabCompleter;
 import com.github.tommyt0mmy.firefighter.tabcompleters.HelpTabCompleter;
 import com.github.tommyt0mmy.firefighter.utility.Configs;
 import com.github.tommyt0mmy.firefighter.utility.Messages;
+import com.github.tommyt0mmy.firefighter.utility.UpdateChecker;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemFlag;
@@ -30,6 +32,10 @@ public class FireFighter extends JavaPlugin
 {
 
     private static FireFighter instance;
+
+    //UPDATE CHECKER
+    private final int spigotResourceId = 68772;
+    private final String spigotResourceUrl = "https://www.spigotmc.org/resources/firefighter.68772/";
 
     public File datafolder = getDataFolder();
     public String prefix = "[" + this.getDescription().getPrefix() + "] ";
@@ -75,6 +81,14 @@ public class FireFighter extends JavaPlugin
         @SuppressWarnings("unused")
         BukkitTask task = new MissionsHandler().runTaskTimer(this, 0, 20);
 
+        //checking for updates
+        UpdateChecker updateChecker = new UpdateChecker();
+        if (updateChecker.needsUpdate())
+        {
+            console.info("An update for FireFighter is available at:");
+            console.info(spigotResourceUrl);
+            console.info(String.format("Installed version: %s Lastest version: %s", updateChecker.getCurrent_version(), updateChecker.getLastest_version()));
+        }
 
         console.info("FireFighter v" + version + " enabled succesfully");
     }
@@ -89,6 +103,7 @@ public class FireFighter extends JavaPlugin
         this.getServer().getPluginManager().registerEvents(new FireExtinguisherActivation(), this);
         this.getServer().getPluginManager().registerEvents(new FiresetWand(), this);
         this.getServer().getPluginManager().registerEvents(new RewardsetGUI(), this);
+        this.getServer().getPluginManager().registerEvents(new onPlayerJoin(), this);
     }
 
     private void loadCommands()
@@ -132,5 +147,15 @@ public class FireFighter extends JavaPlugin
         meta.setLore(lore);
         fire_extinguisher.setItemMeta(meta);
         return fire_extinguisher;
+    }
+
+    public int getSpigotResourceId()
+    {
+        return spigotResourceId;
+    }
+
+    public String getSpigotResourceUrl()
+    {
+        return spigotResourceUrl;
     }
 }
