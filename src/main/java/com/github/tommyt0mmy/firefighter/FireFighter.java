@@ -11,8 +11,7 @@ import com.github.tommyt0mmy.firefighter.tabcompleters.HelpTabCompleter;
 import com.github.tommyt0mmy.firefighter.utility.Configs;
 import com.github.tommyt0mmy.firefighter.utility.Messages;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -105,15 +104,16 @@ public class FireFighter extends JavaPlugin
     {
         ItemStack fire_extinguisher = getFireExtinguisher();
 
+        NamespacedKey key = new NamespacedKey(this, "fire_extinguisher");
+        ShapedRecipe fire_extinguisher_recipe = new ShapedRecipe(key, fire_extinguisher);
 
-        ShapedRecipe fire_extinguisher_recipe = new ShapedRecipe(fire_extinguisher);
         fire_extinguisher_recipe.shape("aih", "awa", "aia");
-        fire_extinguisher_recipe.setIngredient('a', XMaterial.AIR.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('i', XMaterial.IRON_INGOT.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('h', XMaterial.HOPPER.parseMaterial());
-        fire_extinguisher_recipe.setIngredient('w', (XMaterial.WATER_BUCKET.parseMaterial()));
+        fire_extinguisher_recipe.setIngredient('a', Material.AIR);
+        fire_extinguisher_recipe.setIngredient('i', Material.IRON_INGOT);
+        fire_extinguisher_recipe.setIngredient('h', Material.HOPPER);
+        fire_extinguisher_recipe.setIngredient('w', Material.WATER_BUCKET);
 
-        getServer().addRecipe(fire_extinguisher_recipe);
+        Bukkit.addRecipe(fire_extinguisher_recipe);
     }
 
     public ItemStack getFireExtinguisher()
