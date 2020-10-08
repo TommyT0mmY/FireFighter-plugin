@@ -2,20 +2,14 @@ package com.github.tommyt0mmy.firefighter.commands;
 
 import com.github.tommyt0mmy.firefighter.FireFighter;
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
-import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
-import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Firetool implements CommandExecutor
 {
@@ -41,7 +35,7 @@ public class Firetool implements CommandExecutor
 
         Inventory inventory = p.getInventory();
         inventory.addItem(FireFighterClass.getFireExtinguisher());
-        TitleActionBarUtil.sendActionBarMessage(p, ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.formattedMessage("", "hold_right_click"));
+        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW + "" + ChatColor.UNDERLINE + FireFighterClass.messages.formattedMessage("", "hold_right_click")));
 
         return true;
     }

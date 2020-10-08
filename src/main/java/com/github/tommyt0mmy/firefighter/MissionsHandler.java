@@ -1,8 +1,9 @@
 package com.github.tommyt0mmy.firefighter;
 
 import com.github.tommyt0mmy.firefighter.utility.Permissions;
-import com.github.tommyt0mmy.firefighter.utility.TitleActionBarUtil;
 import com.github.tommyt0mmy.firefighter.utility.XMaterial;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;
@@ -193,8 +194,7 @@ public class MissionsHandler extends BukkitRunnable
             {
                 continue;
             }
-            TitleActionBarUtil.sendTitle(dest, title, 10, 100, 20);
-            TitleActionBarUtil.sendSubTitle(dest, subtitle, 10, 100, 20);
+            dest.sendTitle(title, subtitle, 10, 100, 20);
             try
             {
                 new BukkitRunnable()
@@ -204,7 +204,7 @@ public class MissionsHandler extends BukkitRunnable
                     public void run()
                     {
                         timer++;
-                        TitleActionBarUtil.sendActionBarMessage(dest, hotbar);
+                        dest.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(hotbar));
                         if (timer >= 4)
                         {
                             cancel();
