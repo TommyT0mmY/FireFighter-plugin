@@ -10,8 +10,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class TitleActionBarUtil
-{
+public class TitleActionBarUtil {
 
     // These are the Class instances. Needed to get fields or methods for classes.
     private static Class<?> CRAFTPLAYERCLASS, PACKET_PLAYER_CHAT_CLASS, ICHATCOMP, CHATMESSAGE, PACKET_CLASS,

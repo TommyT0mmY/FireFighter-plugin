@@ -27,7 +27,7 @@ public class Configs
 
     private void loadConfigsFile()
     { //loading configs.yml
-        configsFile = new File(FireFighterClass.datafolder, fileName);
+        configsFile = new File(FireFighterClass.dataFolder, fileName);
         if (!configsFile.exists())
         {
             configsFile.getParentFile().mkdirs();
