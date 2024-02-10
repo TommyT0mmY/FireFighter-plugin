@@ -1,8 +1,10 @@
 package com.github.tommyt0mmy.firefighter.utility.titles;
 
 import com.github.tommyt0mmy.firefighter.utility.ReflectionUtils;
+import com.google.common.base.Strings;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,6 +15,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 import static com.github.tommyt0mmy.firefighter.utility.ReflectionUtils.*;
 
@@ -114,7 +117,43 @@ public final class ActionBar {
         PACKET_PLAY_OUT_CHAT = packet;
     }
 
-    private ActionBar() {}
+    private ActionBar() {
+    }
+
+    /**
+     * Sends an action bar to a player.
+     * This particular method supports a special prefix for
+     * configuring the time of the actionbar.
+     * <p>
+     * <b>Format: {@code ^number|}</b>
+     * <br>
+     * where {@code number} is in seconds.
+     * <br>
+     * E.g. {@code ^7|&2Hello &4World!}
+     * will keep the actionbar active for 7 seconds.
+     *
+     * @param player  the player to send the action bar to.
+     * @param message the message to send.
+     * @see #sendActionBar(Plugin, Player, String, long)
+     * @since 3.2.0
+     */
+    public static void sendActionBar(@Nonnull Plugin plugin, @Nonnull Player player, @Nullable String message) {
+        if (!Strings.isNullOrEmpty(message)) {
+            if (message.charAt(0) == TIME_SPECIFIER_START) {
+                int end = message.indexOf(TIME_SPECIFIER_END);
+                if (end != -1) {
+                    int time = 0;
+                    try {
+                        time = Integer.parseInt(message.substring(1, end)) * 20;
+                    } catch (NumberFormatException ignored) {
+                    }
+                    if (time >= 0) sendActionBar(plugin, player, message.substring(end + 1), time);
+                }
+            }
+        }
+
+        sendActionBar(player, message);
+    }
 
     /**
      * Sends an action bar to a player.
@@ -152,6 +191,7 @@ public final class ActionBar {
      * @param player   the player to send the action bar to.
      * @param message  the message to send.
      * @param duration the duration to keep the action bar in ticks.
+     * @see #sendActionBarWhile(Plugin, Player, String, Callable)
      * @since 1.0.0
      */
     public static void sendActionBar(@Nonnull Plugin plugin, @Nonnull Player player, @Nullable String message, long duration) {
@@ -169,6 +209,101 @@ public final class ActionBar {
                 repeater -= 40L;
                 if (repeater - 40L < -20L) cancel();
             }
+        }.runTaskTimerAsynchronously(plugin, 0L, 40L);
+    }
+
+    /**
+     * Sends an action bar all the online players.
+     *
+     * @param message the message to send.
+     * @see #sendActionBar(Player, String)
+     * @since 1.0.0
+     */
+    public static void sendPlayersActionBar(@Nullable String message) {
+        for (Player player : Bukkit.getOnlinePlayers()) sendActionBar(player, message);
+    }
+
+    /**
+     * Clear the action bar by sending an empty message.
+     *
+     * @param player the player to send the action bar to.
+     * @see #sendActionBar(Player, String)
+     * @since 2.1.1
+     */
+    public static void clearActionBar(@Nonnull Player player) {
+        sendActionBar(player, " ");
+    }
+
+    /**
+     * Clear the action bar by sending an empty message to all the online players.
+     *
+     * @see #clearActionBar(Player player)
+     * @since 2.1.1
+     */
+    public static void clearPlayersActionBar() {
+        for (Player player : Bukkit.getOnlinePlayers()) clearActionBar(player);
+    }
+
+    /**
+     * Sends an action bar to a player for a specific amount of ticks.
+     * Plugin instance should be changed in this method for the schedulers.
+     * <p>
+     * If the caller returns true, the action bar will continue.
+     * If the caller returns false, action bar will not be sent anymore.
+     *
+     * @param plugin   the plugin handling the message scheduler.
+     * @param player   the player to send the action bar to.
+     * @param message  the message to send. The message will not be updated.
+     * @param callable the condition for the action bar to continue.
+     * @see #sendActionBar(Plugin, Player, String, long)
+     * @since 1.0.0
+     */
+    public static void sendActionBarWhile(@Nonnull Plugin plugin, @Nonnull Player player, @Nullable String message, @Nonnull Callable<Boolean> callable) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!callable.call()) {
+                        cancel();
+                        return;
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                sendActionBar(player, message);
+            }
+            // Re-sends the messages every 2 seconds so it doesn't go away from the player's screen.
+        }.runTaskTimerAsynchronously(plugin, 0L, 40L);
+    }
+
+    /**
+     * Sends an action bar to a player for a specific amount of ticks.
+     * <p>
+     * If the caller returns true, the action bar will continue.
+     * If the caller returns false, action bar will not be sent anymore.
+     *
+     * @param plugin   the plugin handling the message scheduler.
+     * @param player   the player to send the action bar to.
+     * @param message  the message to send. The message will be updated.
+     * @param callable the condition for the action bar to continue.
+     * @see #sendActionBarWhile(Plugin, Player, String, Callable)
+     * @since 1.0.0
+     */
+    public static void sendActionBarWhile(@Nonnull Plugin plugin, @Nonnull Player player, @Nullable Callable<String> message, @Nonnull Callable<Boolean> callable) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!callable.call()) {
+                        cancel();
+                        return;
+                    }
+                    sendActionBar(player, message.call());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            // Re-sends the messages every 2 seconds so it doesn't go away from the player's screen.
         }.runTaskTimerAsynchronously(plugin, 0L, 40L);
     }
 }

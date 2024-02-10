@@ -133,6 +133,7 @@ public class FireFighter extends JavaPlugin
     }
 
     public ItemStack getFireExtinguisher() {
+        if (fireHose == null) return new ItemStack(Material.STONE);
         return fireHose;
         /*ItemStack fire_extinguisher = XMaterial.IRON_HOE.parseItem();
         //getting meta

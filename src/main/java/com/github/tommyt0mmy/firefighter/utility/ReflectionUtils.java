@@ -43,10 +43,17 @@ public final class ReflectionUtils {
      * Performance is not a concern for these specific statically initialized values.
      * <p>
      * <a href="https://www.spigotmc.org/wiki/spigot-nms-and-minecraft-versions-legacy/">Versions Legacy</a>
+     * <p>
+     * This will no longer work because of
+     * <a href="https://forums.papermc.io/threads/paper-velocity-1-20-4.998/#post-2955">Paper no-relocation</a>
+     * strategy.
      */
-    public static final String NMS_VERSION;
+    @Nullable
+    public static final String NMS_VERSION = findNMSVersionString();
 
-    static { // This needs to be right below VERSION because of initialization order.
+    @Nullable
+    public static String findNMSVersionString() {
+        // This needs to be right below VERSION because of initialization order.
         // This package loop is used to avoid implementation-dependant strings like Bukkit.getVersion() or Bukkit.getBukkitVersion()
         // which allows easier testing as well.
         String found = null;
@@ -70,11 +77,11 @@ public final class ReflectionUtils {
                 }
             }
         }
-        if (found == null)
-            throw new IllegalArgumentException("Failed to parse server version. Could not find any package starting with name: 'org.bukkit.craftbukkit.v'");
-        NMS_VERSION = found;
+
+        return found;
     }
 
+    public static final int MAJOR_NUMBER;
     /**
      * The raw minor version number.
      * E.g. {@code v1_17_R1} to {@code 17}
@@ -84,19 +91,26 @@ public final class ReflectionUtils {
      */
     public static final int MINOR_NUMBER;
     /**
-     * The raw patch version number.
-     * E.g. {@code v1_17_R1} to {@code 1}
+     * The raw patch version number. Refers to the <a href="https://en.wikipedia.org/wiki/Software_versioning">major.minor.patch version scheme</a>.
+     * E.g.
+     * <ul>
+     *     <li>{@code v1.20.4} to {@code 4}</li>
+     *     <li>{@code v1.18.2} to {@code 2}</li>
+     *     <li>{@code v1.19.1} to {@code 1}</li>
+     * </ul>
      * <p>
      * I'd not recommend developers to support individual patches at all. You should always support the latest patch.
      * For example, between v1.14.0, v1.14.1, v1.14.2, v1.14.3 and v1.14.4 you should only support v1.14.4
      * <p>
      * This can be used to warn server owners when your plugin will break on older patches.
      *
+     * @see #supportsPatch(int)
      * @since 7.0.0
      */
     public static final int PATCH_NUMBER;
 
     static {
+        /* Old way of doing this.
         String[] split = NMS_VERSION.substring(1).split("_");
         if (split.length < 1) {
             throw new IllegalStateException("Version number division error: " + Arrays.toString(split) + ' ' + getVersionInformation());
@@ -110,36 +124,90 @@ public final class ReflectionUtils {
         } catch (Throwable ex) {
             throw new RuntimeException("Failed to parse minor number: " + minorVer + ' ' + getVersionInformation(), ex);
         }
+         */
 
-        // Bukkit.getBukkitVersion() = "1.12.2-R0.1-SNAPSHOT"
-        Matcher bukkitVer = Pattern.compile("^\\d+\\.\\d+\\.(\\d+)").matcher(Bukkit.getBukkitVersion());
+        // NMS_VERSION               = v1_20_R3
+        // Bukkit.getBukkitVersion() = 1.20.4-R0.1-SNAPSHOT
+        // Bukkit.getVersion()       = git-Paper-364 (MC: 1.20.4)
+        Matcher bukkitVer = Pattern
+                // <patch> is optional for first releases like "1.8-R0.1-SNAPSHOT"
+                .compile("^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?")
+                .matcher(Bukkit.getBukkitVersion());
         if (bukkitVer.find()) { // matches() won't work, we just want to match the start using "^"
             try {
-                PATCH_NUMBER = Integer.parseInt(bukkitVer.group(1));
+                // group(0) gives the whole matched string, we just want the captured group.
+                String patch = bukkitVer.group("patch");
+                MAJOR_NUMBER = Integer.parseInt(bukkitVer.group("major"));
+                MINOR_NUMBER = Integer.parseInt(bukkitVer.group("minor"));
+                PATCH_NUMBER = Integer.parseInt((patch == null || patch.isEmpty()) ? "0" : patch);
             } catch (Throwable ex) {
                 throw new RuntimeException("Failed to parse minor number: " + bukkitVer + ' ' + getVersionInformation(), ex);
             }
         } else {
-            // 1.8-R0.1-SNAPSHOT
-            PATCH_NUMBER = 0;
+            throw new IllegalStateException("Cannot parse server version: \"" + Bukkit.getBukkitVersion() + '"');
         }
     }
 
     /**
      * Gets the full version information of the server. Useful for including in errors.
+     *
      * @since 7.0.0
      */
     public static String getVersionInformation() {
+        // Bukkit.getServer().getMinecraftVersion() is for Paper
         return "(NMS: " + NMS_VERSION + " | " +
+                "Parsed: " + MAJOR_NUMBER + '.' + MINOR_NUMBER + '.' + PATCH_NUMBER + " | " +
                 "Minecraft: " + Bukkit.getVersion() + " | " +
                 "Bukkit: " + Bukkit.getBukkitVersion() + ')';
+    }
+
+    /**
+     * Gets the latest known patch number of the given minor version.
+     * For example: 1.14 -> 4, 1.17 -> 10
+     * The latest version is expected to get newer patches, so make sure to account for unexpected results.
+     *
+     * @param minorVersion the minor version to get the patch number of.
+     * @return the patch number of the given minor version if recognized, otherwise null.
+     * @since 7.0.0
+     */
+    public static Integer getLatestPatchNumberOf(int minorVersion) {
+        if (minorVersion <= 0) throw new IllegalArgumentException("Minor version must be positive: " + minorVersion);
+
+        // https://minecraft.wiki/w/Java_Edition_version_history
+        // There are many ways to do this, but this is more visually appealing.
+        int[] patches = {
+                /* 1 */ 1,
+                /* 2 */ 5,
+                /* 3 */ 2,
+                /* 4 */ 7,
+                /* 5 */ 2,
+                /* 6 */ 4,
+                /* 7 */ 10,
+                /* 8 */ 8, // I don't think they released a server version for 1.8.9
+                /* 9 */ 4,
+
+                /* 10 */ 2,//          ,_  _  _,
+                /* 11 */ 2,//            \o-o/
+                /* 12 */ 2,//           ,(.-.),
+                /* 13 */ 2,//         _/ |) (| \_
+                /* 14 */ 4,//           /\=-=/\
+                /* 15 */ 2,//          ,| \=/ |,
+                /* 16 */ 5,//        _/ \  |  / \_
+                /* 17 */ 1,//            \_!_/
+                /* 18 */ 2,
+                /* 19 */ 4,
+                /* 20 */ 4,
+        };
+
+        if (minorVersion > patches.length) return null;
+        return patches[minorVersion - 1];
     }
 
     /**
      * Mojang remapped their NMS in 1.17: <a href="https://www.spigotmc.org/threads/spigot-bungeecord-1-17.510208/#post-4184317">Spigot Thread</a>
      */
     public static final String
-            CRAFTBUKKIT_PACKAGE = "org.bukkit.craftbukkit." + NMS_VERSION + '.',
+            CRAFTBUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName(),
             NMS_PACKAGE = v(17, "net.minecraft.").orElse("net.minecraft.server." + NMS_VERSION + '.');
     /**
      * A nullable public accessible field only available in {@code EntityPlayer}.
@@ -164,6 +232,13 @@ public final class ReflectionUtils {
         Class<?> entityPlayer = getNMSClass("server.level", "EntityPlayer");
         Class<?> craftPlayer = getCraftClass("entity.CraftPlayer");
         Class<?> playerConnection = getNMSClass("server.network", "PlayerConnection");
+        Class<?> playerCommonConnection;
+        if (supports(20) && supportsPatch(2)) {
+            // The packet send method has been abstracted from ServerGamePacketListenerImpl to ServerCommonPacketListenerImpl in 1.20.2
+            playerCommonConnection = getNMSClass("server.network", "ServerCommonPacketListenerImpl");
+        } else {
+            playerCommonConnection = playerConnection;
+        }
 
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         MethodHandle sendPacket = null, getHandle = null, connection = null;
@@ -172,8 +247,8 @@ public final class ReflectionUtils {
             connection = lookup.findGetter(entityPlayer,
                     v(20, "c").v(17, "b").orElse("playerConnection"), playerConnection);
             getHandle = lookup.findVirtual(craftPlayer, "getHandle", MethodType.methodType(entityPlayer));
-            sendPacket = lookup.findVirtual(playerConnection,
-                    v(18, "a").orElse("sendPacket"),
+            sendPacket = lookup.findVirtual(playerCommonConnection,
+                    v(20, 2, "b").v(18, "a").orElse("sendPacket"),
                     MethodType.methodType(void.class, getNMSClass("network.protocol", "Packet")));
         } catch (NoSuchMethodException | NoSuchFieldException | IllegalAccessException ex) {
             ex.printStackTrace();
@@ -184,16 +259,28 @@ public final class ReflectionUtils {
         GET_HANDLE = getHandle;
     }
 
-    private ReflectionUtils() {}
+    private ReflectionUtils() {
+    }
 
     /**
-     * This method is purely for readability.
-     * No performance is gained.
+     * Gives the {@code handle} object if the server version is equal or greater than the given version.
+     * This method is purely for readability and should be always used with {@link VersionHandler#orElse(Object)}.
      *
+     * @see #v(int, int, Object)
+     * @see VersionHandler#orElse(Object)
      * @since 5.0.0
      */
     public static <T> VersionHandler<T> v(int version, T handle) {
         return new VersionHandler<>(version, handle);
+    }
+
+    /**
+     * Overload for {@link #v(int, T)} that supports patch versions
+     *
+     * @since 9.5.0
+     */
+    public static <T> VersionHandler<T> v(int version, int patch, T handle) {
+        return new VersionHandler<>(version, patch, handle);
     }
 
     public static <T> CallableVersionHandler<T> v(int version, Callable<T> handle) {
@@ -213,34 +300,64 @@ public final class ReflectionUtils {
     }
 
     /**
-     * Get a NMS (net.minecraft.server) class which accepts a package for 1.17 compatibility.
+     * Checks whether the server version is equal or greater than the given version.
      *
-     * @param newPackage the 1.17 package name.
-     * @param name       the name of the class.
-     * @return the NMS class or null if not found.
-     * @since 4.0.0
+     * @param minorNumber the minor version to compare the server version with.
+     * @param patchNumber the patch number to compare the server version with.
+     * @return true if the version is equal or newer, otherwise false.
+     * @see #MINOR_NUMBER
+     * @see #PATCH_NUMBER
+     * @since 7.1.0
      */
-    @Nullable
-    public static Class<?> getNMSClass(@Nonnull String newPackage, @Nonnull String name) {
-        if (supports(17)) name = newPackage + '.' + name;
-        return getNMSClass(name);
+    public static boolean supports(int minorNumber, int patchNumber) {
+        return MINOR_NUMBER == minorNumber ? supportsPatch(patchNumber) : supports(minorNumber);
     }
 
     /**
-     * Get a NMS (net.minecraft.server) class.
+     * Checks whether the server version is equal or greater than the given version.
      *
-     * @param name the name of the class.
-     * @return the NMS class or null if not found.
-     * @since 1.0.0
+     * @param patchNumber the version to compare the server version with.
+     * @return true if the version is equal or newer, otherwise false.
+     * @see #PATCH_NUMBER
+     * @since 7.0.0
      */
-    @Nullable
-    public static Class<?> getNMSClass(@Nonnull String name) {
+    public static boolean supportsPatch(int patchNumber) {
+        return PATCH_NUMBER >= patchNumber;
+    }
+
+    /**
+     * Get a NMS (net.minecraft.server) class which accepts a package for 1.17 compatibility.
+     *
+     * @param packageName the 1.17+ package name of this class.
+     * @param name        the name of the class.
+     * @return the NMS class or null if not found.
+     * @throws RuntimeException if the class could not be found.
+     * @see #getNMSClass(String)
+     * @since 4.0.0
+     */
+    @Nonnull
+    public static Class<?> getNMSClass(@Nullable String packageName, @Nonnull String name) {
+        if (packageName != null && supports(17)) name = packageName + '.' + name;
+
         try {
             return Class.forName(NMS_PACKAGE + name);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Get a NMS {@link #NMS_PACKAGE} class.
+     *
+     * @param name the name of the class.
+     * @return the NMS class or null if not found.
+     * @throws RuntimeException if the class could not be found.
+     * @see #getNMSClass(String, String)
+     * @since 1.0.0
+     */
+    @Nonnull
+    public static Class<?> getNMSClass(@Nonnull String name) {
+        return getNMSClass(null, name);
     }
 
     /**
@@ -312,39 +429,71 @@ public final class ReflectionUtils {
      *
      * @param name the name of the class to load.
      * @return the CraftBukkit class or null if not found.
+     * @throws RuntimeException if the class could not be found.
      * @since 1.0.0
      */
-    @Nullable
+    @Nonnull
     public static Class<?> getCraftClass(@Nonnull String name) {
         try {
-            return Class.forName(CRAFTBUKKIT_PACKAGE + name);
+            return Class.forName(CRAFTBUKKIT_PACKAGE + '.' + name);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Gives an array version of a class. For example if you wanted {@code EntityPlayer[]} you'd use:
+     * <pre>{@code
+     *     Class EntityPlayer = ReflectionUtils.getNMSClass("...", "EntityPlayer");
+     *     Class EntityPlayerArray = ReflectionUtils.toArrayClass(EntityPlayer);
+     * }</pre>
+     *
+     * @param clazz the class to get the array version of. You could use for multi-dimensions arrays too.
+     * @throws RuntimeException if the class could not be found.
+     */
+    @Nonnull
+    public static Class<?> toArrayClass(Class<?> clazz) {
+        try {
+            return Class.forName("[L" + clazz.getName() + ';');
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException("Cannot find array class for class: " + clazz, ex);
         }
     }
 
     public static final class VersionHandler<T> {
-        private int version;
+        private int version, patch;
         private T handle;
 
         private VersionHandler(int version, T handle) {
-            if (supports(version)) {
+            this(version, 0, handle);
+        }
+
+        private VersionHandler(int version, int patch, T handle) {
+            if (supports(version) && supportsPatch(patch)) {
                 this.version = version;
+                this.patch = patch;
                 this.handle = handle;
             }
         }
 
         public VersionHandler<T> v(int version, T handle) {
-            if (version == this.version)
-                throw new IllegalArgumentException("Cannot have duplicate version handles for version: " + version);
-            if (version > this.version && supports(version)) {
+            return v(version, 0, handle);
+        }
+
+        public VersionHandler<T> v(int version, int patch, T handle) {
+            if (version == this.version && patch == this.patch)
+                throw new IllegalArgumentException("Cannot have duplicate version handles for version: " + version + '.' + patch);
+            if (version > this.version && supports(version) && patch >= this.patch && supportsPatch(patch)) {
                 this.version = version;
+                this.patch = patch;
                 this.handle = handle;
             }
             return this;
         }
 
+        /**
+         * If none of the previous version checks matched, it'll return this object.
+         */
         public T orElse(T handle) {
             return this.version == 0 ? handle : this.handle;
         }
@@ -371,5 +520,13 @@ public final class ReflectionUtils {
             return this;
         }
 
+        public T orElse(Callable<T> handle) {
+            try {
+                return (this.version == 0 ? handle : this.handle).call();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 }

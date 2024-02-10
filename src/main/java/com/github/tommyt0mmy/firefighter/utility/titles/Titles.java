@@ -12,6 +12,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * A reflection API for titles in Minecraft.
@@ -27,7 +28,7 @@ import java.util.Objects;
  * @version 2.1.0
  * @see ReflectionUtils
  */
-public final class Titles {
+public final class Titles implements Cloneable {
     /**
      * EnumTitleAction
      * Used for the fade in, stay and fade out feature of titles.
@@ -40,6 +41,15 @@ public final class Titles {
      */
     private static final MethodHandle CHAT_COMPONENT_TEXT;
 
+    private String title, subtitle;
+    private final int fadeIn, stay, fadeOut;
+
+    /**
+     * From the latest 1.11.2 not checked with supports() to prevent
+     * errors on outdated 1.11 versions.
+     */
+    private static final boolean SUPPORTS_TITLES;
+
     static {
         MethodHandle packetCtor = null;
         MethodHandle chatComp = null;
@@ -49,7 +59,19 @@ public final class Titles {
         Object subtitle = null;
         Object clear = null;
 
-        if (!ReflectionUtils.supports(11)) {
+
+        boolean SUPPORTS_TITLES1;
+        try {
+            Player.class.getDeclaredMethod("sendTitle",
+                    String.class, String.class,
+                    int.class, int.class, int.class);
+            SUPPORTS_TITLES1 = true;
+        } catch (NoSuchMethodException e) {
+            SUPPORTS_TITLES1 = false;
+        }
+        SUPPORTS_TITLES = SUPPORTS_TITLES1;
+
+        if (!SUPPORTS_TITLES) {
             Class<?> chatComponentText = ReflectionUtils.getNMSClass("ChatComponentText");
             Class<?> packet = ReflectionUtils.getNMSClass("PacketPlayOutTitle");
             Class<?> titleTypes = packet.getDeclaredClasses()[0];
@@ -91,7 +113,22 @@ public final class Titles {
         CHAT_COMPONENT_TEXT = chatComp;
     }
 
-    private Titles() {
+    public Titles(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Titles clone() {
+        return new Titles(title, subtitle, fadeIn, stay, fadeOut);
+    }
+
+    public void send(Player player) {
+        sendTitle(player, fadeIn, stay, fadeOut, title, subtitle);
     }
 
     /**
@@ -103,7 +140,6 @@ public final class Titles {
      * @param fadeOut  the amount of ticks for the title to fade out.
      * @param title    the title message.
      * @param subtitle the subtitle message.
-     *
      * @see #clearTitle(Player)
      * @since 1.0.0
      */
@@ -112,7 +148,7 @@ public final class Titles {
                                  @Nullable String title, @Nullable String subtitle) {
         Objects.requireNonNull(player, "Cannot send title to null player");
         if (title == null && subtitle == null) return;
-        if (ReflectionUtils.supports(11)) {
+        if (SUPPORTS_TITLES) {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
             return;
         }
@@ -141,7 +177,6 @@ public final class Titles {
      * @param player   the player to send the title to.
      * @param title    the title message.
      * @param subtitle the subtitle message.
-     *
      * @see #sendTitle(Player, int, int, int, String, String)
      * @since 1.0.0
      */
@@ -151,6 +186,23 @@ public final class Titles {
 
     /**
      * Parses and sends a title from the config.
+     *
+     * @param player the player to send the title to.
+     * @param config the configuration section to parse the title properties from.
+     * @since 1.0.0
+     */
+    public static Titles sendTitle(@Nonnull Player player, @Nonnull ConfigurationSection config) {
+        Titles titles = parseTitle(config, null);
+        titles.send(player);
+        return titles;
+    }
+
+    public static Titles parseTitle(@Nonnull ConfigurationSection config) {
+        return parseTitle(config, null);
+    }
+
+    /**
+     * Parses a title from config.
      * The configuration section must at least
      * contain {@code title} or {@code subtitle}
      *
@@ -161,14 +213,17 @@ public final class Titles {
      *     Titles.sendTitle(player, titleSection);
      * </pre></blockquote>
      *
-     * @param player the player to send the title to.
      * @param config the configuration section to parse the title properties from.
-     *
-     * @since 1.0.0
+     * @since 3.0.0
      */
-    public static void sendTitle(@Nonnull Player player, @Nonnull ConfigurationSection config) {
+    public static Titles parseTitle(@Nonnull ConfigurationSection config, @Nullable Function<String, String> transformers) {
         String title = config.getString("title");
         String subtitle = config.getString("subtitle");
+
+        if (transformers != null) {
+            title = transformers.apply(title);
+            subtitle = transformers.apply(subtitle);
+        }
 
         int fadeIn = config.getInt("fade-in");
         int stay = config.getInt("stay");
@@ -178,14 +233,29 @@ public final class Titles {
         if (stay < 1) stay = 20;
         if (fadeOut < 1) fadeOut = 10;
 
-        sendTitle(player, fadeIn, stay, fadeOut, title, subtitle);
+        return new Titles(title, subtitle, fadeIn, stay, fadeOut);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     /**
      * Clears the title and subtitle message from the player's screen.
      *
      * @param player the player to clear the title from.
-     *
      * @since 1.0.0
      */
     public static void clearTitle(@Nonnull Player player) {
@@ -217,7 +287,6 @@ public final class Titles {
      * @param header  the header of the tablist.
      * @param footer  the footer of the tablist.
      * @param players players to send this change to.
-     *
      * @since 1.0.0
      */
     public static void sendTabList(@Nonnull String header, @Nonnull String footer, Player... players) {
