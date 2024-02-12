@@ -65,6 +65,7 @@ public class FireFighter extends JavaPlugin
         loadEvents();
         loadCommands();
         loadWand();
+        loadFireHose();
         // Disabled for now -> loadRecipes();
 
         //priority 4
@@ -152,7 +153,7 @@ public class FireFighter extends JavaPlugin
     }
 
     public ItemStack loadWand(){
-        ItemStack wand = configs.getConfig().getItemStack("fireset.wand");
+        ItemStack wand = getConfig().getItemStack("fireset.wand");
         FiresetWand.wand = wand;
         return wand;
     }
