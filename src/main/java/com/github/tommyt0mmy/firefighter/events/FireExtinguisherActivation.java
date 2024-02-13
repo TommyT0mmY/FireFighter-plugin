@@ -27,21 +27,22 @@ public class FireExtinguisherActivation implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
+
+        Action action = e.getAction();
+        //only right clicks
+        if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
+
         try {
             Player p = e.getPlayer();
-            Action action = e.getAction();
             ItemStack item = e.getItem();
 
-            //only right clicks
-            if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
+            if (isFireExtinguisher(item)) e.setCancelled(true);
+            else return;
 
             if (!p.hasPermission(Permissions.USE_EXTINGUISHER.getNode())) {
                 p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
                 return;
             }
-
-            if (isFireExtinguisher(item)) e.setCancelled(true);
-            else return;
 
             //durability
             if (!p.hasPermission(Permissions.FREEZE_EXTINGUISHER.getNode())) {

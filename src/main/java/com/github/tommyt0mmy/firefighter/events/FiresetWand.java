@@ -24,11 +24,7 @@ public class FiresetWand implements Listener {
             if (!(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) return;
 
             //only if the player has the right permission
-            if (!p.hasPermission(Permissions.FIRESET.getNode())) {
-                p.sendMessage(fireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
-                e.setCancelled(true);
-                return;
-            }
+            if (!p.hasPermission(Permissions.FIRESET.getNode())) return;
 
             //only if the player has the wand in his main hand
             if (!p.getInventory().getItemInMainHand().isSimilar(wand)) return;
@@ -51,7 +47,7 @@ public class FiresetWand implements Listener {
                     }
                 else setSecondPosition(p, clickedBlock_location);
 
-        }catch (Exception ignored) {}
+        }catch (Exception error) {error.printStackTrace();}
     }
 
     private void setFirstPosition(Player p, Location loc) {
