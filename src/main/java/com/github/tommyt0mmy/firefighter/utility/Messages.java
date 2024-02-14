@@ -185,7 +185,7 @@ public class Messages
 
     private void loadMessagesFile()
     { //loading messages.yml
-        messagesConfigFile = new File(FireFighterClass.datafolder, fileName);
+        messagesConfigFile = new File(FireFighterClass.dataFolder, fileName);
         if (!messagesConfigFile.exists())
         {
             messagesConfigFile.getParentFile().mkdirs();

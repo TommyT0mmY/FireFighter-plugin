@@ -10,81 +10,58 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class FiresetWand implements Listener
-{
+public class FiresetWand implements Listener {
 
-    private FireFighter FireFighterClass = FireFighter.getInstance();
+    private final FireFighter fireFighterClass = FireFighter.getInstance();
+    public static ItemStack wand;
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e)
-    {
-        try
-        {
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        try {
             Player p = e.getPlayer();
             Action action = e.getAction();
-            if (!(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK))
-            { //only clicks on blocks
-                return;
-            }
-            ItemStack wand = FireFighterClass.configs.getConfig().getItemStack("fireset.wand");
-            if (!p.getInventory().getItemInMainHand().isSimilar(wand))
-            { //only if the player has the wand in his main hand
-                return;
-            }
-            if (!p.hasPermission(Permissions.FIRESET.getNode()))
-            { //only if the player has the right permission
-                p.sendMessage(FireFighterClass.messages.formattedMessage("§c", "invalid_permissions"));
-                e.setCancelled(true);
-                return;
-            }
+            //only clicks on blocks
+            if (!(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) return;
+
+            //only if the player has the right permission
+            if (!p.hasPermission(Permissions.FIRESET.getNode())) return;
+
+            //only if the player has the wand in his main hand
+            if (!p.getInventory().getItemInMainHand().isSimilar(wand)) return;
 
             e.setCancelled(true);
             Location clickedBlock_location = e.getClickedBlock().getLocation();
+            //first position
             if (action == Action.LEFT_CLICK_BLOCK)
-            { //first position
-                if (FireFighterClass.fireset_first_position.containsKey(p.getUniqueId()))
-                {
-                    if (!FireFighterClass.fireset_first_position.get(p.getUniqueId()).equals(clickedBlock_location))
-                    {
+                if (fireFighterClass.fireset_first_position.containsKey(p.getUniqueId()))
+                    if (!fireFighterClass.fireset_first_position.get(p.getUniqueId()).equals(clickedBlock_location)){
                         setFirstPosition(p, clickedBlock_location);
+                        p.sendMessage("&6[1] &a&lFirst position set");
                     }
-                } else
-                {
-                    setFirstPosition(p, clickedBlock_location);
-                }
-            } else
-            { //second position
-                if (FireFighterClass.fireset_second_position.containsKey(p.getUniqueId()))
-                {
-                    if (!FireFighterClass.fireset_second_position.get(p.getUniqueId()).equals(clickedBlock_location))
-                    {
+                else setFirstPosition(p, clickedBlock_location);
+            else  //second position
+                if (fireFighterClass.fireset_second_position.containsKey(p.getUniqueId()))
+                    if (!fireFighterClass.fireset_second_position.get(p.getUniqueId()).equals(clickedBlock_location)){
                         setSecondPosition(p, clickedBlock_location);
+                        p.sendMessage("&6[2] &2&lSecond position set");
                     }
-                } else
-                {
-                    setSecondPosition(p, clickedBlock_location);
-                }
-            }
+                else setSecondPosition(p, clickedBlock_location);
 
-        } catch (Exception E)
-        {
-        }
+        }catch (Exception error) {error.printStackTrace();}
     }
 
-    private void setFirstPosition(Player p, Location loc)
-    {
-        FireFighterClass.fireset_first_position.put(p.getUniqueId(), loc);
-        String msg = FireFighterClass.messages.formattedMessage("§e", "fireset_first_position_set");
+    private void setFirstPosition(Player p, Location loc) {
+        fireFighterClass.fireset_first_position.put(p.getUniqueId(), loc);
+        String msg = fireFighterClass.messages.formattedMessage("§e", "fireset_first_position_set");
         msg = msg.replace("<x>", loc.getBlockX() + "");
         msg = msg.replace("<y>", loc.getBlockY() + "");
         msg = msg.replace("<z>", loc.getBlockZ() + "");
         p.sendMessage(msg);
     }
 
-    private void setSecondPosition(Player p, Location loc)
-    {
-        FireFighterClass.fireset_second_position.put(p.getUniqueId(), loc);
-        String msg = FireFighterClass.messages.formattedMessage("§e", "fireset_second_position_set");
+    private void setSecondPosition(Player p, Location loc) {
+        fireFighterClass.fireset_second_position.put(p.getUniqueId(), loc);
+        String msg = fireFighterClass.messages.formattedMessage("§e", "fireset_second_position_set");
         msg = msg.replace("<x>", loc.getBlockX() + "");
         msg = msg.replace("<y>", loc.getBlockY() + "");
         msg = msg.replace("<z>", loc.getBlockZ() + "");
