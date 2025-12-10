@@ -132,6 +132,8 @@ public class RescueManager {
     }
 
     private boolean isValidSpawnLocation(Location loc) {
+        if (loc == null) return false;
+
         Block block = loc.getBlock();
         Block blockBelow = loc.clone().subtract(0, 1, 0).getBlock();
 

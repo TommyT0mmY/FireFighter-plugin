@@ -69,11 +69,22 @@ public class MissionsHandler extends BukkitRunnable {
             // Keeping the fire on
             fireKeepTimer++;
 
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.hasPermission(Permissions.ON_DUTY.getNode())) {
+                    assert mission != null;
+                    if (mission.getRegion().getCenter().distance(player.getLocation()) > 60){
+                        ActionBar.sendActionBar(player,
+                                FireFighterClass.messages.getMessage("firefighter_actionbar")
+                                        .replace("<place>",FireFighterClass.missionName));
+                    }
+                }
+            }
+
             // Check if it's time to spawn smoke
             int smokeFrequency = FireFighterClass.getConfig().getInt("fire_effects.smoke_frequency_ticks", 5);
             boolean shouldSpawnSmoke = (fireKeepTimer % smokeFrequency) == 0;
 
-            if (fireKeepTimer > 20){
+            if (fireKeepTimer > 30){
                 if ((fireKeepTimer % 5) == 0) {
                     if (fireKeepTimer >= fire_lasting_ticks / 100 || setOnFire.size() < mission.getRegion().getLength()) {
                         // TURNING OFF THE MISSION
@@ -196,6 +207,8 @@ public class MissionsHandler extends BukkitRunnable {
                     if (n == 30) break;
                 }
 
+                if (random.nextBoolean()) continue;
+                if (random.nextBoolean()) continue;
                 if (random.nextBoolean()) continue;
 
                 currLocation.subtract(0, 1, 0);

@@ -43,10 +43,11 @@ public class FireAreaEffects extends BukkitRunnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             Location loc = player.getLocation();
-            boolean inArea = loc.getWorld().getName().equals(mission.getWorldName()) &&
-                    loc.getBlockX() >= minX && loc.getBlockX() <= maxX &&
-                    loc.getBlockZ() >= minZ && loc.getBlockZ() <= maxZ &&
-                    Math.abs(loc.getBlockY() - y) <= 10; // Vertical range
+//            boolean inArea = loc.getWorld().getName().equals(mission.getWorldName()) &&
+//                    loc.getBlockX() >= minX && loc.getBlockX() <= maxX &&
+//                    loc.getBlockZ() >= minZ && loc.getBlockZ() <= maxZ &&
+//                    Math.abs(loc.getBlockY() - y) <= 10; // Vertical range
+            boolean inArea = mission.getRegion().contains(player);
 
             ItemStack item = player.getInventory().getHelmet();
             if (item != null && item.getType() != Material.AIR){
