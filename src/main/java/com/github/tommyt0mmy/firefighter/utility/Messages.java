@@ -27,14 +27,14 @@ public class Messages
     private File messagesConfigFile;
     private final String fileName = "messages.yml";
 
-    private HashMap<String, String> messagesMap = new HashMap<String, String>()
-    {
+    private HashMap<String, String> messagesMap = new HashMap<String, String>() {
         {
             //GENERAL MESSAGES
 
             put("messages.only_players_command", "Only players can execute this command");
             put("messages.fire_extinguisher", "Fire Extinguisher");
             put("messages.ingame_prefix", "[FireFighter]");
+            put("messages.ingamechat_prefix", "&2[&c&nFireFighter&2]&r <name>&7: &f<text>");
             put("messages.invalid_permissions", "Invalid permissions!");
             put("messages.page_not_found", "Page not found!");
             put("messages.hold_right_click", "Hold Right Click");
@@ -60,6 +60,40 @@ public class Messages
             put("messages.startedmission_subtitle", "<mission_description>");
             put("messages.startedmission_hotbar", "&eAt coordinates <coordinates>");
             put("messages.startedmission_chat", "&4&lFire alert at coordinates &r&e<coordinates>");
+            put("messages.firechat_toggle_on", "&4&lFireFighter chat has been enabled.");
+            put("messages.firechat_toggle_off", "&4&lFireFighter chat has been disabled.");
+            put("messages.firechat_125", "&e%player% &4&lFireFighter &7-  = &6سلام اینجا اتیش گرفته");
+            put("messages.firechat_125_empty", "&4&lFireFighter: &eYou can not send empty messages");
+            put("messages.firechat_125_send", "&4&lFireFighter: &f Your 125 request has sent, wait for firefighters");
+            put("messages.firechat_125_delay", "&4&lFireFighter:&f Please wait <time> seconds to send a new request");
+            put("messages.mission_end_header", "--------------\\nThe <location_id> fire has been turned off!");
+            put("messages.mission_end_top_firefighters", "Top firefighters:");
+            put("messages.mission_end_participation", "&6Participation: &e<participating>&6/&e<total> &6firefighters (&e<percentage>%&6) helped in the mission");
+            put("messages.mission_end_top_entry", "&e<rank>. &6<name> &7- &e<score> points");
+            put("messages.mission_end_no_participants", "&cNo firefighters participated in this mission");
+            put("messages.mission_end_footer", "---------------");
+            put("messages.picked_up", "&4&lFireFighter &aYou picked up a victim! Carry them to safety.");
+            put("messages.rescued", "&4&lFireFighter &aVictim rescued! <rescued>/<total> saved.");
+            put("messages.all_rescued", "&4&lFireFighter &aAll victims rescued!");
+            put("messages.mission_end_requires_rescue", "&4&lFireFighter &cMission not over—rescue all victims!");
+            put("messages.inside_area", "&4&lFireFighter &cYou must leave the fire area to rescue the victim!");
+
+            put("messages.animal_mission_start", "&eA new report from the city! A &cCat &eis stuck somewhere!\n&7Report from: &f<place>\n&7Save time: &f<time> seconds\n&7Reward: &a<reward>$");
+            put("messages.animal_mission_success_player", "&aYou successfully saved the animal and received &e<reward>$&a!");
+            put("messages.animal_mission_success_broadcast", "&aThe stuck animal at &e<place> &awas saved by &b<player>&a!");
+            put("messages.animal_mission_fail", "&cThe animal at &e<place> &cwas not saved in time!");
+
+            put("messages.points_your_points", "&aYour fire points: &e<points>");
+            put("messages.points_other_points", "&a<player>'s fire points: &e<points>");
+            put("messages.points_player_not_found", "&cPlayer not found!");
+            put("messages.points_top_header", "&c&lTop Firefighters by Points (Page <page>/<total_pages>)");
+            put("messages.points_top_entry", "&e<rank>. &a<name>&7: &e<points> points");
+            put("messages.points_top_no_data", "&cNo points data available.");
+            put("messages.points_reset_success", "&aAll fire points have been reset!");
+            put("messages.points_added_success", "&aAdded <amount> points to <player>!");
+            put("messages.points_invalid_amount", "&cInvalid amount! Must be a positive integer.");
+            put("messages.points_no_permission", "&cYou don't have permission to do that!");
+            put("messages.usage_firepoints", "/firepoints <toppoints|points|resetpoints|addpoints>");
 
             //COMMANDS DESCRIPTIONS
 
@@ -183,11 +217,9 @@ public class Messages
         }
     };
 
-    private void loadMessagesFile()
-    { //loading messages.yml
-        messagesConfigFile = new File(FireFighterClass.datafolder, fileName);
-        if (!messagesConfigFile.exists())
-        {
+    private void loadMessagesFile() { //loading messages.yml
+        messagesConfigFile = new File(FireFighterClass.dataFolder, fileName);
+        if (!messagesConfigFile.exists()) {
             messagesConfigFile.getParentFile().mkdirs();
             FireFighterClass.saveResource(fileName, false);
             FireFighterClass.console.info("Created messages.yml");
@@ -195,96 +227,69 @@ public class Messages
         }
 
         messagesConfig = new YamlConfiguration();
-        try
-        {
+        try {
             messagesConfig.load(messagesConfigFile);
             loadMessages();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             FireFighterClass.console.severe("Couldn't load messages.yml file properly!");
         }
     }
 
-    private void loadMessages()
-    {
+    private void loadMessages() {
 
         boolean needsRewrite = false; //A rewrite is needed when loaded on the server there is a older version of messages.yml, without newer messages
 
-        for (String messageKey : messagesMap.keySet())
-        {
+        for (String messageKey : messagesMap.keySet()) {
             boolean result = loadMessage(messageKey);
             needsRewrite = needsRewrite || result;
         }
 
         //Once every message is loaded on the messagesMap, if needsRewrite is true, messages.yml gets closed, deleted, and rewritten with every message
-        if (needsRewrite)
-        {
-            try
-            {
-                if (messagesConfigFile.delete())
-                { //deleting file
+        if (needsRewrite) {
+            try {
+                if (messagesConfigFile.delete()) {
                     messagesConfigFile.getParentFile().mkdirs(); //creating file
                     messagesConfigFile.createNewFile();
                     messagesConfig.load(messagesConfigFile);
-                    for (String messageKey : messagesMap.keySet())
-                    { //writing file
-                        messagesConfig.set(messageKey, messagesMap.get(messageKey));
-                    }
+                    for (String messageKey : messagesMap.keySet()) messagesConfig.set(messageKey, messagesMap.get(messageKey));
+
                     messagesConfig.save(messagesConfigFile);
-                } else
-                {
-                    FireFighterClass.console.severe("Couldn't load messages.yml file properly!");
-                }
-            } catch (Exception e)
-            {
-                FireFighterClass.console.severe("Couldn't load messages.yml file properly!");
-            }
+                } else FireFighterClass.console.severe("Couldn't load messages.yml file properly!");
+
+            } catch (Exception e) {FireFighterClass.console.severe("Couldn't load messages.yml file properly!");}
         }
 
         FireFighterClass.console.info("Loaded custom messages");
     }
 
-    private boolean loadMessage(String messageName)
-    { //returns true if the message is not found, letting loadMessages() know if a rewrite of the file is needed or not
+    private boolean loadMessage(String messageName) { //returns true if the message is not found, letting loadMessages() know if a rewrite of the file is needed or not
         boolean returnValue = false;
 
         String path = messageName;
-        if (messagesConfig.getString(path, null) == null)
-        { //message not found, returns true
-            returnValue = true;
-        }
-
-        if (messagesConfig.getString(path) == null)
-        {
-            return true;
-        }
+        if (messagesConfig.getString(path, null) == null) returnValue = true;
+        if (messagesConfig.getString(path) == null) return true;
 
         messagesMap.put(messageName, messagesConfig.getString(messageName)); //loading messages into messagesMap
         return returnValue;
     }
 
-    public String getMessage(String messageName)
-    {
-        return messagesMap.get("messages." + messageName);
+    public String getMessage(String messageName) {
+        return messagesMap.getOrDefault("messages." + messageName, "A null message");
     }
 
-    public String formattedMessage(String color, String messageName)
-    { //Automatically puts the prefix and the color to the message
+    public String formattedMessage(String color, String messageName) { //Automatically puts the prefix and the color to the message
         return String.format("%s%s %s", color, getMessage("ingame_prefix"), getMessage(messageName));
     }
 
-    public String formattedText(String color, String message)
-    { //Shouldn't be used, very similar to formattedMessage() but returns a formatted version of a non customizable message, for a better user experience every message should be customizable
+    public String formattedText(String color, String message) { //Shouldn't be used, very similar to formattedMessage() but returns a formatted version of a non customizable message, for a better user experience every message should be customizable
         return String.format("%s%s %s", color, getMessage("ingame_prefix"), message);
     }
 
-    public String getDescription(String commandName)
-    {
+    public String getDescription(String commandName) {
         return messagesMap.get("description." + commandName);
     }
 
-    public String getHelpPage(String pageName)
-    {
+    public String getHelpPage(String pageName) {
         final String arrow1 = "&e&l>";
         final String arrow2 = "&c&l>";
         String path = "help." + pageName;
@@ -297,8 +302,7 @@ public class Messages
         lineKeys = keysSet.toArray(lineKeys);
         Arrays.sort(lineKeys);
 
-        for (String lineKey : lineKeys)
-        {
+        for (String lineKey : lineKeys) {
             String lineContext = messagesMap.get(path + "." + lineKey) + "\n";
 
             lineContext = lineContext.replaceAll("<arrow1>", arrow1);

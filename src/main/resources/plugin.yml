@@ -1,7 +1,7 @@
  name: FireFighter
  version: ${version}
  description: A roleplay plugin that allows players to play as firefighters. 
- author: Tommy_T0mmY
+ author: EhsanMNA
  main: com.github.tommyt0mmy.firefighter.FireFighter
  prefix: FireFighter
  api-version: 1.13
@@ -15,3 +15,12 @@
    firetool:
      usage: "Usage: /<command>"
      description: Gives you a fire extinguisher
+   firefighterchat:
+     usage: "Usage: /<command>"
+     description: Chat with others
+   shomare:
+     aliases:
+       - "125"
+   firepoints:
+     aliases:
+       - "fp"
